@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Spotlight — Jain University</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="bento.css">
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="top-nav">
+    <div class="nav-inner">
+        <div class="nav-brand">
+            <div class="nav-logo"><span>JGI</span></div>
+            <div class="nav-title-block">
+                <span class="nav-title">Jain University</span>
+                <span class="nav-sub">Event Spotlight</span>
+            </div>
+        </div>
+
+        <!-- Filter pill — hidden until toggle on mobile, always visible on desktop -->
+        <div class="nav-center-filters" id="navFilters">
+            <div class="sp-filter-wrap">
+                <div class="sf-select-group">
+                    <label class="sf-label">Department</label>
+                    <div class="sf-sel-inner">
+                        <select id="bentoDeptSelect" class="sf-select">
+                            <option value="all">All Departments</option>
+                            <option value="computer-science">Computer Science</option>
+                            <option value="mathematics">Mathematics</option>
+                            <option value="physics">Physics</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="biology">Biology</option>
+                            <option value="english">English</option>
+                            <option value="history">History</option>
+                        </select>
+                        <i class="fas fa-chevron-down sf-arrow"></i>
+                    </div>
+                </div>
+                <span class="sf-divider"></span>
+                <div class="sf-select-group">
+                    <label class="sf-label">Event</label>
+                    <div class="sf-sel-inner">
+                        <select id="bentoEventSelect" class="sf-select sf-select-wide">
+                            <option value="">Select an event…</option>
+                        </select>
+                        <i class="fas fa-chevron-down sf-arrow"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-actions">
+            <button class="nav-filter-toggle" id="filterToggle" aria-label="Toggle filters">
+                <i class="fas fa-sliders-h"></i>
+                <span>Filter</span>
+            </button>
+            <a href="index.html" class="nav-btn nav-btn-outline">
+                <i class="fas fa-arrow-left"></i> All Events
+            </a>
+        </div>
+    </div>
+
+    <!-- Mobile filter drawer -->
+    <div class="nav-mobile-filters" id="mobileFilters">
+        <div class="sp-filter-wrap sp-filter-wrap--mobile">
+            <div class="sf-select-group sf-select-group--full">
+                <label class="sf-label">Department</label>
+                <div class="sf-sel-inner">
+                    <select id="bentoDeptSelectMobile" class="sf-select">
+                        <option value="all">All Departments</option>
+                        <option value="computer-science">Computer Science</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="physics">Physics</option>
+                        <option value="chemistry">Chemistry</option>
+                        <option value="biology">Biology</option>
+                        <option value="english">English</option>
+                        <option value="history">History</option>
+                    </select>
+                    <i class="fas fa-chevron-down sf-arrow"></i>
+                </div>
+            </div>
+            <div class="sf-select-group sf-select-group--full">
+                <label class="sf-label">Event</label>
+                <div class="sf-sel-inner">
+                    <select id="bentoEventSelectMobile" class="sf-select">
+                        <option value="">Select an event…</option>
+                    </select>
+                    <i class="fas fa-chevron-down sf-arrow"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main class="sp-main">
+
+    <!-- WELCOME STATE -->
+    <div class="sp-welcome" id="bentoWelcome">
+        <div class="welcome-inner">
+            <div class="welcome-icon-wrap">
+                <img src="https://sspark.genspark.ai/cfimages?u1=9E%2B68%2FoiVRY7JHL%2BFTaaxUp1LugSPrN1wEfDfWkiNoO2c3M5fRmyypN3ppEB7Qwpx813DezvE5SLjdAsz7%2BsuybRrHoTis7B3JzDi06UCAcQjM3UgJah18LmW7CZghO7%2FEsKEEajZ%2FrwQSh7pKZf3RnzCSwbPCNt19JGTA%3D%3D&u2=7FnxUgDsoftKL4x2&width=2560" alt="Jain University" class="welcome-campus-img" onerror="this.style.display='none'">
+                <div class="welcome-img-overlay"></div>
+                <div class="welcome-text-overlay">
+                    <div class="welcome-logo">JGI</div>
+                    <h2>Event Spotlight</h2>
+                    <p>Select a department and choose an event to explore its complete details.</p>
+                    <div class="welcome-steps">
+                        <span class="ws"><span class="ws-num">1</span> Pick Department</span>
+                        <span class="ws-arrow"><i class="fas fa-arrow-right"></i></span>
+                        <span class="ws"><span class="ws-num">2</span> Select Event</span>
+                        <span class="ws-arrow"><i class="fas fa-arrow-right"></i></span>
+                        <span class="ws"><span class="ws-num">3</span> Explore</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SPOTLIGHT DETAIL -->
+    <div class="sp-detail" id="bentoGrid" style="display:none;">
+        <div class="sp-layout">
+
+            <!-- LEFT: Main content column -->
+            <div class="sp-content">
+
+                <!-- HERO BANNER -->
+                <div class="sd-hero">
+                    <div class="sd-poster">
+                        <img id="heroPoster" src="" alt="Event Poster" style="display:none;">
+                        <div class="sd-poster-fallback" id="heroPosterFallback"><span>Event Poster</span></div>
+                    </div>
+                    <div class="sd-hero-body">
+                        <div class="sdh-top">
+                            <span class="sdh-badge" id="heroBadge">Upcoming</span>
+                        </div>
+                        <h1 class="sdh-title" id="heroTitle">—</h1>
+                        <p class="sdh-dept" id="heroDept">—</p>
+                        <div class="sdh-stats-row">
+                            <div class="sdh-stat">
+                                <div class="sdh-stat-icon"><i class="fas fa-calendar-day"></i></div>
+                                <div>
+                                    <span class="sdh-stat-lbl">DATE</span>
+                                    <span class="sdh-stat-val" id="heroDate">—</span>
+                                </div>
+                            </div>
+                            <div class="sdh-stat">
+                                <div class="sdh-stat-icon"><i class="fas fa-clock"></i></div>
+                                <div>
+                                    <span class="sdh-stat-lbl">TIME</span>
+                                    <span class="sdh-stat-val" id="heroTime">—</span>
+                                </div>
+                            </div>
+                            <div class="sdh-stat">
+                                <div class="sdh-stat-icon"><i class="fas fa-map-marker-alt"></i></div>
+                                <div>
+                                    <span class="sdh-stat-lbl">VENUE</span>
+                                    <span class="sdh-stat-val" id="heroVenue">—</span>
+                                </div>
+                            </div>
+                            <div class="sdh-stat">
+                                <div class="sdh-stat-icon"><i class="fas fa-user-tie"></i></div>
+                                <div>
+                                    <span class="sdh-stat-lbl">ORGANIZER</span>
+                                    <span class="sdh-stat-val" id="heroOrg">—</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Seats progress bar -->
+                        <div class="sdh-seats-bar">
+                            <div class="sdh-seats-info">
+                                <span>Seats filled</span>
+                                <span class="sdh-seats-count" id="heroSeats">—</span>
+                            </div>
+                            <div class="sdh-progress-track">
+                                <div class="sdh-progress-fill" id="heroProgress" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EVENT OVERVIEW -->
+                <div class="sd-section">
+                    <div class="sd-section-header">
+                        <div class="sd-section-icon"><i class="fas fa-info-circle"></i></div>
+                        <h2 class="sd-section-title">Event Overview</h2>
+                    </div>
+                    <div class="sd-section-body">
+                        <p class="sdc-text" id="aboutText">—</p>
+                        <blockquote class="sdc-quote" id="aboutQuote" style="display:none;">
+                            <span id="aboutQuoteText"></span>
+                        </blockquote>
+                        <p class="sdc-text sdc-text--2" id="aboutText2" style="display:none;"></p>
+                        <div class="sdc-tags" id="aboutTags"></div>
+                    </div>
+                </div>
+
+                <!-- ELIGIBILITY -->
+                <div class="sd-section">
+                    <div class="sd-section-header">
+                        <div class="sd-section-icon"><i class="fas fa-users"></i></div>
+                        <h2 class="sd-section-title">Eligibility</h2>
+                    </div>
+                    <div class="sd-section-body">
+                        <div class="elig-table">
+                            <div class="elig-row">
+                                <span class="elig-key">Eligible Departments</span>
+                                <div class="elig-chips" id="eligDepts">
+                                    <span class="elig-chip" id="eligDept">—</span>
+                                </div>
+                            </div>
+                            <div class="elig-row">
+                                <span class="elig-key">Eligible Students</span>
+                                <div class="elig-chips">
+                                    <span class="elig-chip">1st Year</span>
+                                    <span class="elig-chip">2nd Year</span>
+                                    <span class="elig-chip">3rd Year</span>
+                                </div>
+                            </div>
+                            <div class="elig-row">
+                                <span class="elig-key">Capacity</span>
+                                <span class="elig-val" id="eligCapacity">—</span>
+                            </div>
+                            <div class="elig-row">
+                                <span class="elig-key">Min. Attendance Required</span>
+                                <span class="elig-val">75%</span>
+                            </div>
+                            <div class="elig-row">
+                                <span class="elig-key">Prerequisites</span>
+                                <span class="elig-val">Basic knowledge of subject</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EVENT SCHEDULE -->
+                <div class="sd-section">
+                    <div class="sd-section-header">
+                        <div class="sd-section-icon"><i class="fas fa-calendar-check"></i></div>
+                        <h2 class="sd-section-title">Event Schedule</h2>
+                    </div>
+                    <div class="sd-section-body">
+                        <div class="schedule-table">
+                            <div class="schedule-thead">
+                                <span>DATE</span>
+                                <span>TIME</span>
+                                <span>SESSION / ACTIVITY</span>
+                            </div>
+                            <div class="schedule-body" id="scheduleBody">
+                                <div class="schedule-row">
+                                    <span id="sDate">—</span>
+                                    <span id="sTime" class="schedule-time">—</span>
+                                    <span class="schedule-pill">Event Start</span>
+                                </div>
+                                <div class="schedule-row">
+                                    <span id="sDate2">—</span>
+                                    <span class="schedule-time">—</span>
+                                    <span class="schedule-pill schedule-pill--gold">Main Programme</span>
+                                </div>
+                                <div class="schedule-row">
+                                    <span id="sDate3">—</span>
+                                    <span class="schedule-time">—</span>
+                                    <span class="schedule-pill">Break</span>
+                                </div>
+                                <div class="schedule-row">
+                                    <span id="sDate4">—</span>
+                                    <span class="schedule-time">—</span>
+                                    <span class="schedule-pill schedule-pill--gold">Sessions & Activities</span>
+                                </div>
+                                <div class="schedule-row">
+                                    <span id="sDate5">—</span>
+                                    <span class="schedule-time">—</span>
+                                    <span class="schedule-pill schedule-pill--muted">Certificate Distribution & Valediction</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PARTICIPATION GUIDE -->
+                <div class="sd-section">
+                    <div class="sd-section-header">
+                        <div class="sd-section-icon"><i class="fas fa-list-ol"></i></div>
+                        <h2 class="sd-section-title">Participation Guide</h2>
+                    </div>
+                    <div class="sd-section-body">
+                        <div class="guide-steps">
+                            <div class="guide-step">
+                                <div class="guide-step-num">1</div>
+                                <div class="guide-step-content">
+                                    <strong>Registration</strong>
+                                    <p>Complete online registration before the deadline. Submit your student ID and department details. Confirmation will be sent via email within 24 hours.</p>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <div class="guide-step-num">2</div>
+                                <div class="guide-step-content">
+                                    <strong>Attendance Rule</strong>
+                                    <p>Students must be present for a minimum of 75% of the total session duration. Biometric attendance will be recorded at the entry point.</p>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <div class="guide-step-num">3</div>
+                                <div class="guide-step-content">
+                                    <strong>Certificate</strong>
+                                    <p>E-certificates will be issued to all participants who maintain ≥75% attendance. Physical certificates are distributed at the valediction ceremony.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EVENT DETAILS (metadata table) -->
+                <div class="sd-section">
+                    <div class="sd-section-header">
+                        <div class="sd-section-icon"><i class="fas fa-info-circle"></i></div>
+                        <h2 class="sd-section-title">Event Details</h2>
+                    </div>
+                    <div class="sd-section-body">
+                        <div class="meta-table">
+                            <div class="meta-row">
+                                <span class="meta-key">Coordinator</span>
+                                <span class="meta-val" id="metaCoordinator">—</span>
+                            </div>
+                            <div class="meta-row">
+                                <span class="meta-key">Department</span>
+                                <span class="meta-val" id="metaDept">—</span>
+                            </div>
+                            <div class="meta-row">
+                                <span class="meta-key">Capacity</span>
+                                <span class="meta-val" id="metaCapacity">—</span>
+                            </div>
+                            <div class="meta-row">
+                                <span class="meta-key">Status</span>
+                                <span class="meta-val" id="metaStatus">—</span>
+                            </div>
+                            <div class="meta-row">
+                                <span class="meta-key">Venue</span>
+                                <span class="meta-val" id="metaVenue">—</span>
+                            </div>
+                            <div class="meta-row">
+                                <span class="meta-key">Registration</span>
+                                <span class="meta-val">Open</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ORGANIZER CONTACT -->
+                <div class="sd-section">
+                    <div class="sd-section-header">
+                        <div class="sd-section-icon"><i class="fas fa-user-tie"></i></div>
+                        <h2 class="sd-section-title">Organizer Contact</h2>
+                    </div>
+                    <div class="sd-section-body">
+                        <div class="organizer-card">
+                            <div class="organizer-avatar" id="organizerAvatar">DR</div>
+                            <div class="organizer-info">
+                                <strong id="facultyName">—</strong>
+                                <span id="facultyRole">Faculty Coordinator</span>
+                            </div>
+                        </div>
+                        <div class="organizer-contacts">
+                            <div class="org-contact-row">
+                                <i class="fas fa-envelope"></i>
+                                <span id="orgEmail">coordinator@jainuniversity.ac.in</span>
+                            </div>
+                            <div class="org-contact-row">
+                                <i class="fas fa-phone"></i>
+                                <span>+91 80 1234 5678</span>
+                            </div>
+                            <div class="org-contact-row org-contact-row--highlight">
+                                <i class="fas fa-comment-alt"></i>
+                                <span>Message via Portal</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAST HIGHLIGHTS (carousel — shown only for past events) -->
+                <div class="sd-section sd-section--highlights" id="highlightsSection" style="display:none;">
+                    <div class="sd-section-header">
+                        <div class="sd-section-icon"><i class="fas fa-chart-bar"></i></div>
+                        <h2 class="sd-section-title">Event Highlights</h2>
+                    </div>
+                    <div class="sd-section-body">
+                        <div class="highlights-stats">
+                            <div class="hl-stat"><span class="hl-num">200+</span><span class="hl-lbl">Attendees</span></div>
+                            <div class="hl-stat"><span class="hl-num">95%</span><span class="hl-lbl">Satisfaction</span></div>
+                            <div class="hl-stat"><span class="hl-num">12</span><span class="hl-lbl">Sessions</span></div>
+                            <div class="hl-stat"><span class="hl-num">8</span><span class="hl-lbl">Awards</span></div>
+                        </div>
+                        <div class="highlights-carousel">
+                            <div class="hl-carousel-track" id="hlTrack">
+                                <div class="hl-slide">
+                                    <div class="hl-slide-img" style="background:linear-gradient(135deg,#1C2B4A,#3A5C8C)">
+                                        <i class="fas fa-trophy" style="font-size:40px;color:#C8920A;opacity:.7"></i>
+                                    </div>
+                                    <p>Award ceremony and closing highlights</p>
+                                </div>
+                                <div class="hl-slide">
+                                    <div class="hl-slide-img" style="background:linear-gradient(135deg,#2E4370,#1C2B4A)">
+                                        <i class="fas fa-users" style="font-size:40px;color:#C8920A;opacity:.7"></i>
+                                    </div>
+                                    <p>200+ students participated across sessions</p>
+                                </div>
+                                <div class="hl-slide">
+                                    <div class="hl-slide-img" style="background:linear-gradient(135deg,#1a3a2a,#1C2B4A)">
+                                        <i class="fas fa-certificate" style="font-size:40px;color:#C8920A;opacity:.7"></i>
+                                    </div>
+                                    <p>Certificates distributed to all participants</p>
+                                </div>
+                            </div>
+                            <div class="hl-carousel-dots" id="hlDots">
+                                <button class="hl-dot active" data-idx="0"></button>
+                                <button class="hl-dot" data-idx="1"></button>
+                                <button class="hl-dot" data-idx="2"></button>
+                            </div>
+                            <button class="hl-arrow hl-arrow--prev" id="hlPrev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="hl-arrow hl-arrow--next" id="hlNext"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RELATED EVENTS -->
+                <div class="sd-section" id="relatedSection">
+                    <div class="sd-section-header">
+                        <div class="sd-section-icon"><i class="fas fa-th-large"></i></div>
+                        <h2 class="sd-section-title">Related Events</h2>
+                    </div>
+                    <div class="sd-section-body">
+                        <div class="related-grid" id="relatedGrid">
+                            <!-- filled by JS -->
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /sp-content -->
+
+            <!-- RIGHT: Sticky sidebar -->
+            <aside class="sp-sidebar">
+
+                <!-- REGISTRATION CARD -->
+                <div class="sidebar-card sidebar-card--reg">
+                    <div class="sidebar-card-header">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Registration</span>
+                    </div>
+                    <div class="sidebar-reg-deadline">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <span>Deadline: <strong id="sDeadline" class="deadline-date">—</strong></span>
+                            <span class="deadline-remaining" id="deadlineRemaining"></span>
+                        </div>
+                    </div>
+                    <div class="sidebar-seats">
+                        <div class="sidebar-seats-top">
+                            <span>Seats available</span>
+                            <span class="sidebar-seats-num" id="sidebarSeats">—</span>
+                        </div>
+                        <div class="sidebar-progress-track">
+                            <div class="sidebar-progress-fill" id="sidebarProgress" style="width:0%"></div>
+                        </div>
+                        <span class="sidebar-seats-sub" id="sidebarSeatsSub">—</span>
+                    </div>
+                    <div class="sidebar-meta-grid">
+                        <div class="sidebar-meta-item">
+                            <span class="sidebar-meta-key">Registration Fee</span>
+                            <span class="sidebar-meta-val">Free</span>
+                        </div>
+                        <div class="sidebar-meta-item">
+                            <span class="sidebar-meta-key">Mode</span>
+                            <span class="sidebar-meta-val">Hybrid</span>
+                        </div>
+                        <div class="sidebar-meta-item sidebar-meta-item--full">
+                            <span class="sidebar-meta-key">Status</span>
+                            <span class="sidebar-status-badge" id="sidebarStatusBadge">Open</span>
+                        </div>
+                    </div>
+                    <a href="#" class="sidebar-cta"><i class="fas fa-user-plus"></i> Register Now</a>
+                    <button class="sidebar-wishlist"><i class="fas fa-heart"></i> Add to Wishlist</button>
+                </div>
+
+                <!-- VENUE & TIME CARD -->
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Venue &amp; Time</span>
+                    </div>
+                    <div class="venue-block">
+                        <strong id="venueHall">—</strong>
+                        <span id="venueFloor">—</span>
+                        <span id="venueCampus">Jain University Main Campus</span>
+                        <span id="venueCity">Bengaluru – 560078</span>
+                    </div>
+                    <div class="venue-times">
+                        <div class="venue-time-row">
+                            <span class="venue-time-key">Date</span>
+                            <span class="venue-time-val" id="venueDate">—</span>
+                        </div>
+                        <div class="venue-time-row">
+                            <span class="venue-time-key">Start Time</span>
+                            <span class="venue-time-val" id="timingsBig">—</span>
+                        </div>
+                        <div class="venue-time-row">
+                            <span class="venue-time-key">End Time</span>
+                            <span class="venue-time-val" id="timingsEnd">—</span>
+                        </div>
+                        <div class="venue-time-row">
+                            <span class="venue-time-key">Duration</span>
+                            <span class="venue-time-val">Full Day</span>
+                        </div>
+                    </div>
+                    <div class="venue-share">
+                        <span class="venue-share-label">Share this event</span>
+                        <div class="venue-share-btns">
+                            <button class="share-btn" onclick="shareEvent('whatsapp')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                            <button class="share-btn" onclick="shareEvent('email')"><i class="fas fa-envelope"></i> Email</button>
+                            <button class="share-btn" onclick="shareEvent('copy')"><i class="fas fa-link"></i> Copy Link</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FACULTY NOTES MINI CARD -->
+                <div class="sidebar-card sidebar-card--faculty">
+                    <div class="sidebar-card-header">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Faculty Notes</span>
+                    </div>
+                    <p class="sidebar-faculty-note">Attendance records, grading rubrics and lab credentials will be shared via LMS. Contact the coordinator for staff queries.</p>
+                    <div class="sidebar-faculty-chip">
+                        <i class="fas fa-user-tie"></i>
+                        <span id="facultyName2">—</span>
+                    </div>
+                </div>
+
+            </aside><!-- /sp-sidebar -->
+
+        </div><!-- /sp-layout -->
+    </div><!-- /sp-detail -->
+
+</main>
+
+<!-- TOAST -->
+<div class="sp-toast" id="bentoToast">
+    <i class="fas fa-check-circle"></i>
+    <span id="bentoToastMsg">Loaded</span>
+</div>
+
+<script>
+// Share helper
+function shareEvent(type) {
+    const url = window.location.href;
+    const title = document.getElementById('heroTitle')?.textContent || 'Event';
+    if (type === 'whatsapp') window.open('https://wa.me/?text=' + encodeURIComponent(title + ' ' + url), '_blank');
+    else if (type === 'email') window.location.href = 'mailto:?subject=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(url);
+    else { navigator.clipboard?.writeText(url); showBentoToastGlobal('Link copied!'); }
+}
+function showBentoToastGlobal(msg) {
+    const el = document.getElementById('bentoToast');
+    const txt = document.getElementById('bentoToastMsg');
+    if (!el) return;
+    if (txt) txt.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// Mobile filter toggle
+document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.getElementById('filterToggle');
+    const drawer = document.getElementById('mobileFilters');
+    if (toggle && drawer) {
+        toggle.addEventListener('click', function() {
+            drawer.classList.toggle('open');
+            toggle.classList.toggle('active');
+        });
+    }
+
+    // Highlights carousel
+    let hlIndex = 0;
+    const hlTrack = document.getElementById('hlTrack');
+    const hlDots = document.querySelectorAll('.hl-dot');
+
+    function goToSlide(idx) {
+        hlIndex = idx;
+        if (hlTrack) hlTrack.style.transform = `translateX(-${idx * 100}%)`;
+        hlDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+
+    document.getElementById('hlNext')?.addEventListener('click', () => goToSlide((hlIndex + 1) % 3));
+    document.getElementById('hlPrev')?.addEventListener('click', () => goToSlide((hlIndex + 2) % 3));
+    hlDots.forEach(d => d.addEventListener('click', () => goToSlide(+d.dataset.idx)));
+
+    // Auto-advance carousel
+    setInterval(() => { if (document.getElementById('highlightsSection')?.style.display !== 'none') goToSlide((hlIndex + 1) % 3); }, 4000);
+});
+</script>
+<script src="app.js"></script>
+<script src="bento.js"></script>
+</body>
+</html>

@@ -1,0 +1,2341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ╔══════════════════════════════════════════════╗
+       ║  AUTH GUARD — DO NOT REMOVE                 ║
+       ╚══════════════════════════════════════════════╝ -->
+  <script src="auth.js"></script>
+  <script>
+    // Redirect to login.html if not authenticated
+    if (window.JainAuth) { window.JainAuth.requireAuth(); }
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Department Events Portal — Jain University</title>
+
+  <!-- Google Fonts: Sora + Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sora: ['Sora', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              DEFAULT: '#1C2B4A',
+              deep: '#111C33',
+              mid: '#2E4370',
+              light: '#3A5C8C',
+            },
+            gold: {
+              DEFAULT: '#C8920A',
+              light: '#E8B030',
+              pale: '#FDF3DC',
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM & CUSTOM STYLES
+       ============================================================ */
+    :root {
+      --navy:        #1C2B4A;
+      --navy-deep:   #111C33;
+      --navy-mid:    #2E4370;
+      --navy-light:  #3A5C8C;
+      --gold:        #C8920A;
+      --gold-light:  #E8B030;
+      --gold-pale:   #FDF3DC;
+      --white:       #FFFFFF;
+      --surface:     #F7F8FC;
+      --surface2:    #EFF1F7;
+      --border:      #DDE1EE;
+      --text-dark:   #0F1B33;
+      --text-mid:    #374151;
+      --text-soft:   #6B7280;
+      --text-pale:   #9CA3AF;
+      --r-sm: 6px;
+      --r-md: 12px;
+      --r-lg: 18px;
+      --r-xl: 24px;
+      --shadow-sm: 0 1px 4px rgba(28,43,74,.07);
+      --shadow-md: 0 4px 20px rgba(28,43,74,.10);
+      --shadow-lg: 0 12px 40px rgba(28,43,74,.15);
+      --transition: .22s cubic-bezier(.4,0,.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--surface);
+      color: var(--text-dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to   { transform: translateY(0);     opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.94); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+    @keyframes slideInLeft {
+      from { transform: translateX(-100%); }
+      to   { transform: translateX(0); }
+    }
+    @keyframes slideInRight {
+      from { transform: translateX(40px); opacity: 0; }
+      to   { transform: translateX(0);    opacity: 1; }
+    }
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--navy);
+      border-bottom: 2px solid var(--gold);
+      box-shadow: 0 4px 24px rgba(0,0,0,.22);
+      animation: slideDown 0.5s cubic-bezier(.34,1.1,.64,1) both;
+    }
+    .navbar-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      height: 72px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Hamburger */
+    .hamburger-btn {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,.08);
+      border: 1.5px solid rgba(255,255,255,.15);
+      border-radius: 10px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+    .hamburger-btn:hover { background: rgba(255,255,255,.16); border-color: var(--gold); }
+    .hamburger-line {
+      width: 18px; height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    /* Logo block */
+    .nav-logo-badge {
+      width: 48px; height: 48px;
+      background: var(--gold);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Sora', sans-serif;
+      font-weight: 900; font-size: 14px;
+      color: var(--navy);
+      letter-spacing: .5px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(200,146,10,.35);
+      transition: var(--transition);
+    }
+    .nav-logo-badge:hover { transform: scale(1.05); }
+    .nav-brand-text { display: flex; flex-direction: column; gap: 1px; }
+    .nav-university-name {
+      font-family: 'Sora', sans-serif;
+      font-size: 17px; font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+      letter-spacing: -.2px;
+    }
+    .nav-portal-name {
+      font-size: 11px;
+      color: rgba(255,255,255,.5);
+      letter-spacing: .6px;
+      font-weight: 500;
+    }
+
+    /* Nav spacer */
+    .nav-spacer { flex: 1; }
+
+    /* Profile dropdown */
+    .profile-wrapper { position: relative; }
+    .profile-avatar-btn {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+      border: 2px solid rgba(200,146,10,.5);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Sora', sans-serif;
+      font-size: 13px; font-weight: 800;
+      color: var(--white);
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+    .profile-avatar-btn:hover { border-color: var(--gold); transform: scale(1.05); }
+    .profile-online-dot {
+      position: absolute;
+      bottom: 1px; right: 1px;
+      width: 8px; height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      border: 1.5px solid var(--navy);
+      animation: pulse-dot 2s infinite;
+    }
+    .profile-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 200px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 8px;
+      transform: translateY(6px) scale(.97);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .2s cubic-bezier(.34,1.3,.64,1), opacity .18s;
+      z-index: 300;
+    }
+    .profile-dropdown.open {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: all;
+    }
+    .dropdown-header {
+      padding: 8px 12px 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 6px;
+    }
+    .dropdown-header-name {
+      font-size: 13px; font-weight: 700;
+      color: var(--text-dark);
+    }
+    .dropdown-header-role {
+      font-size: 11px;
+      color: var(--text-pale);
+    }
+    .dropdown-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px; font-weight: 500;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .dropdown-item:hover { background: var(--surface); color: var(--navy); }
+    .dropdown-item i { width: 16px; text-align: center; color: var(--text-pale); font-size: 12px; }
+    .dropdown-item:hover i { color: var(--gold); }
+    .dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+    /* Add Event button */
+    .add-event-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px;
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(200,146,10,.3);
+      text-decoration: none;
+    }
+    .add-event-btn:hover {
+      background: var(--gold-light);
+      transform: scale(1.02);
+      box-shadow: 0 4px 16px rgba(200,146,10,.4);
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar-backdrop {
+      position: fixed; inset: 0; z-index: 400;
+      background: rgba(11,17,30,.6);
+      backdrop-filter: blur(4px);
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s;
+    }
+    .sidebar-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 100%;
+      width: 280px;
+      background: var(--navy-deep);
+      z-index: 500;
+      transform: translateX(-100%);
+      transition: transform .32s cubic-bezier(.4,0,.2,1);
+      display: flex; flex-direction: column;
+      box-shadow: 8px 0 40px rgba(0,0,0,.35);
+    }
+    .sidebar.open { transform: translateX(0); }
+
+    .sidebar-header {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sidebar-logo-group {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .sidebar-logo-badge {
+      width: 42px; height: 42px;
+      background: var(--gold);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Sora', sans-serif;
+      font-size: 13px; font-weight: 900;
+      color: var(--navy);
+    }
+    .sidebar-close-btn {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.6);
+      cursor: pointer;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+    .sidebar-close-btn:hover { background: rgba(255,255,255,.15); color: var(--white); }
+
+    .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
+    .sidebar-section-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      color: rgba(255,255,255,.3);
+      padding: 10px 8px 6px;
+    }
+    .sidebar-nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,.6);
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      position: relative;
+    }
+    .sidebar-nav-item:hover {
+      background: rgba(255,255,255,.07);
+      color: var(--white);
+    }
+    .sidebar-nav-item.active {
+      background: rgba(200,146,10,.15);
+      color: var(--gold-light);
+      font-weight: 600;
+    }
+    .sidebar-nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 3px; height: 22px;
+      background: var(--gold);
+      border-radius: 0 3px 3px 0;
+    }
+    .sidebar-nav-item i {
+      width: 18px; text-align: center;
+      font-size: 15px;
+    }
+    .sidebar-nav-badge {
+      margin-left: auto;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 10px; font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 20px;
+    }
+    .sidebar-footer {
+      padding: 16px 12px 24px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .sidebar-user-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px;
+      background: rgba(255,255,255,.05);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .sidebar-user-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+      border: 2px solid rgba(200,146,10,.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .sidebar-user-info { flex: 1; min-width: 0; }
+    .sidebar-user-name { font-size: 13px; font-weight: 600; color: var(--white); }
+    .sidebar-user-role { font-size: 11px; color: rgba(255,255,255,.4); }
+
+    /* ── HERO SECTION ── */
+    .hero-outer {
+      background: var(--surface);
+      padding: 28px 24px 0;
+    }
+    .hero-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      height: 320px;
+      box-shadow: 0 20px 60px rgba(17,28,51,.25);
+      animation: scaleIn 0.6s cubic-bezier(.34,1.1,.64,1) 0.15s both;
+    }
+    .hero-bg-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      display: block;
+      position: absolute; inset: 0;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        105deg,
+        rgba(11,17,30,.92) 0%,
+        rgba(28,43,74,.82) 45%,
+        rgba(28,43,74,.4)  100%
+      );
+    }
+    .hero-glass-strip {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(11,17,30,.6), transparent);
+      backdrop-filter: blur(2px);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      height: 100%;
+      padding: 36px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      max-width: 640px;
+    }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700;
+      color: var(--gold-light);
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      animation: fadeInUp 0.5s 0.35s both;
+    }
+    .hero-eyebrow-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px rgba(200,146,10,.8);
+      animation: pulse-dot 2s infinite;
+    }
+    .hero-heading {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--white);
+      animation: fadeInUp 0.5s 0.45s both;
+    }
+    .hero-heading-accent { color: var(--gold-light); display: block; }
+    .hero-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,.65);
+      max-width: 400px;
+      line-height: 1.6;
+      animation: fadeInUp 0.5s 0.55s both;
+    }
+    .hero-stats-row {
+      display: flex; align-items: center; gap: 0;
+      margin-top: 8px;
+      animation: fadeInUp 0.5s 0.65s both;
+    }
+    .hero-stat {
+      display: flex; flex-direction: column; gap: 2px;
+      padding-right: 24px;
+    }
+    .hero-stat-num {
+      font-family: 'Sora', sans-serif;
+      font-size: 28px; font-weight: 900;
+      color: var(--white);
+      line-height: 1;
+    }
+    .hero-stat-num.gold { color: var(--gold-light); }
+    .hero-stat-label { font-size: 11px; color: rgba(255,255,255,.5); letter-spacing: .5px; }
+    .hero-stat-sep {
+      width: 1px; height: 36px;
+      background: rgba(255,255,255,.2);
+      margin: 0 24px;
+      flex-shrink: 0;
+    }
+
+    /* ── PAGE LAYOUT ── */
+    .page-body {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar-wrapper {
+      position: sticky;
+      top: 72px;
+      z-index: 100;
+      padding: 16px 0;
+      background: var(--surface);
+    }
+    .filter-bar-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(28,43,74,.07);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      transition: box-shadow var(--transition);
+      animation: fadeInUp 0.4s 0.3s both;
+    }
+    .filter-bar-card:hover { box-shadow: 0 6px 28px rgba(28,43,74,.1); }
+
+    /* Search input */
+    .filter-search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 180px;
+    }
+    .filter-search-icon {
+      position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+      color: var(--text-pale); font-size: 13px;
+      pointer-events: none;
+    }
+    .filter-search {
+      width: 100%;
+      padding: 9px 14px 9px 36px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px; font-family: 'Inter', sans-serif;
+      color: var(--text-dark);
+      background: var(--surface);
+      outline: none;
+      transition: var(--transition);
+    }
+    .filter-search:focus { border-color: var(--navy); background: var(--white); box-shadow: 0 0 0 3px rgba(28,43,74,.07); }
+    .filter-search::placeholder { color: var(--text-pale); }
+
+    /* Department dropdown */
+    .filter-select-wrap { position: relative; }
+    .filter-select-icon {
+      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      color: var(--text-pale); font-size: 12px; pointer-events: none;
+    }
+    .filter-select {
+      appearance: none;
+      padding: 9px 32px 9px 32px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px; font-family: 'Inter', sans-serif;
+      color: var(--text-dark);
+      background: var(--surface);
+      cursor: pointer; outline: none;
+      transition: var(--transition);
+      min-width: 175px;
+    }
+    .filter-select:focus { border-color: var(--navy); background: var(--white); }
+    .filter-select-arrow {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      font-size: 10px; color: var(--text-pale); pointer-events: none;
+    }
+
+    /* Timeline pills */
+    .filter-divider { width: 1px; height: 30px; background: var(--border); flex-shrink: 0; }
+    .timeline-pills {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tl-pill {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px; font-weight: 600;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .tl-pill:hover { border-color: var(--navy); color: var(--navy); }
+    .tl-pill.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: var(--white);
+    }
+
+    /* View toggle */
+    .view-toggle {
+      display: flex; align-items: center;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .vt-btn {
+      width: 32px; height: 32px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: var(--text-pale);
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .vt-btn:hover { color: var(--navy); }
+    .vt-btn.active { background: var(--white); color: var(--navy); box-shadow: 0 1px 6px rgba(28,43,74,.1); }
+
+    /* Export btn */
+    .export-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 12px; font-weight: 600;
+      color: var(--text-mid);
+      background: transparent;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .export-btn:hover { border-color: var(--navy); color: var(--navy); background: var(--surface); }
+
+    /* ── RESULTS BAR ── */
+    .results-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 4px 0 16px;
+    }
+    .results-count {
+      font-size: 13px; color: var(--text-soft);
+    }
+
+    /* ── CONTENT LAYOUT ── */
+    .content-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) { .content-layout { grid-template-columns: 1fr; } }
+
+    /* ── EVENTS GRID ── */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── EVENT CARD ── */
+    .event-card {
+      background: var(--white);
+      border-radius: var(--r-xl);
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      animation: fadeInUp 0.4s both;
+    }
+    .event-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
+    }
+    .event-card-poster {
+      width: 100%; height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+    .event-card-poster-placeholder {
+      width: 100%; height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 44px; color: rgba(255,255,255,.6);
+    }
+    .event-card-body { padding: 18px; }
+    .event-card-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .event-dept-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .3px;
+    }
+    .event-status-chip {
+      font-size: 10px; font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 20px;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+    .status-future { background: #dcfce7; color: #16a34a; }
+    .status-past   { background: var(--surface2); color: var(--text-pale); }
+    .status-present{ background: #fef3c7; color: #d97706; }
+    .event-card-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 16px; font-weight: 800;
+      color: var(--text-dark);
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+    .event-card-meta { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+    .event-meta-row {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 12px; color: var(--text-soft);
+    }
+    .event-meta-row i { width: 14px; text-align: center; font-size: 11px; color: var(--text-pale); }
+    .event-card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+    .event-organizer { font-size: 11px; color: var(--text-pale); }
+    .event-capacity-badge {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; color: var(--text-soft);
+    }
+    .event-capacity-badge i { font-size: 10px; }
+
+    /* ── LIST VIEW ── */
+    .events-list { display: flex; flex-direction: column; gap: 12px; }
+    .event-list-row {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 16px 20px;
+      display: flex; align-items: center; gap: 16px;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition);
+      animation: fadeInUp 0.3s both;
+    }
+    .event-list-row:hover { transform: translateX(4px); box-shadow: var(--shadow-md); }
+    .event-list-color-bar {
+      width: 4px; height: 48px; border-radius: 4px; flex-shrink: 0;
+    }
+    .event-list-info { flex: 1; min-width: 0; }
+    .event-list-name {
+      font-family: 'Sora', sans-serif;
+      font-size: 15px; font-weight: 700;
+      color: var(--text-dark);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .event-list-sub {
+      font-size: 12px; color: var(--text-soft);
+      display: flex; align-items: center; gap: 10px; margin-top: 3px;
+      flex-wrap: wrap;
+    }
+    .event-list-sub i { font-size: 10px; color: var(--text-pale); }
+
+    /* ── CALENDAR (SIDE) ── */
+    .calendar-column { }
+    .cal-panel-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      animation: slideInRight 0.4s 0.2s both;
+    }
+    .cal-panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 18px;
+      background: var(--navy);
+    }
+    .cal-month-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 14px; font-weight: 800;
+      color: var(--white);
+    }
+    .cal-nav-btn {
+      width: 28px; height: 28px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.7);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 11px;
+    }
+    .cal-nav-btn:hover { background: rgba(255,255,255,.2); color: var(--white); }
+
+    .cal-grid-container { padding: 14px; }
+    .cal-day-headers {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .cal-day-header-cell {
+      font-size: 10px; font-weight: 700;
+      color: var(--text-pale);
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      padding: 4px 0;
+    }
+    .cal-days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--text-mid);
+      transition: var(--transition);
+      position: relative;
+      gap: 2px;
+    }
+    .cal-day:hover { background: var(--surface); }
+    .cal-day.other-month { color: var(--text-pale); }
+    .cal-day.today { font-weight: 800; color: var(--navy); }
+    .cal-day.today::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+    .cal-day.has-events { font-weight: 700; }
+    .cal-day.selected { background: var(--navy); color: var(--white); }
+    .cal-day-dots { display: flex; gap: 2px; position: absolute; bottom: 3px; }
+    .cal-day-dot { width: 4px; height: 4px; border-radius: 50%; }
+
+    /* Cal day panel */
+    .cal-day-panel {
+      border-top: 1px solid var(--border);
+      max-height: 0; overflow: hidden;
+      transition: max-height .3s cubic-bezier(.4,0,.2,1);
+    }
+    .cal-day-panel.open { max-height: 300px; }
+    .cal-day-panel-inner { padding: 14px; }
+    .cal-day-panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .cal-day-panel-title {
+      font-size: 13px; font-weight: 700; color: var(--text-dark);
+    }
+    .cal-day-panel-close {
+      width: 22px; height: 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: var(--text-pale);
+      cursor: pointer;
+    }
+    .cal-day-event-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .cal-day-event-item:hover { background: var(--surface); }
+    .cal-day-event-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .cal-day-event-name { font-size: 12px; font-weight: 600; color: var(--text-dark); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cal-day-event-time { font-size: 11px; color: var(--text-pale); white-space: nowrap; }
+
+    /* ── CALENDAR FULL VIEW ── */
+    .calendar-section { display: none; }
+    .calendar-section.active { display: block; }
+    .big-calendar-wrap {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .big-cal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 24px;
+      background: var(--navy);
+    }
+    .big-cal-month {
+      font-family: 'Sora', sans-serif;
+      font-size: 18px; font-weight: 900;
+      color: var(--white);
+    }
+    .big-cal-body-panel { display: flex; }
+    .big-cal-main { flex: 1; }
+    .big-cal-body { padding: 16px; }
+    .big-cal-day-headers {
+      display: grid; grid-template-columns: repeat(7,1fr);
+      margin-bottom: 8px;
+    }
+    .big-cal-day-header-cell {
+      text-align: center;
+      font-size: 11px; font-weight: 700;
+      color: var(--text-pale); letter-spacing: .5px;
+      text-transform: uppercase;
+      padding: 6px 0;
+    }
+    .big-cal-grid {
+      display: grid; grid-template-columns: repeat(7,1fr);
+      gap: 4px;
+    }
+    .big-cal-day {
+      min-height: 90px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 6px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .big-cal-day:hover { background: var(--surface); border-color: var(--navy-light); }
+    .big-cal-day.other-month { opacity: .4; }
+    .big-cal-day.today { border-color: var(--gold); background: var(--gold-pale); }
+    .big-cal-day-num {
+      font-size: 12px; font-weight: 700;
+      color: var(--text-dark); margin-bottom: 4px;
+    }
+    .big-cal-day.today .big-cal-day-num { color: var(--gold); }
+    .big-cal-event-pip {
+      font-size: 10px; font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--white);
+      margin-bottom: 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 100%;
+      display: block;
+    }
+    .big-cal-more { font-size: 10px; color: var(--text-pale); font-weight: 600; margin-top: 2px; }
+
+    /* Big cal side panel */
+    .big-cal-side-panel {
+      width: 0; overflow: hidden;
+      border-left: 0 solid var(--border);
+      transition: width .3s cubic-bezier(.4,0,.2,1), border-width .3s;
+    }
+    .big-cal-side-panel.open {
+      width: 280px;
+      border-left-width: 1px;
+    }
+    .big-cal-side-inner { padding: 18px; width: 280px; }
+    .big-cal-side-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .big-cal-side-title { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+    .big-cal-side-close {
+      width: 26px; height: 26px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: var(--text-pale);
+      cursor: pointer; transition: var(--transition);
+    }
+    .big-cal-side-close:hover { background: var(--navy); color: var(--white); }
+    .big-cal-side-events { display: flex; flex-direction: column; gap: 8px; }
+
+    /* ── DETAIL MODAL ── */
+    .detail-modal-backdrop {
+      position: fixed; inset: 0; z-index: 600;
+      background: rgba(11,17,30,.6);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .detail-modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .detail-modal-box {
+      background: var(--white);
+      border-radius: var(--r-xl);
+      width: 100%; max-width: 540px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 30px 80px rgba(0,0,0,.3);
+      transform: scale(.96) translateY(12px);
+      transition: transform .3s cubic-bezier(.34,1.1,.64,1);
+    }
+    .detail-modal-backdrop.open .detail-modal-box {
+      transform: scale(1) translateY(0);
+    }
+    .detail-modal-poster {
+      width: 100%; height: 200px;
+      object-fit: cover;
+    }
+    .detail-modal-poster-placeholder {
+      width: 100%; height: 200px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 60px; color: rgba(255,255,255,.5);
+    }
+    .detail-modal-body { padding: 24px; }
+    .detail-modal-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 12px; margin-bottom: 14px;
+    }
+    .detail-modal-title-group { flex: 1; }
+    .detail-modal-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 22px; font-weight: 900;
+      color: var(--text-dark); line-height: 1.2;
+    }
+    .detail-close-btn {
+      width: 36px; height: 36px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: var(--text-pale);
+      cursor: pointer; transition: var(--transition);
+      flex-shrink: 0;
+    }
+    .detail-close-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+    .detail-chips { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+    .detail-info-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-bottom: 18px;
+    }
+    .detail-info-cell {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .detail-info-label {
+      font-size: 10px; font-weight: 700;
+      color: var(--text-pale); letter-spacing: .7px;
+      text-transform: uppercase; margin-bottom: 4px;
+    }
+    .detail-info-value {
+      font-size: 13px; font-weight: 600;
+      color: var(--text-dark);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .detail-info-value i { font-size: 11px; color: var(--text-pale); }
+    .detail-desc-label {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 12px; font-weight: 700;
+      color: var(--text-mid);
+      margin-bottom: 8px;
+    }
+    .detail-desc-label i { color: var(--text-pale); font-size: 11px; }
+    .detail-desc-text {
+      font-size: 13px;
+      color: var(--text-soft);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .detail-actions { display: flex; gap: 10px; }
+    .detail-primary-btn {
+      flex: 1;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      padding: 11px 20px;
+      background: var(--navy);
+      color: var(--white);
+      border: none; border-radius: 12px;
+      font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: var(--transition);
+    }
+    .detail-primary-btn:hover { background: var(--navy-mid); }
+    .detail-edit-btn-sm {
+      display: flex; align-items: center; gap: 7px;
+      padding: 11px 18px;
+      background: var(--gold-pale);
+      color: var(--gold);
+      border: 1.5px solid rgba(200,146,10,.3);
+      border-radius: 12px;
+      font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: var(--transition);
+    }
+    .detail-edit-btn-sm:hover { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+
+    /* ── FORM MODAL ── */
+    .form-modal-backdrop {
+      position: fixed; inset: 0; z-index: 700;
+      background: rgba(11,17,30,.65);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .form-modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .form-modal-box {
+      background: var(--white);
+      border-radius: var(--r-xl);
+      width: 100%; max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 30px 80px rgba(0,0,0,.3);
+      transform: scale(.95) translateY(16px);
+      transition: transform .3s cubic-bezier(.34,1.1,.64,1);
+    }
+    .form-modal-backdrop.open .form-modal-box {
+      transform: scale(1) translateY(0);
+    }
+    .form-modal-header {
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; background: var(--white); z-index: 10;
+    }
+    .form-modal-title-group { display: flex; align-items: center; gap: 12px; }
+    .form-modal-icon {
+      width: 40px; height: 40px;
+      background: var(--navy);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 16px;
+    }
+    .form-modal-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 18px; font-weight: 800;
+      color: var(--text-dark);
+    }
+    .form-modal-close {
+      width: 34px; height: 34px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; color: var(--text-pale);
+      cursor: pointer; transition: var(--transition);
+    }
+    .form-modal-close:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+    .form-modal-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-size: 12px; font-weight: 700;
+      color: var(--text-mid); letter-spacing: .3px;
+    }
+    .form-req { color: var(--gold); }
+    .form-input, .form-select, .form-textarea {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px; font-family: 'Inter', sans-serif;
+      color: var(--text-dark);
+      background: var(--surface);
+      outline: none; width: 100%;
+      transition: var(--transition);
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--navy); background: var(--white);
+      box-shadow: 0 0 0 3px rgba(28,43,74,.07);
+    }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+    .select-field-wrap { position: relative; }
+    .select-field-wrap .form-select { appearance: none; padding-right: 32px; }
+    .select-field-arrow {
+      position: absolute; right: 11px; top: 50%; transform: translateY(-50%);
+      font-size: 10px; color: var(--text-pale); pointer-events: none;
+    }
+
+    .form-modal-footer {
+      padding: 18px 24px 24px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: flex-end; gap: 10px;
+      position: sticky; bottom: 0; background: var(--white);
+    }
+    .btn-ghost-form {
+      padding: 10px 22px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px; font-weight: 600;
+      color: var(--text-mid);
+      cursor: pointer; transition: var(--transition);
+    }
+    .btn-ghost-form:hover { border-color: var(--navy); color: var(--navy); }
+    .btn-primary-form {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 24px;
+      background: var(--gold);
+      color: var(--navy);
+      border: none; border-radius: 10px;
+      font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(200,146,10,.3);
+    }
+    .btn-primary-form:hover { background: var(--gold-light); transform: scale(1.01); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 64px 24px;
+      background: var(--white);
+      border: 1.5px dashed var(--border);
+      border-radius: var(--r-xl);
+    }
+    .empty-state.visible { display: flex; }
+    .empty-icon { font-size: 48px; color: var(--text-pale); margin-bottom: 12px; }
+
+    /* ── TOAST ── */
+    .toast-notification {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--navy);
+      color: var(--white);
+      padding: 12px 22px;
+      border-radius: 12px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 600;
+      box-shadow: 0 8px 30px rgba(0,0,0,.3);
+      z-index: 900;
+      opacity: 0;
+      transition: transform .35s cubic-bezier(.34,1.1,.64,1), opacity .3s;
+      white-space: nowrap;
+    }
+    .toast-notification.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    .toast-icon { color: var(--gold); font-size: 15px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .navbar-inner { padding: 0 16px; height: 64px; }
+      .hero-content { padding: 24px 28px; }
+      .page-body { padding: 0 16px 40px; }
+      .filter-bar-card { gap: 8px; }
+      .content-layout { grid-template-columns: 1fr; }
+      .calendar-column { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       SIDEBAR BACKDROP
+       ============================================================ -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- ============================================================
+       SIDEBAR
+       ============================================================ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-group">
+        <div class="sidebar-logo-badge">JGI</div>
+        <div class="nav-brand-text">
+          <span class="nav-university-name" style="font-size:14px;">Jain University</span>
+          <span class="nav-portal-name">Admin Portal</span>
+        </div>
+      </div>
+      <button class="sidebar-close-btn" id="sidebarCloseBtn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <!-- MAIN -->
+      <div class="sidebar-section-label">Main</div>
+      <a href="index.html" class="sidebar-nav-item active">
+        <i class="fas fa-home"></i>
+        Home
+      </a>
+      <a href="index.html" class="sidebar-nav-item">
+        <i class="fas fa-calendar-alt"></i>
+        All Events
+        <span class="sidebar-nav-badge" id="sidebarEventCount">11</span>
+      </a>
+
+      <!-- EVENTS MANAGEMENT -->
+      <div class="sidebar-section-label" style="margin-top:8px;">Event Management</div>
+      <a href="register-event.html" class="sidebar-nav-item">
+        <i class="fas fa-plus-circle"></i>
+        Register Event
+      </a>
+      <a href="#" class="sidebar-nav-item">
+        <i class="fas fa-edit"></i>
+        Manage Events
+      </a>
+      <a href="#" class="sidebar-nav-item">
+        <i class="fas fa-users"></i>
+        Registrations
+      </a>
+
+      <!-- DEPARTMENTS -->
+      <div class="sidebar-section-label" style="margin-top:8px;">Departments</div>
+      <a href="#" class="sidebar-nav-item">
+        <i class="fas fa-laptop-code"></i>
+        Computer Science
+      </a>
+      <a href="#" class="sidebar-nav-item">
+        <i class="fas fa-atom"></i>
+        Sciences
+      </a>
+      <a href="#" class="sidebar-nav-item">
+        <i class="fas fa-book-open"></i>
+        Humanities
+      </a>
+
+      <!-- SYSTEM -->
+      <div class="sidebar-section-label" style="margin-top:8px;">System</div>
+      <a href="#" class="sidebar-nav-item">
+        <i class="fas fa-chart-bar"></i>
+        Reports
+      </a>
+      <a href="#" class="sidebar-nav-item">
+        <i class="fas fa-cog"></i>
+        Settings
+      </a>
+      <a href="#" class="sidebar-nav-item">
+        <i class="fas fa-question-circle"></i>
+        Help & Support
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user-card">
+        <div class="sidebar-user-avatar">JU</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Jain University</div>
+          <div class="sidebar-user-role">Admin Portal</div>
+        </div>
+        <i class="fas fa-ellipsis-v" style="color:rgba(255,255,255,.3);font-size:12px;cursor:pointer;"></i>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       NAVBAR
+       ============================================================ -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <!-- Hamburger -->
+      <button class="hamburger-btn" id="hamburgerBtn" title="Toggle Sidebar">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <!-- Logo + Brand -->
+      <div class="nav-logo-badge" style="margin-left:4px;">JGI</div>
+      <div class="nav-brand-text">
+        <span class="nav-university-name">Jain University</span>
+        <span class="nav-portal-name">Department Events Portal</span>
+      </div>
+
+      <div class="nav-spacer"></div>
+
+      <!-- Register Event link -->
+      <a href="register-event.html" class="add-event-btn" style="margin-right:8px;">
+        <i class="fas fa-plus"></i>
+        Register Event
+      </a>
+
+      <!-- Add Event (modal) -->
+      <button class="add-event-btn" id="addEventBtn" style="background:transparent;border:1.5px solid rgba(255,255,255,.25);color:white;">
+        <i class="fas fa-calendar-plus"></i>
+        Quick Add
+      </button>
+
+      <!-- Profile Avatar + Dropdown -->
+      <div class="profile-wrapper">
+        <button class="profile-avatar-btn" id="profileAvatarBtn" title="User Account">
+          <span id="navUserInitials">JU</span>
+          <span class="profile-online-dot"></span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="dropdown-header">
+            <div class="dropdown-header-name" id="navUserName">Jain University</div>
+            <div class="dropdown-header-role" id="navUserRole">Administrator</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;" id="navUserEmail"></div>
+          </div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-user-tie"></i>
+            Staff Login
+          </a>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-user-graduate"></i>
+            Student Login
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-cog"></i>
+            Settings
+          </a>
+          <a href="#" class="dropdown-item" style="color:#ef4444;" onclick="event.preventDefault();window.JainAuth&&window.JainAuth.logout();">
+            <i class="fas fa-sign-out-alt" style="color:#ef4444;"></i>
+            Sign Out
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       HERO SECTION
+       ============================================================ -->
+  <div class="hero-outer">
+    <div class="hero-container">
+      <img
+        src="https://sspark.genspark.ai/cfimages?u1=9E%2B68%2FoiVRY7JHL%2BFTaaxUp1LugSPrN1wEfDfWkiNoO2c3M5fRmyypN3ppEB7Qwpx813DezvE5SLjdAsz7%2BsuybRrHoTis7B3JzDi06UCAcQjM3UgJah18LmW7CZghO7%2FEsKEEajZ%2FrwQSh7pKZf3RnzCSwbPCNt19JGTA%3D%3D&width=1400"
+        alt="Jain University Campus"
+        class="hero-bg-img"
+        onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg,#1C2B4A 0%,#2E4370 50%,#3A5C8C 100%)';"
+      />
+      <div class="hero-overlay"></div>
+      <div class="hero-glass-strip"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-dot"></span>
+          Academic Year 2025–26
+        </div>
+        <h1 class="hero-heading">
+          Department
+          <span class="hero-heading-accent">Events Calendar</span>
+        </h1>
+        <p class="hero-subtitle">
+          Discover workshops, seminars, symposiums and more — all in one place.
+        </p>
+        <div class="hero-stats-row">
+          <div class="hero-stat">
+            <span class="hero-stat-num" id="statTotal">—</span>
+            <span class="hero-stat-label">Total Events</span>
+          </div>
+          <div class="hero-stat-sep"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-num gold" id="statUpcoming">—</span>
+            <span class="hero-stat-label">Upcoming</span>
+          </div>
+          <div class="hero-stat-sep"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-num" id="statToday">—</span>
+            <span class="hero-stat-label">Today</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PAGE BODY
+       ============================================================ -->
+  <div class="page-body">
+
+    <!-- ── FILTER BAR ── -->
+    <div class="filter-bar-wrapper">
+      <div class="filter-bar-card">
+        <!-- Search -->
+        <div class="filter-search-wrap">
+          <i class="fas fa-search filter-search-icon"></i>
+          <input
+            type="text"
+            id="searchInput"
+            class="filter-search"
+            placeholder="Search events, locations, organizers…"
+          />
+        </div>
+
+        <div class="filter-divider"></div>
+
+        <!-- Department dropdown -->
+        <div class="filter-select-wrap">
+          <i class="fas fa-building filter-select-icon"></i>
+          <select id="departmentSelect" class="filter-select">
+            <option value="all">All Departments</option>
+            <option value="computer-science">Computer Science</option>
+            <option value="mathematics">Mathematics</option>
+            <option value="physics">Physics</option>
+            <option value="chemistry">Chemistry</option>
+            <option value="biology">Biology</option>
+            <option value="english">English</option>
+            <option value="history">History</option>
+          </select>
+          <i class="fas fa-chevron-down filter-select-arrow"></i>
+        </div>
+
+        <div class="filter-divider"></div>
+
+        <!-- Timeline pills -->
+        <div class="timeline-pills" id="timelineFilter">
+          <button class="tl-pill active" data-timeline="all">All</button>
+          <button class="tl-pill" data-timeline="future">Upcoming</button>
+          <button class="tl-pill" data-timeline="present">Today</button>
+          <button class="tl-pill" data-timeline="past">Past</button>
+        </div>
+
+        <div style="flex:1;"></div>
+
+        <!-- View toggle -->
+        <div class="view-toggle">
+          <button class="vt-btn active" data-view="grid" id="gridViewBtn" title="Grid View">
+            <i class="fas fa-th-large"></i>
+          </button>
+          <button class="vt-btn" data-view="list" id="listViewBtn" title="List View">
+            <i class="fas fa-list"></i>
+          </button>
+          <button class="vt-btn" data-view="calendar" id="calViewBtn" title="Calendar View">
+            <i class="fas fa-calendar-alt"></i>
+          </button>
+        </div>
+
+        <!-- Export -->
+        <button class="export-btn" id="exportBtn">
+          <i class="fas fa-download"></i>
+          Export CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- Results count -->
+    <div class="results-bar">
+      <span class="results-count"><strong id="resultsCount">0</strong> events found</span>
+    </div>
+
+    <!-- ── CONTENT LAYOUT ── -->
+    <div class="content-layout">
+
+      <!-- Events Column -->
+      <div class="events-column">
+
+        <!-- GRID VIEW -->
+        <section id="eventsGridSection">
+          <div class="events-grid" id="eventsGrid"></div>
+          <div class="empty-state" id="emptyState">
+            <div class="empty-icon"><i class="fas fa-calendar-times"></i></div>
+            <h3 style="font-size:18px;color:var(--text-mid);font-weight:700;">No events found</h3>
+            <p style="font-size:14px;color:var(--text-soft);">Try adjusting your filters or search, or register a new event.</p>
+            <a href="register-event.html" class="add-event-btn" style="margin-top:8px;">
+              <i class="fas fa-plus"></i> Register Event
+            </a>
+          </div>
+        </section>
+
+        <!-- CALENDAR (full page) VIEW -->
+        <section class="calendar-section" id="calendarFullSection">
+          <div class="big-calendar-wrap">
+            <div class="big-cal-header">
+              <button class="cal-nav-btn" id="prevMonthBig" title="Previous Month">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <span class="big-cal-month" id="bigCalMonthTitle">March 2026</span>
+              <button class="cal-nav-btn" id="nextMonthBig" title="Next Month">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+            <div class="big-cal-body-panel">
+              <div class="big-cal-main">
+                <div class="big-cal-body">
+                  <div class="big-cal-day-headers" id="bigCalDayHeaders"></div>
+                  <div class="big-cal-grid" id="bigCalGrid"></div>
+                </div>
+              </div>
+              <div class="big-cal-side-panel" id="bigCalSidePanel">
+                <div class="big-cal-side-inner">
+                  <div class="big-cal-side-header">
+                    <span class="big-cal-side-title" id="bigCalSideTitle">Events</span>
+                    <button class="big-cal-side-close" id="bigCalSideClose">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                  <div class="big-cal-side-events" id="bigCalSideEvents"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Calendar Panel (right column) -->
+      <aside class="calendar-column" id="calendarSidePanelCol">
+        <div class="cal-panel-card">
+          <div class="cal-panel-header">
+            <button class="cal-nav-btn" id="prevMonth" title="Previous Month">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <span class="cal-month-title" id="currentMonth">March 2026</span>
+            <button class="cal-nav-btn" id="nextMonth" title="Next Month">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          <div class="cal-grid-container">
+            <div class="cal-day-headers" id="calDayHeaders"></div>
+            <div class="cal-days-grid" id="calDaysGrid"></div>
+          </div>
+          <!-- Day events panel -->
+          <div class="cal-day-panel" id="calDayPanel">
+            <div class="cal-day-panel-inner">
+              <div class="cal-day-panel-header">
+                <span class="cal-day-panel-title" id="calDayPanelTitle">Events</span>
+                <button class="cal-day-panel-close" id="calDayPanelClose">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <div id="calDayPanelEvents"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick stats card -->
+        <div class="cal-panel-card" style="margin-top:16px;">
+          <div style="padding:16px 18px;">
+            <div style="font-size:11px;font-weight:700;color:var(--text-pale);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px;">Quick Stats</div>
+            <div style="display:flex;flex-direction:column;gap:10px;" id="quickStatsList"></div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       DETAIL MODAL
+       ============================================================ -->
+  <div class="detail-modal-backdrop" id="detailModalBackdrop">
+    <div class="detail-modal-box" id="detailModalBox">
+      <div id="detailPosterWrap"></div>
+      <div class="detail-modal-body">
+        <div class="detail-modal-header">
+          <div class="detail-modal-title-group">
+            <h2 class="detail-modal-title" id="detailTitle">—</h2>
+          </div>
+          <button class="detail-close-btn" id="detailCloseBtn">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="detail-chips" id="detailChips"></div>
+        <div class="detail-info-grid" id="detailInfoGrid"></div>
+        <div class="detail-desc-label">
+          <i class="fas fa-align-left"></i>
+          About this Event
+        </div>
+        <p class="detail-desc-text" id="detailDesc">—</p>
+        <div class="detail-actions">
+          <button class="detail-primary-btn" id="detailSpotlightBtn">
+            <i class="fas fa-layer-group"></i>
+            View Full Details
+          </button>
+          <button class="detail-edit-btn-sm" id="detailEditBtn">
+            <i class="fas fa-pen"></i>
+            Edit Event
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       ADD / EDIT EVENT MODAL (Quick Add)
+       ============================================================ -->
+  <div class="form-modal-backdrop" id="formModalBackdrop">
+    <div class="form-modal-box">
+      <div class="form-modal-header">
+        <div class="form-modal-title-group">
+          <div class="form-modal-icon">
+            <i class="fas fa-calendar-plus"></i>
+          </div>
+          <span class="form-modal-title" id="formModalTitle">Quick Add Event</span>
+        </div>
+        <button class="form-modal-close" id="formModalClose">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <form id="eventForm" class="form-modal-body">
+        <input type="hidden" id="eventId" />
+
+        <div class="form-field">
+          <label class="form-label">Event Name <span class="form-req">*</span></label>
+          <input type="text" id="eventName" class="form-input" required placeholder="Enter event name" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Department <span class="form-req">*</span></label>
+            <div class="select-field-wrap">
+              <select id="eventDepartment" class="form-select" required>
+                <option value="">Select Department</option>
+                <option value="computer-science">Computer Science</option>
+                <option value="mathematics">Mathematics</option>
+                <option value="physics">Physics</option>
+                <option value="chemistry">Chemistry</option>
+                <option value="biology">Biology</option>
+                <option value="english">English</option>
+                <option value="history">History</option>
+              </select>
+              <i class="fas fa-chevron-down select-field-arrow"></i>
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Date <span class="form-req">*</span></label>
+            <input type="date" id="eventDate" class="form-input" required />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Time <span class="form-req">*</span></label>
+            <input type="time" id="eventTime" class="form-input" required />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Venue / Location <span class="form-req">*</span></label>
+          <input type="text" id="eventLocation" class="form-input" required placeholder="Room, building, or address" />
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Description</label>
+          <textarea id="eventDescription" class="form-textarea" rows="3" placeholder="Brief description of the event…"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Capacity</label>
+            <input type="number" id="eventCapacity" class="form-input" placeholder="Max seats" min="1" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Organizer</label>
+            <input type="text" id="eventOrganizer" class="form-input" placeholder="Faculty / coordinator" />
+          </div>
+        </div>
+      </form>
+
+      <div class="form-modal-footer">
+        <button type="button" class="btn-ghost-form" id="formCancelBtn">Cancel</button>
+        <button type="submit" form="eventForm" class="btn-primary-form">
+          <i class="fas fa-check"></i>
+          Save Event
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TOAST NOTIFICATION
+       ============================================================ -->
+  <div class="toast-notification" id="toastNotification">
+    <i class="fas fa-check-circle toast-icon"></i>
+    <span id="toastMessage">Done</span>
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================ -->
+  <script>
+    /* ================================================================
+       STATE
+       ================================================================ */
+    const state = {
+      events: [],
+      filteredEvents: [],
+      selectedDepartment: 'all',
+      selectedTimeline: 'all',
+      searchQuery: '',
+      currentView: 'grid',
+      currentMonth: new Date(),
+      editingEventId: null,
+      openDetailId: null,
+    };
+
+    /* ================================================================
+       SAMPLE DATA
+       ================================================================ */
+    const sampleEvents = [
+      { id:'1',  name:'AI & Machine Learning Workshop',   department:'computer-science', date:'2024-12-20', time:'14:00', location:'CS Lab 301',                        description:'Learn the fundamentals of AI and Machine Learning with hands-on examples.', capacity:50,  organizer:'Dr. Sarah Johnson',  color:'#6366f1', poster:'posters/event1.jpg'  },
+      { id:'2',  name:'Calculus Study Session',           department:'mathematics',      date:'2024-12-25', time:'10:00', location:'Math Building Room 205',             description:'Comprehensive review session covering derivatives, integrals, and applications.', capacity:30, organizer:'Prof. Michael Chen', color:'#8b5cf6', poster:'posters/event2.jpg'  },
+      { id:'3',  name:'Quantum Physics Lecture',          department:'physics',          date:'2024-12-18', time:'15:30', location:'Physics Auditorium',                 description:'Explore the fascinating world of quantum mechanics and wave-particle duality.', capacity:100, organizer:'Dr. Emily Watson',  color:'#ec4899', poster:'posters/event3.jpg'  },
+      { id:'4',  name:'Organic Chemistry Lab',            department:'chemistry',        date:'2024-12-28', time:'13:00', location:'Chemistry Lab B',                    description:'Hands-on laboratory session focusing on organic synthesis and reaction mechanisms.', capacity:25, organizer:'Dr. Robert Lee',    color:'#f59e0b', poster:'posters/event4.jpg'  },
+      { id:'5',  name:'Cell Biology Seminar',             department:'biology',          date:'2024-12-22', time:'11:00', location:'Biology Hall 102',                   description:'Latest research in cellular processes, genetics, and biotechnology applications.', capacity:40, organizer:'Dr. Lisa Anderson', color:'#10b981', poster:'posters/event5.jpg'  },
+      { id:'6',  name:'Shakespeare Reading Group',        department:'english',          date:'2025-01-05', time:'16:00', location:'Library Reading Room',              description:'Discussion and analysis of Hamlet with focus on literary themes.', capacity:20, organizer:'Prof. James Wilson', color:'#3b82f6', poster:'posters/event6.jpg'  },
+      { id:'7',  name:'World War II History Discussion',  department:'history',          date:'2025-01-08', time:'14:30', location:'History Department Room 401',        description:'Examining the causes, events, and aftermath of World War II.', capacity:35, organizer:'Dr. Patricia Brown', color:'#ef4444', poster:'posters/event7.jpg'  },
+      { id:'8',  name:'Web Development Bootcamp',         department:'computer-science', date:'2025-01-10', time:'09:00', location:'Computer Lab A',                     description:'Intensive full-day workshop on HTML, CSS, JavaScript, and modern web frameworks.', capacity:30, organizer:'Dr. Sarah Johnson', color:'#6366f1', poster:'posters/event8.jpg'  },
+      { id:'9',  name:'Statistics & Data Analysis',       department:'mathematics',      date:'2024-12-15', time:'10:30', location:'Math Building Room 310',             description:'Applied statistics for research, including hypothesis testing and regression analysis.', capacity:45, organizer:'Prof. Michael Chen', color:'#8b5cf6', poster:'posters/event9.jpg'  },
+      { id:'10', name:'Environmental Science Field Trip', department:'biology',          date:'2025-01-15', time:'08:00', location:'Campus Parking Lot (Bus Departure)', description:'Full-day field trip to study local ecosystems and biodiversity.', capacity:30, organizer:'Dr. Lisa Anderson', color:'#10b981', poster:'posters/event10.jpg' },
+      { id:'11', name:'Annual Tech Symposium 2026',       department:'computer-science', date:'2026-03-11', time:'10:00', location:'Main Auditorium',                    description:'Flagship annual tech event featuring student projects, industry talks and competitions.', capacity:200, organizer:'Dr. Sarah Johnson', color:'#6366f1', poster:'posters/event11.jpg' },
+    ];
+
+    const posterImages = [
+      'posters/event1.jpg','posters/event2.jpg','posters/event3.jpg',
+      'posters/event4.jpg','posters/event5.jpg','posters/event6.jpg',
+      'posters/event7.jpg','posters/event8.jpg','posters/event9.jpg',
+      'posters/event10.jpg','posters/event11.jpg',
+    ];
+    const DEPT_ICONS = {
+      'computer-science':'fa-laptop-code','mathematics':'fa-square-root-alt',
+      'physics':'fa-atom','chemistry':'fa-flask','biology':'fa-dna',
+      'english':'fa-book-open','history':'fa-landmark',
+    };
+
+    /* ================================================================
+       UTILITIES
+       ================================================================ */
+    function getEventTimeline(d) {
+      const t=new Date();t.setHours(0,0,0,0);
+      const e=new Date(d);e.setHours(0,0,0,0);
+      if(e<t) return 'past';
+      if(e.getTime()===t.getTime()) return 'present';
+      return 'future';
+    }
+    function formatDate(d) { return new Date(d).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}); }
+    function formatDateLong(d) { return new Date(d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}); }
+    function formatTime(t) { if(!t)return'—'; const[h,m]=t.split(':'); const hh=parseInt(h); return`${hh%12||12}:${m} ${hh>=12?'PM':'AM'}`; }
+    function getDepartmentName(d) {
+      return {'computer-science':'Computer Science','mathematics':'Mathematics','physics':'Physics','chemistry':'Chemistry','biology':'Biology','english':'English','history':'History'}[d]||d;
+    }
+    function getDeptColor(d) {
+      return {'computer-science':'#6366f1','mathematics':'#8b5cf6','physics':'#ec4899','chemistry':'#f59e0b','biology':'#10b981','english':'#3b82f6','history':'#ef4444'}[d]||'#6366f1';
+    }
+    function getEventPoster(ev) {
+      if(ev.poster) return ev.poster;
+      const idx=(parseInt(ev.id,10)-1)%posterImages.length;
+      return posterImages[idx<0?0:idx];
+    }
+    function generateId() { return Date.now().toString(36)+Math.random().toString(36).slice(2); }
+    let toastTimer;
+    function showToast(msg) {
+      const el=document.getElementById('toastNotification');
+      document.getElementById('toastMessage').textContent=msg;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer=setTimeout(()=>el.classList.remove('show'),3000);
+    }
+
+
+    /* ================================================================
+       SPOTLIGHT NAVIGATION
+       ================================================================ */
+    function goToSpotlight(id) {
+      window.location.href = 'bento.html?id=' + id;
+    }
+
+    /* ================================================================
+       FILTERING
+       ================================================================ */
+    function filterEvents() {
+      let evs=[...state.events];
+      if(state.selectedDepartment!=='all') evs=evs.filter(e=>e.department===state.selectedDepartment);
+      if(state.selectedTimeline!=='all') evs=evs.filter(e=>getEventTimeline(e.date)===state.selectedTimeline);
+      if(state.searchQuery) {
+        const q=state.searchQuery.toLowerCase();
+        evs=evs.filter(e=>e.name.toLowerCase().includes(q)||e.location.toLowerCase().includes(q)||(e.organizer||'').toLowerCase().includes(q)||(e.description||'').toLowerCase().includes(q));
+      }
+      state.filteredEvents=evs;
+      document.getElementById('resultsCount').textContent=evs.length;
+      renderCurrentView();
+      updateStats();
+      renderSideCalendar();
+    }
+
+    function updateStats() {
+      const all=state.events;
+      document.getElementById('statTotal').textContent=all.length;
+      document.getElementById('statUpcoming').textContent=all.filter(e=>getEventTimeline(e.date)==='future').length;
+      document.getElementById('statToday').textContent=all.filter(e=>getEventTimeline(e.date)==='present').length;
+      document.getElementById('sidebarEventCount').textContent=all.length;
+      // Quick stats
+      const depts={};
+      all.forEach(e=>{ depts[e.department]=(depts[e.department]||0)+1; });
+      const top=Object.entries(depts).sort((a,b)=>b[1]-a[1]).slice(0,4);
+      document.getElementById('quickStatsList').innerHTML=top.map(([d,c])=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-mid);">
+            <i class="fas ${DEPT_ICONS[d]||'fa-circle'}" style="color:${getDeptColor(d)};width:14px;text-align:center;font-size:11px;"></i>
+            ${getDepartmentName(d)}
+          </div>
+          <span style="font-size:12px;font-weight:700;color:var(--text-dark);">${c}</span>
+        </div>
+      `).join('');
+    }
+
+    /* ================================================================
+       RENDER VIEWS
+       ================================================================ */
+    function setView(v) {
+      state.currentView=v;
+      document.querySelectorAll('.vt-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+      renderCurrentView();
+    }
+
+    function renderCurrentView() {
+      const gridSec=document.getElementById('eventsGridSection');
+      const calSec=document.getElementById('calendarFullSection');
+      const calCol=document.getElementById('calendarSidePanelCol');
+
+      if(state.currentView==='calendar') {
+        gridSec.style.display='none';
+        calSec.classList.add('active');
+        calCol.style.display='none';
+        renderBigCalendar();
+      } else {
+        gridSec.style.display='';
+        calSec.classList.remove('active');
+        calCol.style.display='';
+        if(state.currentView==='grid') renderGrid();
+        else renderList();
+      }
+    }
+
+    function renderGrid() {
+      const grid=document.getElementById('eventsGrid');
+      const empty=document.getElementById('emptyState');
+      if(!state.filteredEvents.length) { grid.innerHTML=''; empty.classList.add('visible'); return; }
+      empty.classList.remove('visible');
+      grid.innerHTML=state.filteredEvents.map((ev,i)=>{
+        const tl=getEventTimeline(ev.date);
+        const statusLabel={past:'Past',present:'Today',future:'Upcoming'}[tl];
+        const statusClass={past:'status-past',present:'status-present',future:'status-future'}[tl];
+        const deptColor=getDeptColor(ev.department);
+        const icon=DEPT_ICONS[ev.department]||'fa-calendar';
+        const poster=getEventPoster(ev);
+        return `
+        <div class="event-card" style="animation-delay:${i*0.04}s" onclick="goToSpotlight('${ev.id}')">
+          <div class="event-card-poster-placeholder" style="background:linear-gradient(135deg,${deptColor}cc,${deptColor}66); position:relative; overflow:hidden;">
+            <i class="fas ${icon}" style="color:rgba(255,255,255,.7);font-size:40px;"></i>
+            <img
+              src="${poster}"
+              alt="${ev.name}"
+              class="event-card-poster"
+              style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;"
+              onerror="this.style.display='none';"
+            />
+          </div>
+          <div class="event-card-body">
+            <div class="event-card-top">
+              <span class="event-dept-chip" style="background:${deptColor}15;color:${deptColor};">
+                <i class="fas ${icon}" style="font-size:10px;"></i>
+                ${getDepartmentName(ev.department)}
+              </span>
+              <span class="event-status-chip ${statusClass}">${statusLabel}</span>
+            </div>
+            <h3 class="event-card-title">${ev.name}</h3>
+            <div class="event-card-meta">
+              <div class="event-meta-row"><i class="fas fa-calendar"></i>${formatDate(ev.date)}</div>
+              <div class="event-meta-row"><i class="fas fa-clock"></i>${formatTime(ev.time)}</div>
+              <div class="event-meta-row"><i class="fas fa-map-marker-alt"></i>${ev.location}</div>
+            </div>
+            <div class="event-card-footer">
+              <span class="event-organizer"><i class="fas fa-user" style="margin-right:4px;font-size:9px;"></i>${ev.organizer||'—'}</span>
+              <span class="event-capacity-badge"><i class="fas fa-users"></i>${ev.capacity||'—'}</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderList() {
+      const grid=document.getElementById('eventsGrid');
+      const empty=document.getElementById('emptyState');
+      if(!state.filteredEvents.length) { grid.innerHTML=''; empty.classList.add('visible'); return; }
+      empty.classList.remove('visible');
+      grid.className='events-list';
+      grid.innerHTML=state.filteredEvents.map((ev,i)=>{
+        const deptColor=getDeptColor(ev.department);
+        const tl=getEventTimeline(ev.date);
+        const statusLabel={past:'Past',present:'Today',future:'Upcoming'}[tl];
+        const statusClass={past:'status-past',present:'status-present',future:'status-future'}[tl];
+        return `
+        <div class="event-list-row" style="animation-delay:${i*0.03}s" onclick="goToSpotlight('${ev.id}')">
+          <div class="event-list-color-bar" style="background:${deptColor};"></div>
+          <div class="event-list-info">
+            <div class="event-list-name">${ev.name}</div>
+            <div class="event-list-sub">
+              <span><i class="fas fa-calendar"></i>${formatDate(ev.date)}</span>
+              <span><i class="fas fa-clock"></i>${formatTime(ev.time)}</span>
+              <span><i class="fas fa-map-marker-alt"></i>${ev.location}</span>
+            </div>
+          </div>
+          <span class="event-dept-chip" style="background:${deptColor}15;color:${deptColor};font-size:11px;padding:4px 10px;border-radius:20px;font-weight:700;white-space:nowrap;">
+            ${getDepartmentName(ev.department)}
+          </span>
+          <span class="event-status-chip ${statusClass}" style="white-space:nowrap;">${statusLabel}</span>
+        </div>`;
+      }).join('');
+    }
+
+    /* ================================================================
+       SIDE CALENDAR
+       ================================================================ */
+    function renderSideCalendar() {
+      const M=state.currentMonth;
+      const year=M.getFullYear(), month=M.getMonth();
+      document.getElementById('currentMonth').textContent=M.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+      const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      document.getElementById('calDayHeaders').innerHTML=days.map(d=>`<div class="cal-day-header-cell">${d[0]}</div>`).join('');
+      const first=new Date(year,month,1).getDay();
+      const daysInMonth=new Date(year,month+1,0).getDate();
+      const today=new Date(); today.setHours(0,0,0,0);
+      const eventDateMap={};
+      state.events.forEach(ev=>{ const d=ev.date; if(!eventDateMap[d])eventDateMap[d]=[]; eventDateMap[d].push(ev); });
+      let html='';
+      for(let i=0;i<first;i++) html+='<div class="cal-day other-month"></div>';
+      for(let d=1;d<=daysInMonth;d++) {
+        const dateStr=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const evs=eventDateMap[dateStr]||[];
+        const isToday=new Date(year,month,d).getTime()===today.getTime();
+        html+=`<div class="cal-day${isToday?' today':''}${evs.length?' has-events':''}" onclick="selectCalDay('${dateStr}',this)" title="${evs.length?evs.length+' event(s)':''}">
+          ${d}
+          ${evs.length?`<div class="cal-day-dots">${evs.slice(0,3).map(e=>`<span class="cal-day-dot" style="background:${getDeptColor(e.department)};"></span>`).join('')}</div>`:''}
+        </div>`;
+      }
+      document.getElementById('calDaysGrid').innerHTML=html;
+    }
+
+    function selectCalDay(dateStr, el) {
+      document.querySelectorAll('.cal-day.selected').forEach(d=>d.classList.remove('selected'));
+      el.classList.add('selected');
+      const evs=state.events.filter(e=>e.date===dateStr);
+      const panel=document.getElementById('calDayPanel');
+      const title=document.getElementById('calDayPanelTitle');
+      const evList=document.getElementById('calDayPanelEvents');
+      const d=new Date(dateStr);
+      title.textContent=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+      if(evs.length) {
+        evList.innerHTML=evs.map(ev=>`
+          <div class="cal-day-event-item" onclick="goToSpotlight('${ev.id}')">
+            <span class="cal-day-event-dot" style="background:${getDeptColor(ev.department)};"></span>
+            <span class="cal-day-event-name">${ev.name}</span>
+            <span class="cal-day-event-time">${formatTime(ev.time)}</span>
+          </div>`).join('');
+        panel.classList.add('open');
+      } else {
+        evList.innerHTML='<p style="font-size:12px;color:var(--text-pale);text-align:center;padding:8px 0;">No events on this day</p>';
+        panel.classList.add('open');
+      }
+    }
+
+    function closeSideCalPanel() {
+      document.getElementById('calDayPanel').classList.remove('open');
+      document.querySelectorAll('.cal-day.selected').forEach(d=>d.classList.remove('selected'));
+    }
+
+    function changeSideMonth(dir) {
+      state.currentMonth.setMonth(state.currentMonth.getMonth()+dir);
+      renderSideCalendar();
+    }
+
+    /* ================================================================
+       BIG CALENDAR
+       ================================================================ */
+    function renderBigCalendar() {
+      const M=state.currentMonth;
+      const year=M.getFullYear(), month=M.getMonth();
+      document.getElementById('bigCalMonthTitle').textContent=M.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+      const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      document.getElementById('bigCalDayHeaders').innerHTML=days.map(d=>`<div class="big-cal-day-header-cell">${d}</div>`).join('');
+      const first=new Date(year,month,1).getDay();
+      const daysInMonth=new Date(year,month+1,0).getDate();
+      const today=new Date(); today.setHours(0,0,0,0);
+      const eventDateMap={};
+      state.events.forEach(ev=>{ const d=ev.date; if(!eventDateMap[d])eventDateMap[d]=[]; eventDateMap[d].push(ev); });
+      let html='';
+      for(let i=0;i<first;i++) html+=`<div class="big-cal-day other-month"><div class="big-cal-day-num">${new Date(year,month,-(first-i-1)).getDate()}</div></div>`;
+      for(let d=1;d<=daysInMonth;d++) {
+        const dateStr=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const evs=eventDateMap[dateStr]||[];
+        const isToday=new Date(year,month,d).getTime()===today.getTime();
+        html+=`<div class="big-cal-day${isToday?' today':''}" onclick="openBigCalDay('${dateStr}')">
+          <div class="big-cal-day-num">${d}</div>
+          ${evs.slice(0,2).map(ev=>`<span class="big-cal-event-pip" style="background:${getDeptColor(ev.department)};">${ev.name}</span>`).join('')}
+          ${evs.length>2?`<div class="big-cal-more">+${evs.length-2} more</div>`:''}
+        </div>`;
+      }
+      document.getElementById('bigCalGrid').innerHTML=html;
+    }
+
+    function openBigCalDay(dateStr) {
+      const evs=state.events.filter(e=>e.date===dateStr);
+      const panel=document.getElementById('bigCalSidePanel');
+      const title=document.getElementById('bigCalSideTitle');
+      const list=document.getElementById('bigCalSideEvents');
+      const d=new Date(dateStr);
+      title.textContent=d.toLocaleDateString('en-US',{month:'long',day:'numeric'});
+      panel.classList.add('open');
+      if(evs.length) {
+        list.innerHTML=evs.map(ev=>`
+          <div class="cal-day-event-item" onclick="goToSpotlight('${ev.id}')">
+            <span class="cal-day-event-dot" style="background:${getDeptColor(ev.department)};"></span>
+            <div style="flex:1;min-width:0;">
+              <div class="cal-day-event-name">${ev.name}</div>
+              <div style="font-size:10px;color:var(--text-pale);">${formatTime(ev.time)} · ${ev.location}</div>
+            </div>
+          </div>`).join('');
+      } else {
+        list.innerHTML='<p style="font-size:12px;color:var(--text-pale);text-align:center;padding:12px 0;">No events on this day</p>';
+      }
+    }
+
+    function closeBigCalPanel() {
+      document.getElementById('bigCalSidePanel').classList.remove('open');
+    }
+
+    /* ================================================================
+       DETAIL MODAL
+       ================================================================ */
+    function openDetailModal(id) {
+      const ev=state.events.find(e=>e.id===id);
+      if(!ev) return;
+      state.openDetailId=id;
+      const tl=getEventTimeline(ev.date);
+      const statusLabel={past:'Past',present:'Today',future:'Upcoming'}[tl];
+      const statusClass={past:'status-past',present:'status-present',future:'status-future'}[tl];
+      const deptColor=getDeptColor(ev.department);
+      const icon=DEPT_ICONS[ev.department]||'fa-calendar';
+
+      document.getElementById('detailTitle').textContent=ev.name;
+      document.getElementById('detailDesc').textContent=ev.description||'No description provided.';
+      document.getElementById('detailPosterWrap').innerHTML=`
+        <div class="detail-modal-poster-placeholder" style="background:linear-gradient(135deg,${deptColor}cc,${deptColor}44);">
+          <i class="fas ${icon}" style="color:rgba(255,255,255,.7);font-size:56px;"></i>
+        </div>`;
+      document.getElementById('detailChips').innerHTML=`
+        <span class="event-dept-chip" style="background:${deptColor}15;color:${deptColor};padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;">
+          <i class="fas ${icon}" style="font-size:10px;"></i> ${getDepartmentName(ev.department)}
+        </span>
+        <span class="event-status-chip ${statusClass}">${statusLabel}</span>`;
+      document.getElementById('detailInfoGrid').innerHTML=`
+        <div class="detail-info-cell"><div class="detail-info-label">Date</div><div class="detail-info-value"><i class="fas fa-calendar"></i>${formatDateLong(ev.date)}</div></div>
+        <div class="detail-info-cell"><div class="detail-info-label">Time</div><div class="detail-info-value"><i class="fas fa-clock"></i>${formatTime(ev.time)}</div></div>
+        <div class="detail-info-cell"><div class="detail-info-label">Location</div><div class="detail-info-value"><i class="fas fa-map-marker-alt"></i>${ev.location}</div></div>
+        <div class="detail-info-cell"><div class="detail-info-label">Capacity</div><div class="detail-info-value"><i class="fas fa-users"></i>${ev.capacity||'—'} seats</div></div>`;
+      document.getElementById('detailEditBtn').dataset.id=id;
+      document.getElementById('detailModalBackdrop').classList.add('open');
+      document.body.style.overflow='hidden';
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailModalBackdrop').classList.remove('open');
+      document.body.style.overflow='';
+      state.openDetailId=null;
+    }
+
+    /* ================================================================
+       ADD / EDIT MODAL
+       ================================================================ */
+    function openAddModal() {
+      document.getElementById('formModalTitle').textContent='Quick Add Event';
+      document.getElementById('eventId').value='';
+      document.getElementById('eventForm').reset();
+      document.getElementById('formModalBackdrop').classList.add('open');
+      document.body.style.overflow='hidden';
+    }
+
+    function openEditModal(ev) {
+      state.editingEventId=ev.id;
+      document.getElementById('formModalTitle').textContent='Edit Event';
+      document.getElementById('eventId').value=ev.id;
+      document.getElementById('eventName').value=ev.name;
+      document.getElementById('eventDepartment').value=ev.department;
+      document.getElementById('eventDate').value=ev.date;
+      document.getElementById('eventTime').value=ev.time;
+      document.getElementById('eventLocation').value=ev.location;
+      document.getElementById('eventDescription').value=ev.description||'';
+      document.getElementById('eventCapacity').value=ev.capacity||'';
+      document.getElementById('eventOrganizer').value=ev.organizer||'';
+      document.getElementById('formModalBackdrop').classList.add('open');
+      document.body.style.overflow='hidden';
+    }
+
+    function closeFormModal() {
+      document.getElementById('formModalBackdrop').classList.remove('open');
+      document.getElementById('eventForm').reset();
+      state.editingEventId=null;
+      document.body.style.overflow='';
+    }
+
+    function saveEvent(e) {
+      e.preventDefault();
+      const dept=document.getElementById('eventDepartment').value;
+      const evData={
+        name:document.getElementById('eventName').value.trim(),
+        department:dept,
+        date:document.getElementById('eventDate').value,
+        time:document.getElementById('eventTime').value,
+        location:document.getElementById('eventLocation').value.trim(),
+        description:document.getElementById('eventDescription').value.trim(),
+        capacity:parseInt(document.getElementById('eventCapacity').value)||50,
+        organizer:document.getElementById('eventOrganizer').value.trim()||'Staff',
+        color:getDeptColor(dept),
+      };
+      const id=document.getElementById('eventId').value;
+      if(id) {
+        const idx=state.events.findIndex(ev=>ev.id===id);
+        if(idx!==-1){ state.events[idx]={...state.events[idx],...evData}; showToast('Event updated successfully'); }
+      } else {
+        state.events.unshift({id:generateId(),...evData});
+        showToast('Event added successfully');
+      }
+      closeFormModal();
+      filterEvents();
+    }
+
+    /* ================================================================
+       EXPORT CSV
+       ================================================================ */
+    function exportEvents() {
+      if(!state.filteredEvents.length){ showToast('No events to export'); return; }
+      const headers=['Name','Department','Date','Time','Location','Organizer','Capacity','Status'];
+      const rows=state.filteredEvents.map(ev=>[
+        `"${ev.name}"`,`"${getDepartmentName(ev.department)}"`,`"${formatDateLong(ev.date)}"`,
+        `"${formatTime(ev.time)}"`,`"${ev.location}"`,`"${ev.organizer}"`,
+        ev.capacity,`"${getEventTimeline(ev.date).toUpperCase()}"`,
+      ]);
+      const csv=[headers.join(','),...rows.map(r=>r.join(','))].join('\n');
+      const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+      const url=URL.createObjectURL(blob);
+      const a=Object.assign(document.createElement('a'),{href:url,download:`jain_events_${new Date().toISOString().split('T')[0]}.csv`});
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+      showToast('Exported successfully');
+    }
+
+    /* ================================================================
+       SIDEBAR / PROFILE
+       ================================================================ */
+    function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarBackdrop').classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarBackdrop').classList.remove('open'); document.body.style.overflow=''; }
+    function toggleProfileDropdown() { document.getElementById('profileDropdown').classList.toggle('open'); }
+    function closeProfileDropdown() { document.getElementById('profileDropdown').classList.remove('open'); }
+
+    /* ================================================================
+       INIT
+       ================================================================ */
+    document.addEventListener('DOMContentLoaded', function () {
+      // Populate navbar with logged-in user info
+      if (window.JainAuth) {
+        window.JainAuth.populateNavbar();
+        // Also populate sidebar
+        var u = window.JainAuth.getUser();
+        if (u) {
+          var ini = (u.name||'JU').split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
+          var sini  = document.getElementById('sidebarUserInitials');
+          var sname = document.getElementById('sidebarUserName');
+          var srole = document.getElementById('sidebarUserRole');
+          if(sini)  sini.textContent  = ini;
+          if(sname) sname.textContent = u.name || 'Jain University';
+          if(srole) srole.textContent = u.role || 'Student';
+        }
+      }
+
+      // Load data
+      state.events=[...sampleEvents];
+      filterEvents();
+
+      document.getElementById('hamburgerBtn').addEventListener('click',openSidebar);
+      document.getElementById('sidebarCloseBtn').addEventListener('click',closeSidebar);
+      document.getElementById('sidebarBackdrop').addEventListener('click',closeSidebar);
+
+      document.getElementById('profileAvatarBtn').addEventListener('click',function(e){ e.stopPropagation(); toggleProfileDropdown(); });
+      document.addEventListener('click',function(){ closeProfileDropdown(); });
+      document.getElementById('profileDropdown').addEventListener('click',e=>e.stopPropagation());
+
+      document.getElementById('addEventBtn').addEventListener('click',openAddModal);
+      document.getElementById('departmentSelect').addEventListener('change',function(){ state.selectedDepartment=this.value; filterEvents(); });
+      document.querySelectorAll('.tl-pill').forEach(btn=>{
+        btn.addEventListener('click',function(){
+          document.querySelectorAll('.tl-pill').forEach(b=>b.classList.remove('active'));
+          this.classList.add('active');
+          state.selectedTimeline=this.dataset.timeline;
+          filterEvents();
+        });
+      });
+      document.getElementById('searchInput').addEventListener('input',function(){ state.searchQuery=this.value; filterEvents(); });
+      document.getElementById('gridViewBtn').addEventListener('click',()=>setView('grid'));
+      document.getElementById('listViewBtn').addEventListener('click',()=>setView('list'));
+      document.getElementById('calViewBtn').addEventListener('click',()=>setView('calendar'));
+      document.getElementById('exportBtn').addEventListener('click',exportEvents);
+
+      document.getElementById('prevMonth').addEventListener('click',()=>changeSideMonth(-1));
+      document.getElementById('nextMonth').addEventListener('click',()=>changeSideMonth(1));
+      document.getElementById('calDayPanelClose').addEventListener('click',closeSideCalPanel);
+
+      document.getElementById('prevMonthBig').addEventListener('click',function(){
+        state.currentMonth.setMonth(state.currentMonth.getMonth()-1);
+        renderBigCalendar(); renderSideCalendar();
+      });
+      document.getElementById('nextMonthBig').addEventListener('click',function(){
+        state.currentMonth.setMonth(state.currentMonth.getMonth()+1);
+        renderBigCalendar(); renderSideCalendar();
+      });
+      document.getElementById('bigCalSideClose').addEventListener('click',closeBigCalPanel);
+
+      document.getElementById('detailCloseBtn').addEventListener('click',closeDetailModal);
+      document.getElementById('detailModalBackdrop').addEventListener('click',function(e){ if(e.target===this)closeDetailModal(); });
+      document.getElementById('detailEditBtn').addEventListener('click',function(){
+        const id=this.dataset.id; closeDetailModal();
+        const ev=state.events.find(e=>e.id===id);
+        if(ev) openEditModal(ev);
+      });
+
+      document.getElementById('eventForm').addEventListener('submit',saveEvent);
+      document.getElementById('formModalClose').addEventListener('click',closeFormModal);
+      document.getElementById('formCancelBtn').addEventListener('click',closeFormModal);
+      document.getElementById('formModalBackdrop').addEventListener('click',function(e){ if(e.target===this)closeFormModal(); });
+
+      document.addEventListener('keydown',function(e){
+        if(e.key==='Escape'){ closeFormModal(); closeDetailModal(); closeSidebar(); }
+      });
+    });
+  </script>
+</body>
+</html>
