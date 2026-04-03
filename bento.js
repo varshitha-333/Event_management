@@ -119,6 +119,21 @@ document.addEventListener('DOMContentLoaded', function () {
         setText('heroVenue', ev.location);
         setText('heroOrg',   ev.organizer || 'TBD');
 
+        const heroDesc = document.getElementById('heroDesc');
+        if (heroDesc) {
+            const baseDesc = (ev.description || 'A focused academic experience designed for clarity, discovery, and meaningful participation.').trim();
+            const shortDesc = baseDesc.split(/(?<=[.!?])\s+/)[0].slice(0, 160);
+            heroDesc.textContent = shortDesc || baseDesc;
+        }
+
+        const heroTagGroup = document.getElementById('heroTagGroup');
+        if (heroTagGroup) {
+            const tagPool = (ev.tags && ev.tags.length ? ev.tags : [getDepartmentName(ev.department), 'Lecture', 'Research'])
+                .filter(Boolean)
+                .slice(0, 3);
+            heroTagGroup.innerHTML = tagPool.map(tag => `<span class="hero-tag">${escHtml(tag)}</span>`).join('');
+        }
+
         // Status badge
         const badge = document.getElementById('heroBadge');
         if (badge) {
@@ -127,6 +142,9 @@ document.addEventListener('DOMContentLoaded', function () {
                               :                    'Past';
             badge.className = 'sdh-badge ' + tl;
         }
+        setText('quickStatus', tl === 'present' ? 'Today' : tl === 'future' ? 'Open' : 'Closed');
+        setText('quickMode', ev.mode || 'Hybrid');
+        setText('quickFee', ev.registrationFee || ev.fee || 'Free');
 
         // Seats progress bar
         const capacity = ev.capacity || 120;
@@ -136,6 +154,11 @@ document.addEventListener('DOMContentLoaded', function () {
         setText('heroSeats', filled + '/' + capacity);
         const progEl = document.getElementById('heroProgress');
         if (progEl) setTimeout(() => progEl.style.width = pct + '%', 100);
+
+        setText('quickSeats', filled + ' / ' + capacity);
+        setText('quickSeatsPct', pct + '%');
+        const quickProg = document.getElementById('quickProgress');
+        if (quickProg) setTimeout(() => quickProg.style.width = pct + '%', 120);
 
         /* ── POSTER ── */
         const img = document.getElementById('heroPoster');
@@ -329,7 +352,51 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ── Toast notification ── */
-    let _toastTimer = null;
+    letconst observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) entry.target.classList.add('is-visible');
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+document.querySelectorAll('[data-count]').forEach((el) => {
+  const target = Number(el.dataset.count || 0);
+  let current = 0;
+  const step = Math.max(1, Math.ceil(target / 36));
+  const tick = () => {
+    current += step;
+    if (current >= target) {
+      el.textContent = String(target);
+      return;
+    }
+    el.textContent = String(current);
+    requestAnimationFrame(tick);
+  };
+  tick();
+});
+
+document.querySelectorAll('.progress-fill').forEach((bar) => {
+  const target = bar.style.getPropertyValue('--target') || '72%';
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      bar.style.width = target;
+    }, 250);
+  });
+});
+
+document.querySelectorAll('.btn').forEach((btn) => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 8;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 8;
+    btn.style.transform = `translate(${x}px, ${y}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = '';
+  });
+});
+_toastTimer = null;
     function showBentoToast(msg) {
         const el  = document.getElementById('bentoToast');
         const txt = document.getElementById('bentoToastMsg');
