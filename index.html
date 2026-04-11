@@ -8,7 +8,8 @@
   <title>Department Events Portal — Jain University</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <!-- CHANGED: DM Sans replaces Inter, Plus Jakarta Sans replaces Sora -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
 
   <style>
@@ -35,7 +36,8 @@
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
-    body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--text-dark);line-height:1.6;min-height:100vh;overflow-x:hidden}
+    /* CHANGED: DM Sans as primary body font */
+    body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text-dark);line-height:1.6;min-height:100vh;overflow-x:hidden}
 
     /* ── KEYFRAMES ── */
     @keyframes slideDown{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
@@ -74,17 +76,19 @@
     .nav-logo-badge{
       width:44px;height:44px;background:var(--gold);border-radius:11px;
       display:flex;align-items:center;justify-content:center;
-      font-family:'Sora',sans-serif;font-weight:900;font-size:13px;color:var(--navy);
+      /* CHANGED: Plus Jakarta Sans for badge */
+      font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:13px;color:var(--navy);
       flex-shrink:0;box-shadow:0 4px 12px rgba(200,146,10,.35);transition:var(--transition);
     }
     .nav-logo-badge:hover{transform:scale(1.06)}
     .nav-brand-text{display:flex;flex-direction:column;gap:1px}
-    .nav-university-name{font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:#fff;line-height:1;letter-spacing:-.2px}
+    /* CHANGED: Plus Jakarta Sans for university name */
+    .nav-university-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:800;color:#fff;line-height:1;letter-spacing:-.2px}
     .nav-portal-name{font-size:10.5px;color:rgba(255,255,255,.5);letter-spacing:.6px;font-weight:500}
     .nav-spacer{flex:1}
     .nav-action-btn{
       display:inline-flex;align-items:center;gap:7px;padding:8px 16px;
-      border-radius:9px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;
+      border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;
       cursor:pointer;transition:var(--transition);white-space:nowrap;text-decoration:none;
     }
     .nav-btn-gold{background:var(--gold);color:var(--navy);border:none;box-shadow:0 2px 8px rgba(200,146,10,.3)}
@@ -96,7 +100,8 @@
       width:38px;height:38px;background:linear-gradient(135deg,var(--navy-mid),var(--navy-light));
       border:2px solid rgba(200,146,10,.5);border-radius:50%;
       display:flex;align-items:center;justify-content:center;
-      font-family:'Sora',sans-serif;font-size:12px;font-weight:800;color:#fff;
+      /* CHANGED: Plus Jakarta Sans for initials */
+      font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:800;color:#fff;
       cursor:pointer;transition:var(--transition);position:relative;
     }
     .profile-avatar-btn:hover{border-color:var(--gold);transform:scale(1.05)}
@@ -148,7 +153,8 @@
     .sidebar-logo-badge{
       width:40px;height:40px;background:var(--gold);border-radius:10px;
       display:flex;align-items:center;justify-content:center;
-      font-family:'Sora',sans-serif;font-size:12px;font-weight:900;color:var(--navy);
+      /* CHANGED: Plus Jakarta Sans */
+      font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:900;color:var(--navy);
     }
     .sidebar-close-btn{
       width:30px;height:30px;background:rgba(255,255,255,.08);
@@ -193,14 +199,13 @@
     .sidebar-user-role{font-size:10px;color:rgba(255,255,255,.4)}
 
     /* ════════════════════════════════
-       HERO — full-width banner redesign
+       HERO
     ════════════════════════════════ */
     .hero-section{
       background:var(--navy-deep);
       position:relative;overflow:hidden;
       padding:0;
     }
-    /* animated gradient mesh background */
     .hero-mesh{
       position:absolute;inset:0;
       background:
@@ -211,7 +216,6 @@
       background-size:200% 200%;
       animation:gradShift 12s ease infinite;
     }
-    /* dot grid overlay */
     .hero-dots{
       position:absolute;inset:0;
       background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);
@@ -224,7 +228,6 @@
       align-items:center;gap:0;
       min-height:340px;
     }
-    /* LEFT pane */
     .hero-left{
       padding:48px 40px 48px 28px;
       display:flex;flex-direction:column;gap:18px;
@@ -241,8 +244,9 @@
       width:6px;height:6px;border-radius:50%;background:var(--gold);
       box-shadow:0 0 8px rgba(200,146,10,.9);animation:pulse-dot 2s infinite;
     }
+    /* CHANGED: Plus Jakarta Sans for hero heading */
     .hero-heading{
-      font-family:'Sora',sans-serif;
+      font-family:'Plus Jakarta Sans',sans-serif;
       font-size:clamp(32px,3.8vw,52px);font-weight:900;line-height:1.08;
       color:#fff;
       animation:fadeInUp .5s .2s both;
@@ -270,10 +274,6 @@
     .hero-cta-secondary{background:rgba(255,255,255,.09);color:#fff;border:1.5px solid rgba(255,255,255,.2)}
     .hero-cta-secondary:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4)}
 
-    /* RIGHT pane — stat cards */
-    /* ════════════════════════════════
-       HERO RIGHT — campus illustration
-    ════════════════════════════════ */
     .hero-right{
       padding:24px 16px 24px 0;
       display:flex;align-items:center;justify-content:flex-end;
@@ -283,13 +283,9 @@
     .hero-illustration{
       position:relative;width:100%;max-width:480px;height:290px;
     }
-
-    /* ── building silhouette SVG fills hero-right ── */
     .hero-illus-svg{
       position:absolute;inset:0;width:100%;height:100%;
     }
-
-    /* Floating badge elements */
     .hi-badge{
       position:absolute;
       display:inline-flex;align-items:center;gap:8px;
@@ -309,34 +305,28 @@
     .hi-badge-text-wrap{display:flex;flex-direction:column;gap:1px}
     .hi-badge-title{font-size:11px;font-weight:700;color:#fff;line-height:1.2}
     .hi-badge-sub{font-size:9.5px;color:rgba(255,255,255,.55)}
-
-    /* Badge positions */
     .hi-badge-1{top:14px;right:20px;animation:badgeFloat1 4s ease-in-out infinite,fadeInUp .6s .5s both}
     .hi-badge-2{bottom:30px;right:10px;animation:badgeFloat2 5s ease-in-out infinite .8s,fadeInUp .6s .7s both}
     .hi-badge-3{top:50%;right:0;transform:translateY(-50%);animation:badgeFloat3 4.5s ease-in-out infinite .3s,fadeInUp .6s .9s both}
-
     @keyframes badgeFloat1{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
     @keyframes badgeFloat2{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
     @keyframes badgeFloat3{0%,100%{transform:translateY(-50%) translateX(0)}50%{transform:translateY(-50%) translateX(-5px)}}
-
-    /* Glow dots scattered */
     .hi-dot{
       position:absolute;border-radius:50%;
       animation:dotPulse ease-in-out infinite;
     }
     @keyframes dotPulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:.8;transform:scale(1.4)}}
 
-    /* ════════════════════════════════
-       HERO INLINE STATS — bigger, bolder
-    ════════════════════════════════ */
+    /* HERO INLINE STATS */
     .hero-stats-inline{
       display:flex;align-items:center;gap:0;
       margin-top:10px;
       animation:fadeInUp .5s .4s both;
     }
     .hero-stat-inline{display:flex;flex-direction:column;gap:4px;padding-right:30px}
+    /* CHANGED: Plus Jakarta Sans for stat numbers */
     .hero-stat-inline-num{
-      font-family:'Sora',sans-serif;
+      font-family:'Plus Jakarta Sans',sans-serif;
       font-size:44px;font-weight:900;
       color:#fff;line-height:1;
       text-shadow:0 2px 20px rgba(255,255,255,.15);
@@ -366,8 +356,6 @@
       display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;
     }
     .filter-right-controls{display:flex;align-items:center;gap:10px;flex-shrink:0}
-
-    /* search pill */
     .search-pill{flex:1;min-width:220px;position:relative}
     .search-pill-icon{
       position:absolute;left:16px;top:50%;transform:translateY(-50%);
@@ -376,15 +364,13 @@
     .search-pill-input{
       width:100%;padding:12px 16px 12px 44px;
       background:#fff;border:1.5px solid var(--border);border-radius:100px;
-      font-size:13.5px;font-family:'Inter',sans-serif;color:var(--text-dark);
+      font-size:13.5px;font-family:'DM Sans',sans-serif;color:var(--text-dark);
       outline:none;transition:var(--transition);
       box-shadow:0 1px 4px rgba(28,43,74,.05);
     }
     .search-pill-input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(28,43,74,.07)}
     .search-pill:focus-within .search-pill-icon{color:var(--navy)}
     .search-pill-input::placeholder{color:var(--text-pale)}
-
-    /* view toggle */
     .view-toggle-pill{
       display:flex;align-items:center;background:#fff;border:1.5px solid var(--border);
       border-radius:100px;padding:3px;gap:2px;flex-shrink:0;
@@ -396,8 +382,6 @@
     }
     .vt-btn:hover{color:var(--navy);background:var(--surface)}
     .vt-btn.active{background:var(--navy);color:#fff;box-shadow:0 2px 8px rgba(28,43,74,.25)}
-
-    /* export pill */
     .export-pill{
       display:inline-flex;align-items:center;gap:6px;padding:10px 16px;
       background:#fff;border:1.5px solid var(--border);border-radius:100px;
@@ -406,16 +390,15 @@
     }
     .export-pill:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-pale)}
 
-    /* ── UNSTOP-STYLE FILTER PILLS ── */
+    /* UNSTOP FILTER PILLS */
     .unstop-filter-row{
       display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:16px;
     }
     .uf-divider{width:1px;height:20px;background:var(--border);flex-shrink:0;margin:0 2px}
-
     .uf-pill{
       display:inline-flex;align-items:center;gap:7px;padding:8px 16px;
       background:#fff;border:1.5px solid var(--border);border-radius:100px;
-      font-family:'Inter',sans-serif;font-size:13px;font-weight:500;
+      font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
       color:var(--text-mid);cursor:pointer;
       transition:all .2s cubic-bezier(.4,0,.2,1);white-space:nowrap;
       box-shadow:0 1px 3px rgba(28,43,74,.04);
@@ -433,7 +416,6 @@
     .uf-pill-dropdown-wrap.open .uf-chevron{transform:rotate(180deg)}
     .uf-pill-dropdown.applied{border-color:var(--navy);color:var(--navy);font-weight:600;background:#f0f3ff}
     .uf-pill-dropdown.applied .uf-chevron{color:var(--navy)}
-
     .uf-pill-dropdown-wrap{position:relative}
     .uf-dropdown-menu{
       position:absolute;top:calc(100% + 8px);left:0;min-width:200px;
@@ -452,7 +434,6 @@
     .uf-option.selected{color:var(--navy);font-weight:700;background:rgba(28,43,74,.05)}
     .uf-option.selected::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;margin-left:auto;font-size:10px;color:var(--navy)}
     .uf-option i{font-size:12px;width:16px;text-align:center;flex-shrink:0}
-
     .uf-active-tags{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
     .uf-tag{
       display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:100px;
@@ -465,11 +446,9 @@
       font-size:9px;cursor:pointer;transition:var(--transition);
     }
     .uf-tag-remove:hover{background:var(--navy);color:#fff}
-
-    /* tl-pill hidden but needed for JS compat */
     .tl-pill{display:none}
 
-    /* results bar */
+    /* RESULTS BAR */
     .results-bar{
       display:flex;align-items:center;padding:16px 0 10px;
       max-width:1400px;margin:0 auto;padding-left:24px;padding-right:24px;
@@ -485,14 +464,13 @@
     @media(max-width:1100px){.content-layout{grid-template-columns:1fr}}
 
     /* ════════════════════════════════
-       EVENT CARDS — redesigned
+       EVENT CARDS
     ════════════════════════════════ */
     .events-grid{
       display:grid;
       grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
       gap:22px;
     }
-
     .event-card{
       background:#fff;border-radius:20px;border:1.5px solid var(--border);
       overflow:hidden;cursor:pointer;
@@ -505,8 +483,6 @@
       box-shadow:0 20px 50px rgba(28,43,74,.15);
       border-color:transparent;
     }
-
-    /* image area */
     .card-img-wrap{
       position:relative;height:185px;overflow:hidden;
     }
@@ -522,8 +498,6 @@
       transition:transform .4s cubic-bezier(.4,0,.2,1);
     }
     .event-card:hover .card-real-img{transform:scale(1.06)}
-
-    /* image overlays */
     .card-img-bottom-grad{
       position:absolute;bottom:0;left:0;right:0;height:80px;
       background:linear-gradient(to top,rgba(0,0,0,.55),transparent);
@@ -547,11 +521,10 @@
       backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.15);
     }
     .card-dept-tag i{font-size:9px}
-
-    /* card body */
     .card-body{padding:16px 18px 18px}
+    /* CHANGED: Plus Jakarta Sans for card titles */
     .card-title{
-      font-family:'Sora',sans-serif;font-size:15.5px;font-weight:800;
+      font-family:'Plus Jakarta Sans',sans-serif;font-size:15.5px;font-weight:800;
       color:var(--text-dark);line-height:1.3;margin-bottom:11px;
       display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
     }
@@ -572,14 +545,14 @@
     .card-view-btn{
       display:none;width:100%;padding:9px;margin-top:12px;
       border:1.5px solid var(--border);border-radius:10px;background:transparent;
-      font-family:'Inter',sans-serif;font-size:12px;font-weight:700;
+      font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;
       color:var(--navy);cursor:pointer;transition:var(--transition);
       align-items:center;justify-content:center;gap:6px;
     }
     .event-card:hover .card-view-btn{display:flex}
     .card-view-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
 
-    /* ── LIST VIEW ── */
+    /* LIST VIEW */
     .events-list{display:flex;flex-direction:column;gap:10px}
     .event-list-row{
       background:#fff;border:1.5px solid var(--border);border-radius:14px;
@@ -590,11 +563,12 @@
     .event-list-row:hover{transform:translateX(5px);box-shadow:var(--shadow-md)}
     .event-list-color-bar{width:4px;height:46px;border-radius:4px;flex-shrink:0}
     .event-list-info{flex:1;min-width:0}
-    .event-list-name{font-family:'Sora',sans-serif;font-size:14.5px;font-weight:700;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    /* CHANGED: Plus Jakarta Sans for list event names */
+    .event-list-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:14.5px;font-weight:700;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .event-list-sub{font-size:12px;color:var(--text-soft);display:flex;align-items:center;gap:10px;margin-top:3px;flex-wrap:wrap}
     .event-list-sub i{font-size:10px;color:var(--text-pale)}
 
-    /* ── EMPTY STATE ── */
+    /* EMPTY STATE */
     .empty-state{display:none;flex-direction:column;align-items:center;padding:80px 24px;gap:14px;text-align:center}
     .empty-state.visible{display:flex;animation:fadeIn .3s both}
     .empty-icon{font-size:52px;color:var(--border);margin-bottom:4px}
@@ -611,7 +585,8 @@
       background:var(--navy);padding:16px 18px;
       display:flex;align-items:center;justify-content:space-between;
     }
-    .cal-month-title{font-family:'Sora',sans-serif;font-size:14px;font-weight:800;color:#fff}
+    /* CHANGED: Plus Jakarta Sans for calendar month title */
+    .cal-month-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;color:#fff}
     .cal-nav-btn{
       width:28px;height:28px;border:1.5px solid rgba(255,255,255,.2);background:transparent;
       border-radius:8px;color:#fff;cursor:pointer;font-size:10px;
@@ -659,12 +634,13 @@
     .cal-day-event-name{font-size:11.5px;font-weight:700;color:var(--text-dark);margin-bottom:2px;display:block}
     .cal-day-event-meta{font-size:10.5px;color:var(--text-soft)}
 
-    /* big calendar */
+    /* BIG CALENDAR */
     .calendar-section{display:none;animation:fadeIn .3s both}
     .calendar-section.active{display:block}
     .big-calendar-wrap{background:#fff;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-sm)}
     .big-cal-header{background:var(--navy);padding:18px 22px;display:flex;align-items:center;justify-content:space-between}
-    .big-cal-month{font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:#fff}
+    /* CHANGED: Plus Jakarta Sans for big calendar month */
+    .big-cal-month{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:800;color:#fff}
     .big-cal-body{padding:14px}
     .big-cal-day-headers{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px}
     .big-cal-day-header-cell{text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--text-pale);padding:6px 0 10px}
@@ -689,7 +665,7 @@
     .big-cal-side-close:hover{background:var(--navy);color:#fff}
     .big-cal-side-events{display:flex;flex-direction:column;gap:7px;overflow-y:auto;max-height:350px}
 
-    /* ── MODALS ── */
+    /* MODALS */
     .detail-modal-backdrop{
       position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0);
       backdrop-filter:blur(0px);pointer-events:none;transition:background .3s,backdrop-filter .3s;
@@ -705,7 +681,8 @@
     .detail-drag-bar{width:40px;height:4px;background:var(--border);border-radius:4px;margin:16px auto 0}
     .detail-modal-body{padding:20px 28px 32px}
     .detail-modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
-    .detail-modal-title{font-family:'Sora',sans-serif;font-size:22px;font-weight:900;color:var(--text-dark);line-height:1.2}
+    /* CHANGED: Plus Jakarta Sans for modal title */
+    .detail-modal-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:900;color:var(--text-dark);line-height:1.2}
     .detail-close-btn{
       width:34px;height:34px;border:1.5px solid var(--border);background:var(--surface);border-radius:50%;
       color:var(--text-soft);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:var(--transition);flex-shrink:0;
@@ -724,13 +701,13 @@
     .detail-primary-btn{
       flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px;
       background:var(--navy);color:#fff;border:none;border-radius:11px;
-      font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:var(--transition);
+      font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:var(--transition);
     }
     .detail-primary-btn:hover{background:var(--navy-mid)}
     .detail-edit-btn-sm{
       display:inline-flex;align-items:center;gap:7px;padding:11px 18px;
       border:1.5px solid var(--border);background:transparent;
-      font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--text-mid);
+      font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text-mid);
       border-radius:11px;cursor:pointer;transition:var(--transition);
     }
     .detail-edit-btn-sm:hover{border-color:var(--gold);color:var(--gold)}
@@ -765,7 +742,7 @@
     .form-req{color:var(--gold)}
     .form-input,.form-textarea,.form-select{
       padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;
-      font-family:'Inter',sans-serif;font-size:13px;color:var(--text-dark);
+      font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-dark);
       background:#fff;outline:none;width:100%;transition:var(--transition);
     }
     .form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(28,43,74,.07)}
@@ -778,17 +755,17 @@
       display:flex;gap:10px;justify-content:flex-end;padding:13px 22px;
       border-top:1px solid var(--border);position:sticky;bottom:0;background:#fff;
     }
-    .btn-ghost-form{padding:9px 18px;border:1.5px solid var(--border);background:transparent;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--text-mid);cursor:pointer;transition:var(--transition)}
+    .btn-ghost-form{padding:9px 18px;border:1.5px solid var(--border);background:transparent;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text-mid);cursor:pointer;transition:var(--transition)}
     .btn-ghost-form:hover{border-color:var(--text-mid)}
-    .btn-primary-form{padding:9px 22px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:6px}
+    .btn-primary-form{padding:9px 22px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:6px}
     .btn-primary-form:hover{background:var(--navy-mid);transform:scale(1.01)}
 
-    /* ── TOAST ── */
+    /* TOAST */
     .toast-notification{
       position:fixed;bottom:24px;right:24px;z-index:900;
       display:flex;align-items:center;gap:10px;padding:12px 18px;
       background:var(--navy);color:#fff;border-radius:12px;
-      font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+      font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
       box-shadow:0 8px 32px rgba(0,0,0,.25);
       transform:translateY(80px) scale(.94);opacity:0;
       transition:transform .32s cubic-bezier(.34,1.3,.64,1),opacity .25s;
@@ -797,13 +774,14 @@
     .toast-notification.show{transform:translateY(0) scale(1);opacity:1}
     .toast-icon{color:var(--gold);font-size:15px}
 
-    /* ── QUICK STATS CARD ── */
+    /* QUICK STATS CARD */
     .quick-stats-card{background:#fff;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-sm);margin-top:16px;animation:slideInRight .4s .35s both}
     .quick-stats-header{background:linear-gradient(135deg,var(--navy),var(--navy-mid));padding:14px 18px}
-    .quick-stats-title{font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:#fff}
+    /* CHANGED: Plus Jakarta Sans for quick stats title */
+    .quick-stats-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;color:#fff}
     .quick-stats-body{padding:14px 18px;display:flex;flex-direction:column;gap:10px}
 
-    /* ── RESPONSIVE ── */
+    /* RESPONSIVE */
     @media(max-width:900px){
       .hero-inner{grid-template-columns:1fr}
       .hero-right{display:none!important}
@@ -828,7 +806,7 @@
     <div class="sidebar-logo-group">
       <div class="sidebar-logo-badge">JGI</div>
       <div>
-        <div style="font-family:'Sora',sans-serif;font-size:13.5px;font-weight:800;color:#fff;">Jain University</div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;font-weight:800;color:#fff;">Jain University</div>
         <div style="font-size:10px;color:rgba(255,255,255,.45);letter-spacing:.5px;">Events Portal</div>
       </div>
     </div>
@@ -840,7 +818,7 @@
     <a href="index.html" class="sidebar-nav-item"><i class="fas fa-calendar-alt"></i>All Events<span class="sidebar-nav-badge" id="sidebarEventCount">11</span></a>
     <div class="sidebar-section-label" style="margin-top:8px;">Event Management</div>
     <a href="register-event.html" class="sidebar-nav-item"><i class="fas fa-plus-circle"></i>Register Event</a>
-    <a href="#" class="sidebar-nav-item"><i class="fas fa-edit"></i>Manage Events</a>
+    <a href="manage_event.html" class="sidebar-nav-item"><i class="fas fa-edit"></i>Manage Events</a>
     <a href="#" class="sidebar-nav-item"><i class="fas fa-users"></i>Registrations</a>
     <div class="sidebar-section-label" style="margin-top:8px;">Departments</div>
     <a href="#" class="sidebar-nav-item"><i class="fas fa-laptop-code"></i>Computer Science</a>
@@ -899,14 +877,11 @@
   </div>
 </nav>
 
-<!-- ══════════════════════════════════════
-     HERO — split layout
-══════════════════════════════════════ -->
+<!-- HERO -->
 <div class="hero-section">
   <div class="hero-mesh"></div>
   <div class="hero-dots"></div>
   <div class="hero-inner">
-    <!-- Left -->
     <div class="hero-left">
       <div class="hero-tag">
         <span class="hero-tag-dot"></span>
@@ -917,7 +892,6 @@
         Explore <em>Campus Events</em>
       </h1>
       <p class="hero-sub">Workshops, seminars, symposiums, field trips and more — all your department events in one place.</p>
-      <!-- inline stats row — no boxes -->
       <div class="hero-stats-inline">
         <div class="hero-stat-inline">
           <span class="hero-stat-inline-num" id="statTotal">—</span>
@@ -940,23 +914,13 @@
         </div>
       </div>
     </div>
-    <!-- Right side — campus illustration -->
     <div class="hero-right">
       <div class="hero-illustration">
-
-        <!-- Campus SVG illustration -->
         <svg class="hero-illus-svg" viewBox="0 0 480 290" xmlns="http://www.w3.org/2000/svg" fill="none">
-          <!-- Sky glow -->
           <ellipse cx="240" cy="260" rx="220" ry="60" fill="rgba(200,146,10,0.06)"/>
           <ellipse cx="240" cy="270" rx="160" ry="35" fill="rgba(99,102,241,0.07)"/>
-
-          <!-- Ground line -->
           <line x1="20" y1="255" x2="460" y2="255" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-
-          <!-- ── Main building (center) ── -->
-          <!-- Body -->
           <rect x="160" y="155" width="160" height="100" rx="3" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-          <!-- Columns -->
           <rect x="172" y="165" width="8" height="90" fill="rgba(255,255,255,0.06)"/>
           <rect x="192" y="165" width="8" height="90" fill="rgba(255,255,255,0.06)"/>
           <rect x="212" y="165" width="8" height="90" fill="rgba(255,255,255,0.06)"/>
@@ -964,42 +928,26 @@
           <rect x="252" y="165" width="8" height="90" fill="rgba(255,255,255,0.06)"/>
           <rect x="272" y="165" width="8" height="90" fill="rgba(255,255,255,0.06)"/>
           <rect x="292" y="165" width="8" height="90" fill="rgba(255,255,255,0.06)"/>
-          <!-- Pediment / triangular roof -->
           <polygon points="150,155 240,105 330,155" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
-          <!-- Dome -->
           <ellipse cx="240" cy="105" rx="28" ry="16" fill="rgba(200,146,10,0.2)" stroke="rgba(200,146,10,0.4)" stroke-width="1.5"/>
           <ellipse cx="240" cy="100" rx="18" ry="10" fill="rgba(200,146,10,0.3)" stroke="rgba(200,146,10,0.5)" stroke-width="1"/>
-          <!-- Dome lantern -->
           <rect x="236" y="88" width="8" height="12" rx="2" fill="rgba(200,146,10,0.5)"/>
           <line x1="240" y1="82" x2="240" y2="76" stroke="rgba(200,146,10,0.7)" stroke-width="1.5"/>
-          <!-- Flag glow at top -->
-          <circle cx="240" cy="74" r="3" fill="var(--gold)" opacity="0.9">
-            <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/>
-          </circle>
-          <!-- Entrance door -->
+          <circle cx="240" cy="74" r="3" fill="var(--gold)" opacity="0.9"><animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/></circle>
           <rect x="222" y="215" width="36" height="40" rx="18" fill="rgba(200,146,10,0.15)" stroke="rgba(200,146,10,0.3)" stroke-width="1"/>
-          <!-- Steps -->
           <rect x="210" y="250" width="60" height="5" rx="1" fill="rgba(255,255,255,0.07)"/>
           <rect x="205" y="253" width="70" height="4" rx="1" fill="rgba(255,255,255,0.05)"/>
-
-          <!-- ── Left wing building ── -->
           <rect x="60" y="190" width="95" height="65" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" stroke-width="1"/>
-          <!-- Windows left -->
           <rect x="70" y="200" width="14" height="14" rx="2" fill="rgba(200,146,10,0.15)" stroke="rgba(200,146,10,0.2)" stroke-width="1"/>
           <rect x="92" y="200" width="14" height="14" rx="2" fill="rgba(99,102,241,0.2)" stroke="rgba(99,102,241,0.25)" stroke-width="1"/>
           <rect x="114" y="200" width="14" height="14" rx="2" fill="rgba(200,146,10,0.15)" stroke="rgba(200,146,10,0.2)" stroke-width="1"/>
           <rect x="70" y="222" width="14" height="14" rx="2" fill="rgba(255,255,255,0.06)"/>
           <rect x="92" y="222" width="14" height="14" rx="2" fill="rgba(200,146,10,0.1)"/>
           <rect x="114" y="222" width="14" height="14" rx="2" fill="rgba(255,255,255,0.06)"/>
-          <!-- Left roof -->
           <rect x="55" y="186" width="105" height="6" rx="1" fill="rgba(255,255,255,0.09)"/>
-          <!-- Left chimney -->
           <rect x="82" y="170" width="8" height="18" rx="1" fill="rgba(255,255,255,0.07)"/>
           <rect x="104" y="175" width="6" height="13" rx="1" fill="rgba(255,255,255,0.05)"/>
-
-          <!-- ── Right wing building ── -->
           <rect x="325" y="185" width="95" height="70" rx="2" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" stroke-width="1"/>
-          <!-- Windows right -->
           <rect x="335" y="195" width="14" height="14" rx="2" fill="rgba(16,185,129,0.2)" stroke="rgba(16,185,129,0.25)" stroke-width="1"/>
           <rect x="357" y="195" width="14" height="14" rx="2" fill="rgba(200,146,10,0.15)"/>
           <rect x="379" y="195" width="14" height="14" rx="2" fill="rgba(99,102,241,0.2)" stroke="rgba(99,102,241,0.25)" stroke-width="1"/>
@@ -1007,116 +955,64 @@
           <rect x="335" y="217" width="14" height="14" rx="2" fill="rgba(255,255,255,0.06)"/>
           <rect x="357" y="217" width="14" height="14" rx="2" fill="rgba(200,146,10,0.1)"/>
           <rect x="379" y="217" width="14" height="14" rx="2" fill="rgba(255,255,255,0.06)"/>
-          <!-- Right roof -->
           <rect x="320" y="181" width="105" height="6" rx="1" fill="rgba(255,255,255,0.09)"/>
-          <!-- Right clock tower -->
           <rect x="395" y="155" width="18" height="32" rx="2" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
           <circle cx="404" cy="168" r="6" fill="none" stroke="rgba(200,146,10,0.5)" stroke-width="1.5"/>
-          <!-- Clock hands -->
-          <line x1="404" y1="168" x2="404" y2="163" stroke="rgba(200,146,10,0.8)" stroke-width="1">
-            <animateTransform attributeName="transform" type="rotate" from="0 404 168" to="360 404 168" dur="10s" repeatCount="indefinite"/>
-          </line>
-          <line x1="404" y1="168" x2="408" y2="168" stroke="rgba(200,146,10,0.6)" stroke-width="1">
-            <animateTransform attributeName="transform" type="rotate" from="0 404 168" to="360 404 168" dur="120s" repeatCount="indefinite"/>
-          </line>
-
-          <!-- ── Trees ── -->
-          <!-- Tree left 1 -->
+          <line x1="404" y1="168" x2="404" y2="163" stroke="rgba(200,146,10,0.8)" stroke-width="1"><animateTransform attributeName="transform" type="rotate" from="0 404 168" to="360 404 168" dur="10s" repeatCount="indefinite"/></line>
+          <line x1="404" y1="168" x2="408" y2="168" stroke="rgba(200,146,10,0.6)" stroke-width="1"><animateTransform attributeName="transform" type="rotate" from="0 404 168" to="360 404 168" dur="120s" repeatCount="indefinite"/></line>
           <rect x="36" y="225" width="6" height="30" rx="2" fill="rgba(255,255,255,0.1)"/>
           <ellipse cx="39" cy="218" rx="16" ry="20" fill="rgba(16,185,129,0.2)" stroke="rgba(16,185,129,0.15)" stroke-width="1"/>
-          <!-- Tree left 2 -->
           <rect x="128" y="228" width="5" height="27" rx="2" fill="rgba(255,255,255,0.08)"/>
           <ellipse cx="130" cy="220" rx="13" ry="16" fill="rgba(16,185,129,0.15)"/>
-          <!-- Tree right 1 -->
           <rect x="436" y="222" width="6" height="33" rx="2" fill="rgba(255,255,255,0.1)"/>
           <ellipse cx="439" cy="214" rx="16" ry="20" fill="rgba(16,185,129,0.2)" stroke="rgba(16,185,129,0.15)" stroke-width="1"/>
-          <!-- Tree right 2 -->
           <rect x="308" y="228" width="5" height="27" rx="2" fill="rgba(255,255,255,0.08)"/>
           <ellipse cx="311" cy="220" rx="12" ry="15" fill="rgba(16,185,129,0.15)"/>
-
-          <!-- ── Path ── -->
           <path d="M200 255 Q240 250 280 255" stroke="rgba(255,255,255,0.07)" stroke-width="8" stroke-linecap="round"/>
-
-          <!-- ── Stars / sky sparkles ── -->
-          <circle cx="50" cy="40" r="1.5" fill="rgba(255,255,255,0.5)">
-            <animate attributeName="opacity" values="0.5;0.1;0.5" dur="3s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="120" cy="25" r="1" fill="rgba(255,255,255,0.4)">
-            <animate attributeName="opacity" values="0.4;0.1;0.4" dur="2.5s" repeatCount="indefinite" begin="0.5s"/>
-          </circle>
-          <circle cx="380" cy="30" r="1.5" fill="rgba(255,255,255,0.4)">
-            <animate attributeName="opacity" values="0.4;0.1;0.4" dur="4s" repeatCount="indefinite" begin="1s"/>
-          </circle>
-          <circle cx="450" cy="55" r="1" fill="rgba(255,255,255,0.35)">
-            <animate attributeName="opacity" values="0.35;0.1;0.35" dur="2.8s" repeatCount="indefinite" begin="0.3s"/>
-          </circle>
-          <circle cx="310" cy="18" r="1" fill="rgba(200,146,10,0.6)">
-            <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3.5s" repeatCount="indefinite" begin="0.8s"/>
-          </circle>
-          <circle cx="170" cy="35" r="1.5" fill="rgba(200,146,10,0.5)">
-            <animate attributeName="opacity" values="0.5;0.15;0.5" dur="2.2s" repeatCount="indefinite" begin="1.2s"/>
-          </circle>
-
-          <!-- Dome glow halo -->
-          <ellipse cx="240" cy="102" rx="35" ry="18" fill="rgba(200,146,10,0.08)">
-            <animate attributeName="rx" values="35;40;35" dur="3s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0.08;0.15;0.08" dur="3s" repeatCount="indefinite"/>
-          </ellipse>
+          <circle cx="50" cy="40" r="1.5" fill="rgba(255,255,255,0.5)"><animate attributeName="opacity" values="0.5;0.1;0.5" dur="3s" repeatCount="indefinite"/></circle>
+          <circle cx="120" cy="25" r="1" fill="rgba(255,255,255,0.4)"><animate attributeName="opacity" values="0.4;0.1;0.4" dur="2.5s" repeatCount="indefinite" begin="0.5s"/></circle>
+          <circle cx="380" cy="30" r="1.5" fill="rgba(255,255,255,0.4)"><animate attributeName="opacity" values="0.4;0.1;0.4" dur="4s" repeatCount="indefinite" begin="1s"/></circle>
+          <circle cx="450" cy="55" r="1" fill="rgba(255,255,255,0.35)"><animate attributeName="opacity" values="0.35;0.1;0.35" dur="2.8s" repeatCount="indefinite" begin="0.3s"/></circle>
+          <circle cx="310" cy="18" r="1" fill="rgba(200,146,10,0.6)"><animate attributeName="opacity" values="0.6;0.2;0.6" dur="3.5s" repeatCount="indefinite" begin="0.8s"/></circle>
+          <circle cx="170" cy="35" r="1.5" fill="rgba(200,146,10,0.5)"><animate attributeName="opacity" values="0.5;0.15;0.5" dur="2.2s" repeatCount="indefinite" begin="1.2s"/></circle>
+          <ellipse cx="240" cy="102" rx="35" ry="18" fill="rgba(200,146,10,0.08)"><animate attributeName="rx" values="35;40;35" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.08;0.15;0.08" dur="3s" repeatCount="indefinite"/></ellipse>
         </svg>
-
-        <!-- Floating info badges -->
         <div class="hi-badge hi-badge-1">
-          <div class="hi-badge-icon" style="background:rgba(200,146,10,.25);color:var(--gold-light);">
-            <i class="fas fa-calendar-check"></i>
-          </div>
+          <div class="hi-badge-icon" style="background:rgba(200,146,10,.25);color:var(--gold-light);"><i class="fas fa-calendar-check"></i></div>
           <div class="hi-badge-text-wrap">
             <div class="hi-badge-title">11 Events This Year</div>
             <div class="hi-badge-sub">7 departments · all levels</div>
           </div>
         </div>
-
         <div class="hi-badge hi-badge-2">
-          <div class="hi-badge-icon" style="background:rgba(16,185,129,.25);color:#34d399;">
-            <i class="fas fa-users"></i>
-          </div>
+          <div class="hi-badge-icon" style="background:rgba(16,185,129,.25);color:#34d399;"><i class="fas fa-users"></i></div>
           <div class="hi-badge-text-wrap">
             <div class="hi-badge-title">Open Registrations</div>
             <div class="hi-badge-sub">Seats filling fast</div>
           </div>
         </div>
-
         <div class="hi-badge hi-badge-3">
-          <div class="hi-badge-icon" style="background:rgba(99,102,241,.25);color:#818cf8;">
-            <i class="fas fa-trophy"></i>
-          </div>
+          <div class="hi-badge-icon" style="background:rgba(99,102,241,.25);color:#818cf8;"><i class="fas fa-trophy"></i></div>
           <div class="hi-badge-text-wrap">
             <div class="hi-badge-title">Annual Symposium</div>
             <div class="hi-badge-sub">Mar 11, 2026</div>
           </div>
         </div>
-
-        <!-- Glow dots -->
         <div class="hi-dot" style="width:6px;height:6px;top:12%;left:48%;background:var(--gold);animation-duration:3s;animation-delay:0s;"></div>
         <div class="hi-dot" style="width:4px;height:4px;top:25%;left:72%;background:#818cf8;animation-duration:4s;animation-delay:.7s;"></div>
         <div class="hi-dot" style="width:5px;height:5px;top:65%;left:55%;background:#34d399;animation-duration:3.5s;animation-delay:1.2s;"></div>
-
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     FILTER SECTION — Unstop style
-══════════════════════════════════════ -->
+<!-- FILTER SECTION -->
 <div class="filter-section">
-
-  <!-- Search bar -->
   <div class="filter-search-row">
     <div class="search-pill">
       <i class="fas fa-search search-pill-icon"></i>
       <input type="text" id="searchInput" class="search-pill-input" placeholder="Search events, locations, organizers…" />
     </div>
-    <!-- view toggle + export tucked to the right -->
     <div class="filter-right-controls">
       <div class="view-toggle-pill">
         <button class="vt-btn active" data-view="grid" id="gridViewBtn" title="Grid View"><i class="fas fa-th-large"></i></button>
@@ -1126,20 +1022,13 @@
       <button class="export-pill" id="exportBtn"><i class="fas fa-download"></i>Export</button>
     </div>
   </div>
-
-  <!-- Unstop-style filter pills row -->
   <div class="unstop-filter-row">
-
-    <!-- Filters count pill -->
     <button class="uf-pill uf-pill-filters" id="ufFiltersBtn">
       <i class="fas fa-filter"></i>
       Filters
       <span class="uf-badge" id="activeFilterCount">0</span>
     </button>
-
     <div class="uf-divider"></div>
-
-    <!-- Department dropdown pill -->
     <div class="uf-pill-dropdown-wrap" id="deptDropWrap">
       <button class="uf-pill uf-pill-dropdown" id="deptPillBtn">
         <i class="fas fa-chevron-down uf-chevron"></i>
@@ -1156,8 +1045,6 @@
         <div class="uf-option" data-dept="history"><i class="fas fa-landmark" style="color:#ef4444"></i>History</div>
       </div>
     </div>
-
-    <!-- Timeline dropdown pill -->
     <div class="uf-pill-dropdown-wrap" id="timelineDropWrap">
       <button class="uf-pill uf-pill-dropdown" id="timelinePillBtn">
         <i class="fas fa-chevron-down uf-chevron"></i>
@@ -1170,8 +1057,6 @@
         <div class="uf-option" data-timeline="past"><i class="fas fa-history"></i>Past Events</div>
       </div>
     </div>
-
-    <!-- Sort By dropdown pill -->
     <div class="uf-pill-dropdown-wrap" id="sortDropWrap">
       <button class="uf-pill uf-pill-dropdown" id="sortPillBtn">
         <i class="fas fa-sort uf-chevron"></i>
@@ -1184,11 +1069,7 @@
         <div class="uf-option" data-sort="capacity"><i class="fas fa-users"></i>Capacity</div>
       </div>
     </div>
-
-    <!-- Active filter tags (appear dynamically) -->
     <div class="uf-active-tags" id="ufActiveTags"></div>
-
-    <!-- Hidden select for compatibility -->
     <select id="departmentSelect" style="display:none;">
       <option value="all">All Departments</option>
       <option value="computer-science">Computer Science</option>
@@ -1219,13 +1100,9 @@
   <span class="results-count"><strong id="resultsCount">0</strong> events found</span>
 </div>
 
-<!-- ══════════════════════════════════════
-     PAGE BODY
-══════════════════════════════════════ -->
+<!-- PAGE BODY -->
 <div class="page-body">
   <div class="content-layout">
-
-    <!-- Events column -->
     <div class="events-column">
       <section id="eventsGridSection">
         <div class="events-grid" id="eventsGrid"></div>
@@ -1238,8 +1115,6 @@
           </a>
         </div>
       </section>
-
-      <!-- Calendar full view -->
       <section class="calendar-section" id="calendarFullSection">
         <div class="big-calendar-wrap">
           <div class="big-cal-header">
@@ -1267,8 +1142,6 @@
         </div>
       </section>
     </div>
-
-    <!-- Calendar side panel -->
     <aside class="calendar-column" id="calendarSidePanelCol">
       <div class="cal-panel-card">
         <div class="cal-panel-header">
@@ -1290,8 +1163,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Quick stats -->
       <div class="quick-stats-card">
         <div class="quick-stats-header">
           <div class="quick-stats-title">Quick Stats</div>
@@ -1299,7 +1170,6 @@
         <div class="quick-stats-body" id="quickStatsList"></div>
       </div>
     </aside>
-
   </div>
 </div>
 
@@ -1421,7 +1291,6 @@
   const DEPT_ICONS={'computer-science':'fa-laptop-code','mathematics':'fa-square-root-alt','physics':'fa-atom','chemistry':'fa-flask','biology':'fa-dna','english':'fa-book-open','history':'fa-landmark'};
   const DEPT_COLORS={'computer-science':'#6366f1','mathematics':'#8b5cf6','physics':'#ec4899','chemistry':'#f59e0b','biology':'#10b981','english':'#3b82f6','history':'#ef4444'};
 
-  /* ── UTILS ── */
   function getEventTimeline(d){const t=new Date();t.setHours(0,0,0,0);const e=new Date(d);e.setHours(0,0,0,0);if(e<t)return'past';if(e.getTime()===t.getTime())return'present';return'future';}
   function formatDate(d){return new Date(d).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});}
   function formatDateLong(d){return new Date(d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});}
@@ -1440,13 +1309,11 @@
     toastTimer=setTimeout(()=>el.classList.remove('show'),3000);
   }
 
-  /* ── FILTER ── */
   function filterEvents(){
     let evs=[...state.events];
     if(state.selectedDepartment!=='all') evs=evs.filter(e=>e.department===state.selectedDepartment);
     if(state.selectedTimeline!=='all') evs=evs.filter(e=>getEventTimeline(e.date)===state.selectedTimeline);
     if(state.searchQuery){const q=state.searchQuery.toLowerCase();evs=evs.filter(e=>e.name.toLowerCase().includes(q)||e.location.toLowerCase().includes(q)||(e.organizer||'').toLowerCase().includes(q)||(e.description||'').toLowerCase().includes(q));}
-    // sort
     const sort=document.getElementById('sortSelect').value;
     if(sort==='date-asc') evs.sort((a,b)=>new Date(a.date)-new Date(b.date));
     else if(sort==='date-desc') evs.sort((a,b)=>new Date(b.date)-new Date(a.date));
@@ -1475,7 +1342,6 @@
       </div>`).join('');
   }
 
-  /* ── VIEWS ── */
   function setView(v){
     state.currentView=v;
     document.querySelectorAll('.vt-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
@@ -1564,7 +1430,6 @@
     }).join('');
   }
 
-  /* ── SIDE CALENDAR ── */
   function renderSideCalendar(){
     const grid=document.getElementById('calDaysGrid');
     const headers=document.getElementById('calDayHeaders');
@@ -1612,7 +1477,6 @@
   function closeSideCalPanel(){document.getElementById('calDayPanel').classList.remove('open');document.querySelectorAll('#calDaysGrid .cal-day-cell').forEach(c=>c.classList.remove('selected'));}
   function changeSideMonth(dir){state.currentMonth.setMonth(state.currentMonth.getMonth()+dir);renderSideCalendar();}
 
-  /* ── BIG CALENDAR ── */
   function renderBigCalendar(){
     const grid=document.getElementById('bigCalGrid');
     const headers=document.getElementById('bigCalDayHeaders');
@@ -1658,7 +1522,6 @@
   }
   function closeBigCalPanel(){document.getElementById('bigCalSidePanel').classList.remove('open');document.querySelectorAll('#bigCalGrid .big-cal-day').forEach(d=>d.classList.remove('selected'));}
 
-  /* ── DETAIL MODAL ── */
   function openDetailModal(id){
     const ev=state.events.find(e=>e.id===id);if(!ev)return;
     const tl=getEventTimeline(ev.date);
@@ -1684,7 +1547,6 @@
   }
   function closeDetailModal(){document.getElementById('detailModalBackdrop').classList.remove('open');document.body.style.overflow='';state.openDetailId=null;}
 
-  /* ── ADD/EDIT MODAL ── */
   function openAddModal(){
     document.getElementById('formModalTitle').textContent='Quick Add Event';
     document.getElementById('eventId').value='';
@@ -1717,7 +1579,6 @@
     closeFormModal();filterEvents();
   }
 
-  /* ── EXPORT ── */
   function exportEvents(){
     if(!state.filteredEvents.length){showToast('No events to export');return;}
     const headers=['Name','Department','Date','Time','Location','Organizer','Capacity','Status'];
@@ -1730,33 +1591,26 @@
     showToast('Exported successfully');
   }
 
-  /* ── SIDEBAR/PROFILE ── */
   function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sidebarBackdrop').classList.add('open');document.body.style.overflow='hidden';}
   function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarBackdrop').classList.remove('open');document.body.style.overflow='';}
   function toggleProfileDropdown(){document.getElementById('profileDropdown').classList.toggle('open');}
   function closeProfileDropdown(){document.getElementById('profileDropdown').classList.remove('open');}
 
-  /* ── DEPT CHIPS ── */
-  /* ── UNSTOP FILTER DROPDOWNS ── */
   let activeFilters = { dept: 'all', timeline: 'all', sort: 'date-asc' };
 
   function initUnstopFilters() {
-    // Generic dropdown toggle
     function setupDropdown(wrapId, btnId, menuId, onSelect) {
       const wrap = document.getElementById(wrapId);
       const btn  = document.getElementById(btnId);
       const menu = document.getElementById(menuId);
       if(!wrap||!btn||!menu) return;
-
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
-        // close all others
         document.querySelectorAll('.uf-pill-dropdown-wrap').forEach(w => {
           if(w !== wrap) w.classList.remove('open');
         });
         wrap.classList.toggle('open');
       });
-
       menu.querySelectorAll('.uf-option').forEach(opt => {
         opt.addEventListener('click', function() {
           menu.querySelectorAll('.uf-option').forEach(o => o.classList.remove('selected'));
@@ -1769,7 +1623,6 @@
       });
     }
 
-    // Dept dropdown
     setupDropdown('deptDropWrap', 'deptPillBtn', 'deptDropMenu', function(opt) {
       const dept = opt.dataset.dept;
       activeFilters.dept = dept;
@@ -1781,7 +1634,6 @@
       if(dept !== 'all') btn.classList.add('applied'); else btn.classList.remove('applied');
     });
 
-    // Timeline dropdown
     setupDropdown('timelineDropWrap', 'timelinePillBtn', 'timelineDropMenu', function(opt) {
       const tl = opt.dataset.timeline;
       activeFilters.timeline = tl;
@@ -1792,7 +1644,6 @@
       if(tl !== 'all') btn.classList.add('applied'); else btn.classList.remove('applied');
     });
 
-    // Sort dropdown
     setupDropdown('sortDropWrap', 'sortPillBtn', 'sortDropMenu', function(opt) {
       const sort = opt.dataset.sort;
       activeFilters.sort = sort;
@@ -1802,35 +1653,25 @@
       document.getElementById('sortPillBtn').classList.add('applied');
     });
 
-    // Close on outside click
     document.addEventListener('click', function() {
       document.querySelectorAll('.uf-pill-dropdown-wrap').forEach(w => w.classList.remove('open'));
     });
 
-    // Clear all filters button
     document.getElementById('ufFiltersBtn').addEventListener('click', function() {
-      // reset
       activeFilters = { dept:'all', timeline:'all', sort:'date-asc' };
       state.selectedDepartment = 'all';
       state.selectedTimeline = 'all';
       document.getElementById('departmentSelect').value = 'all';
       document.getElementById('sortSelect').value = 'date-asc';
-
-      // reset labels
       document.getElementById('deptPillLabel').textContent = 'Department';
       document.getElementById('timelinePillLabel').textContent = 'Timeline';
       document.getElementById('sortPillLabel').textContent = 'Sort By';
-
-      // remove applied styles
       document.querySelectorAll('.uf-pill-dropdown').forEach(b => b.classList.remove('applied'));
-
-      // reset option selections
       document.querySelectorAll('.uf-dropdown-menu').forEach(menu => {
         menu.querySelectorAll('.uf-option').forEach((opt,i) => {
           opt.classList.toggle('selected', i === 0);
         });
       });
-
       updateFilterPills();
       filterEvents();
     });
@@ -1842,13 +1683,10 @@
       activeFilters.timeline !== 'all',
       activeFilters.sort !== 'date-asc'
     ].filter(Boolean).length;
-
     const badge = document.querySelector('.uf-badge');
     if(badge) badge.textContent = count;
     const filterBtn = document.getElementById('ufFiltersBtn');
     if(filterBtn) filterBtn.classList.toggle('has-filters', count > 0);
-
-    // Update active tags
     const tagsWrap = document.getElementById('ufActiveTags');
     if(!tagsWrap) return;
     const tags = [];
@@ -1865,7 +1703,6 @@
         ${t.label}
         <span class="uf-tag-remove" data-key="${t.key}"><i class="fas fa-times"></i></span>
       </span>`).join('');
-
     tagsWrap.querySelectorAll('.uf-tag-remove').forEach(btn => {
       btn.addEventListener('click', function() {
         const key = this.dataset.key;
@@ -1875,7 +1712,6 @@
           document.getElementById('deptPillLabel').textContent = 'Department';
           document.getElementById('deptPillBtn').classList.remove('applied');
           document.getElementById('departmentSelect').value = 'all';
-          document.querySelector('#deptDropMenu .uf-option').classList.add('selected');
           document.querySelectorAll('#deptDropMenu .uf-option').forEach((o,i) => o.classList.toggle('selected', i===0));
         }
         if(key === 'timeline') {
@@ -1891,7 +1727,6 @@
     });
   }
 
-  /* ── INIT ── */
   document.addEventListener('DOMContentLoaded',function(){
     if(window.JainAuth){
       window.JainAuth.populateNavbar();
@@ -1904,46 +1739,35 @@
         if(sini)sini.textContent=ini;if(sname)sname.textContent=u.name||'Jain University';if(srole)srole.textContent=u.role||'Student';
       }
     }
-
     state.events=[...sampleEvents];
     filterEvents();
     initUnstopFilters();
-
     document.getElementById('hamburgerBtn').addEventListener('click',openSidebar);
     document.getElementById('sidebarCloseBtn').addEventListener('click',closeSidebar);
     document.getElementById('sidebarBackdrop').addEventListener('click',closeSidebar);
-
     document.getElementById('profileAvatarBtn').addEventListener('click',function(e){e.stopPropagation();toggleProfileDropdown();});
     document.addEventListener('click',function(){closeProfileDropdown();});
     document.getElementById('profileDropdown').addEventListener('click',e=>e.stopPropagation());
-
-    // addEventBtn may not exist now — guard it
     const aeb = document.getElementById('addEventBtn');
     if(aeb) aeb.addEventListener('click',openAddModal);
-
     document.getElementById('searchInput').addEventListener('input',function(){state.searchQuery=this.value;filterEvents();});
     document.getElementById('gridViewBtn').addEventListener('click',()=>setView('grid'));
     document.getElementById('listViewBtn').addEventListener('click',()=>setView('list'));
     document.getElementById('calViewBtn').addEventListener('click',()=>setView('calendar'));
     document.getElementById('exportBtn').addEventListener('click',exportEvents);
-
     document.getElementById('prevMonth').addEventListener('click',()=>changeSideMonth(-1));
     document.getElementById('nextMonth').addEventListener('click',()=>changeSideMonth(1));
     document.getElementById('calDayPanelClose').addEventListener('click',closeSideCalPanel);
-
     document.getElementById('prevMonthBig').addEventListener('click',function(){state.currentMonth.setMonth(state.currentMonth.getMonth()-1);renderBigCalendar();renderSideCalendar();});
     document.getElementById('nextMonthBig').addEventListener('click',function(){state.currentMonth.setMonth(state.currentMonth.getMonth()+1);renderBigCalendar();renderSideCalendar();});
     document.getElementById('bigCalSideClose').addEventListener('click',closeBigCalPanel);
-
     document.getElementById('detailCloseBtn').addEventListener('click',closeDetailModal);
     document.getElementById('detailModalBackdrop').addEventListener('click',function(e){if(e.target===this)closeDetailModal();});
     document.getElementById('detailEditBtn').addEventListener('click',function(){const id=this.dataset.id;closeDetailModal();const ev=state.events.find(e=>e.id===id);if(ev)openEditModal(ev);});
-
     document.getElementById('eventForm').addEventListener('submit',saveEvent);
     document.getElementById('formModalClose').addEventListener('click',closeFormModal);
     document.getElementById('formCancelBtn').addEventListener('click',closeFormModal);
     document.getElementById('formModalBackdrop').addEventListener('click',function(e){if(e.target===this)closeFormModal();});
-
     document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeFormModal();closeDetailModal();closeSidebar();}});
   });
 </script>

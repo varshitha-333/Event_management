@@ -8,7 +8,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
@@ -31,9 +31,15 @@
       --green:      #22C55E;
     }
 
+    :root {
+      --font-body:     'Inter', sans-serif;
+      --font-heading:  'Plus Jakarta Sans', sans-serif;
+      --font-accent:   'DM Sans', sans-serif;
+    }
+
     html, body {
       height: 100%;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-body);
       background: #fff;
       overflow-x: hidden;
     }
@@ -126,9 +132,10 @@
 
     .brand-heading {
       color:#fff;font-size:clamp(1.8rem,3.5vw,2.4rem);font-weight:800;line-height:1.15;margin-bottom:16px;
+      font-family: var(--font-heading);
     }
     .brand-heading-accent { color:var(--gold-light); }
-    .brand-sub { color:rgba(255,255,255,.65);font-size:15px;line-height:1.7;max-width:300px;margin-bottom:32px; }
+    .brand-sub { color:rgba(255,255,255,.65);font-size:15px;line-height:1.7;max-width:300px;margin-bottom:32px; font-family: var(--font-accent); }
 
     .brand-features { display:flex;flex-direction:column;gap:12px; }
     .brand-feature  { display:flex;align-items:center;gap:12px; }
@@ -147,7 +154,7 @@
     }
     .brand-stat-icon  { font-size:18px;color:var(--gold-light);margin-bottom:6px; }
     .brand-stat-value { color:#fff;font-weight:700;font-size:18px;line-height:1; }
-    .brand-stat-label { color:rgba(255,255,255,.50);font-size:11px;margin-top:4px;line-height:1.3; }
+    .brand-stat-label { color:rgba(255,255,255,.50);font-size:11px;margin-top:4px;line-height:1.3; font-family: var(--font-accent); }
 
     /* ═══════════════ RIGHT AUTH AREA ═══════════════ */
     .auth-area {
@@ -201,8 +208,8 @@
     }
     .card-badge.student { background:rgba(28,43,74,.08);color:var(--navy); }
     .card-badge.staff   { background:rgba(200,146,10,.12);color:var(--gold); }
-    .card-title  { color:var(--navy);font-weight:800;font-size:1.65rem;line-height:1.2;margin-bottom:6px; }
-    .card-sub    { color:var(--text-mid);font-size:14px;margin-bottom:28px; }
+    .card-title  { color:var(--navy);font-weight:800;font-size:1.65rem;line-height:1.2;margin-bottom:6px; font-family: var(--font-heading); }
+    .card-sub    { color:var(--text-mid);font-size:14px;margin-bottom:28px; font-family: var(--font-accent); }
 
     /* Input Group */
     .field-group { display:flex;flex-direction:column;gap:6px;margin-bottom:16px; }
@@ -308,8 +315,8 @@
       transform:scale(0);transition:transform .4s cubic-bezier(.34,1.56,.64,1);
     }
     .success-overlay.show .success-icon { transform:scale(1); }
-    .success-title { color:var(--navy);font-weight:800;font-size:20px; }
-    .success-sub   { color:var(--text-mid);font-size:14px; }
+    .success-title { color:var(--navy);font-weight:800;font-size:20px; font-family: var(--font-heading); }
+    .success-sub   { color:var(--text-mid);font-size:14px; font-family: var(--font-accent); }
 
     /* ── Staff role grid ── */
     .staff-roles { display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:20px; }

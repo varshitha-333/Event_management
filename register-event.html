@@ -3,54 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register Event — Jain University Events Portal</title>
-
-  
-  
-  
+  <title>Register Event — Jain University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
-
   <style>
     :root {
-      --navy:        #1C2B4A;
-      --navy-deep:   #111C33;
-      --navy-mid:    #2E4370;
-      --navy-light:  #3A5C8C;
-      --gold:        #C8920A;
-      --gold-light:  #E8B030;
-      --gold-pale:   #FDF3DC;
-      --white:       #FFFFFF;
-      --surface:     #F4F5FB;
-      --surface2:    #ECEEF8;
-      --border:      #D8DCF0;
-      --text-dark:   #0F1B33;
-      --text-mid:    #374151;
-      --text-soft:   #6B7280;
-      --text-pale:   #9CA3AF;
-      --success:     #059669;
-      --danger:      #dc2626;
-
-      /* Section accent colours */
-      --c1: #6366f1; --c1-bg: #EEF0FE;
-      --c2: #059669; --c2-bg: #D1FAE5;
-      --c3: #D97706; --c3-bg: #FEF3C7;
-      --c4: #2563EB; --c4-bg: #DBEAFE;
-      --c5: #BE185D; --c5-bg: #FCE7F3;
-      --c6: #DC2626; --c6-bg: #FEE2E2;
-      --c7: #C8920A; --c7-bg: #FDF3DC;
-
-      --r-sm: 8px; --r-md: 14px; --r-lg: 18px; --r-xl: 22px; --r-2xl: 28px;
-      --shadow-sm: 0 2px 8px rgba(28,43,74,.07);
-      --shadow-md: 0 6px 28px rgba(28,43,74,.11);
-      --shadow-lg: 0 16px 56px rgba(28,43,74,.16);
-      --transition: .22s cubic-bezier(.4,0,.2,1);
+      --navy:       #1C2B4A;
+      --navy-deep:  #111C33;
+      --navy-mid:   #2E4370;
+      --navy-light: #3A5C8C;
+      --gold:       #C8920A;
+      --gold-light: #E8B030;
+      --gold-pale:  #FDF3DC;
+      --white:      #FFFFFF;
+      --surface:    #F5F6FB;
+      --border:     #E0E4F0;
+      --text-dark:  #0F1B33;
+      --text-mid:   #374151;
+      --text-soft:  #6B7280;
+      --text-pale:  #9CA3AF;
+      --danger:     #DC2626;
+      --success:    #059669;
+      --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 20px;
+      --shadow-sm: 0 2px 10px rgba(28,43,74,.07);
+      --shadow-md: 0 8px 32px rgba(28,43,74,.12);
+      --shadow-lg: 0 20px 60px rgba(28,43,74,.18);
+      --t: .2s cubic-bezier(.4,0,.2,1);
       --spring: .38s cubic-bezier(.34,1.56,.64,1);
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 14px; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: 'Times New Roman', Times, serif;
+      font-family: 'Inter', sans-serif;
       background: var(--surface);
       color: var(--text-dark);
       line-height: 1.5;
@@ -58,526 +44,273 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ══════════════════════════════════════
-       ANIMATIONS
-    ══════════════════════════════════════ */
-    @keyframes slideDown      { from{transform:translateY(-100%);opacity:0} to{transform:translateY(0);opacity:1} }
-    @keyframes fadeInUp       { from{transform:translateY(28px);opacity:0} to{transform:translateY(0);opacity:1} }
-    @keyframes fadeIn         { from{opacity:0} to{opacity:1} }
-    @keyframes pulse-dot      { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
-    @keyframes shimmer        { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
-    @keyframes sectionSlide   { from{opacity:0;transform:translateX(-24px)} to{opacity:1;transform:translateX(0)} }
-    @keyframes badgePop       { 0%{transform:scale(0.5);opacity:0} 70%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
-    @keyframes borderGrow     { from{height:0} to{height:100%} }
-    @keyframes floatUp        { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
-    /* Step slide transitions */
-    @keyframes slideInRight   { from{opacity:0;transform:translateX(52px)} to{opacity:1;transform:translateX(0)} }
-    @keyframes slideInLeft    { from{opacity:0;transform:translateX(-52px)} to{opacity:1;transform:translateX(0)} }
-    @keyframes slideOutLeft   { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(-52px)} }
-    @keyframes slideOutRight  { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(52px)} }
-    /* Ripple */
-    @keyframes ripple         { from{transform:scale(0);opacity:.5} to{transform:scale(4);opacity:0} }
-    /* Progress fill */
-    @keyframes progressFill   { from{width:0} to{width:var(--prog-w)} }
-    /* Input focus glow pulse */
-    @keyframes focusGlow      { 0%,100%{box-shadow:0 0 0 3px rgba(28,43,74,.1)} 50%{box-shadow:0 0 0 5px rgba(28,43,74,.18)} }
-    /* Step dot pop */
-    @keyframes stepPop        { 0%{transform:scale(.7)} 60%{transform:scale(1.18)} 100%{transform:scale(1)} }
-    /* Shimmer sweep for active step dot */
-    @keyframes dotShimmer     { 0%{background-position:-200% center} 100%{background-position:200% center} }
+    /* ── ANIMATIONS ── */
+    @keyframes slideDown    { from{transform:translateY(-100%);opacity:0} to{transform:translateY(0);opacity:1} }
+    @keyframes fadeInUp     { from{transform:translateY(24px);opacity:0} to{transform:translateY(0);opacity:1} }
+    @keyframes slideInRight { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes slideInLeft  { from{opacity:0;transform:translateX(-40px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes pulse-dot    { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+    @keyframes toastDrain   { from{width:100%} to{width:0} }
+    @keyframes ripple       { from{transform:scale(0);opacity:.4} to{transform:scale(4);opacity:0} }
 
-    /* ══════════════════════════════════════
-       NAVBAR
-    ══════════════════════════════════════ */
+    /* ── NAVBAR ── */
     .navbar {
       position: sticky; top: 0; z-index: 200;
       background: var(--navy-deep);
-      border-bottom: 3px solid var(--gold);
-      box-shadow: 0 4px 32px rgba(0,0,0,.28);
+      border-bottom: 2.5px solid var(--gold);
+      box-shadow: 0 4px 24px rgba(0,0,0,.22);
       animation: slideDown .5s cubic-bezier(.34,1.1,.64,1) both;
     }
     .navbar-inner {
-      max-width: 1400px; margin: 0 auto;
-      height: 56px; padding: 0 20px;
-      display: flex; align-items: center; gap: 12px;
+      max-width: 1200px; margin: 0 auto;
+      height: 58px; padding: 0 24px;
+      display: flex; align-items: center; gap: 14px;
     }
-    .hamburger-btn {
-      width: 36px; height: 36px;
-      background: rgba(255,255,255,.08);
-      border: 1.5px solid rgba(255,255,255,.15);
-      border-radius: 9px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 4px;
-      cursor: pointer; transition: var(--transition); flex-shrink: 0;
-    }
-    .hamburger-btn:hover { background: rgba(255,255,255,.16); border-color: var(--gold); transform: scale(1.05); }
-    .hamburger-line { width: 15px; height: 1.5px; background: var(--white); border-radius: 2px; }
-    .nav-logo-badge {
-      width: 36px; height: 36px; background: var(--gold);
+    .nav-logo {
+      width: 38px; height: 38px; background: var(--gold);
       border-radius: 10px; display: flex; align-items: center; justify-content: center;
-      font-family: 'Times New Roman', Times, serif; font-weight: 900; font-size: 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 900; font-size: 13px;
       color: var(--navy); flex-shrink: 0;
-      box-shadow: 0 3px 10px rgba(200,146,10,.4); transition: var(--transition);
+      box-shadow: 0 3px 12px rgba(200,146,10,.4);
     }
-    .nav-logo-badge:hover { transform: rotate(-4deg) scale(1.06); }
-    .nav-brand-text { display: flex; flex-direction: column; gap: 1px; }
-    .nav-university-name {
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 14px; font-weight: 800; color: var(--white); line-height: 1;
-    }
-    .nav-portal-name { font-size: 10px; color: rgba(255,255,255,.5); letter-spacing: .6px; font-weight: 500; }
-
-    .nav-breadcrumb {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 14px; color: rgba(255,255,255,.55);
-    }
-    .nav-breadcrumb a { color: rgba(255,255,255,.55); text-decoration: none; transition: var(--transition); }
-    .nav-breadcrumb a:hover { color: var(--gold-light); }
-    .nav-breadcrumb-sep { color: rgba(255,255,255,.3); font-size: 11px; }
-    .nav-breadcrumb-current { color: var(--gold-light); font-weight: 700; }
+    .nav-brand { display: flex; flex-direction: column; gap: 1px; }
+    .nav-uni { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; color: var(--white); }
+    .nav-sub { font-size: 10px; color: rgba(255,255,255,.45); letter-spacing: .6px; font-weight: 500; }
     .nav-spacer { flex: 1; }
-    .nav-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 20px; border-radius: 11px;
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 14px; font-weight: 700;
-      cursor: pointer; transition: var(--transition);
-      white-space: nowrap; text-decoration: none;
-    }
-    .nav-btn-primary { background: var(--gold); color: var(--navy); border: none; box-shadow: 0 3px 12px rgba(200,146,10,.35); }
-    .nav-btn-primary:hover { background: var(--gold-light); transform: scale(1.03) translateY(-1px); }
-    .nav-btn-ghost { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,.25); }
-    .nav-btn-ghost:hover { border-color: var(--gold); color: var(--gold-light); }
-
-    .profile-wrapper { position: relative; }
-    .profile-avatar-btn {
-      width: 44px; height: 44px;
+    .nav-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,.45); }
+    .nav-breadcrumb a { color: rgba(255,255,255,.45); text-decoration: none; transition: var(--t); }
+    .nav-breadcrumb a:hover { color: var(--gold-light); }
+    .nav-breadcrumb-sep { color: rgba(255,255,255,.25); font-size: 10px; }
+    .nav-breadcrumb-cur { color: var(--gold-light); font-weight: 700; font-size: 13px; }
+    .nav-avatar {
+      width: 36px; height: 36px;
       background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
       border: 2px solid rgba(200,146,10,.5); border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Times New Roman', Times, serif; font-size: 14px; font-weight: 800;
-      color: var(--white); cursor: pointer; transition: var(--transition); position: relative;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 800;
+      color: var(--white); cursor: pointer; position: relative;
     }
-    .profile-avatar-btn:hover { border-color: var(--gold); transform: scale(1.06); }
-    .profile-online-dot {
-      position: absolute; bottom: 1px; right: 1px;
+    .nav-online {
+      position: absolute; bottom: 0; right: 0;
       width: 9px; height: 9px; background: #22c55e;
       border-radius: 50%; border: 2px solid var(--navy);
-      animation: pulse-dot 2s infinite;
+      animation: pulse-dot 2.2s infinite;
     }
-    .profile-dropdown {
-      position: absolute; top: calc(100% + 10px); right: 0;
-      width: 210px; background: var(--white);
-      border: 1px solid var(--border); border-radius: var(--r-lg);
-      box-shadow: var(--shadow-lg); padding: 8px;
-      transform: translateY(6px) scale(.97); opacity: 0; pointer-events: none;
-      transition: transform .2s cubic-bezier(.34,1.3,.64,1), opacity .18s; z-index: 300;
-    }
-    .profile-dropdown.open { transform: translateY(0) scale(1); opacity: 1; pointer-events: all; }
-    .dropdown-header { padding: 10px 14px 14px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
-    .dropdown-header-name { font-size: 14px; font-weight: 700; color: var(--text-dark); }
-    .dropdown-header-role { font-size: 12px; color: var(--text-pale); }
-    .dropdown-item {
-      display: flex; align-items: center; gap: 11px; padding: 10px 14px;
-      border-radius: 9px; font-size: 14px; font-weight: 500;
-      color: var(--text-mid); cursor: pointer; transition: var(--transition); text-decoration: none;
-    }
-    .dropdown-item:hover { background: var(--surface); color: var(--navy); }
-    .dropdown-item i { width: 16px; text-align: center; color: var(--text-pale); font-size: 13px; }
-    .dropdown-item:hover i { color: var(--gold); }
-    .dropdown-divider { height: 1px; background: var(--border); margin: 5px 0; }
 
-    /* ══════════════════════════════════════
-       SIDEBAR
-    ══════════════════════════════════════ */
-    .sidebar-backdrop {
-      position: fixed; inset: 0; z-index: 400;
-      background: rgba(11,17,30,.65); backdrop-filter: blur(6px);
-      opacity: 0; pointer-events: none; transition: opacity .3s;
-    }
-    .sidebar-backdrop.open { opacity: 1; pointer-events: all; }
-    .sidebar {
-      position: fixed; top: 0; left: 0; height: 100%; width: 290px;
-      background: var(--navy-deep); z-index: 500;
-      transform: translateX(-100%); transition: transform .32s cubic-bezier(.4,0,.2,1);
-      display: flex; flex-direction: column; box-shadow: 8px 0 48px rgba(0,0,0,.4);
-    }
-    .sidebar.open { transform: translateX(0); }
-    .sidebar-header {
-      padding: 26px 22px 22px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .sidebar-logo-group { display: flex; align-items: center; gap: 13px; }
-    .sidebar-logo-badge {
-      width: 44px; height: 44px; background: var(--gold); border-radius: 11px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Times New Roman', Times, serif; font-size: 14px; font-weight: 900; color: var(--navy);
-    }
-    .sidebar-close-btn {
-      width: 34px; height: 34px; background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.12); border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      color: rgba(255,255,255,.6); cursor: pointer; font-size: 15px; transition: var(--transition);
-    }
-    .sidebar-close-btn:hover { background: rgba(255,255,255,.16); color: var(--white); }
-    .sidebar-nav { flex: 1; padding: 18px 14px; display: flex; flex-direction: column; gap: 3px; overflow-y: auto; }
-    .sidebar-section-label {
-      font-size: 11px; font-weight: 700; letter-spacing: 1.3px; 
-      color: rgba(255,255,255,.3); padding: 12px 10px 7px;
-    }
-    .sidebar-nav-item {
-      display: flex; align-items: center; gap: 13px; padding: 12px 16px;
-      border-radius: 11px; font-size: 15px; font-weight: 500;
-      color: rgba(255,255,255,.6); cursor: pointer; transition: var(--transition);
-      text-decoration: none; position: relative;
-    }
-    .sidebar-nav-item:hover { background: rgba(255,255,255,.07); color: var(--white); }
-    .sidebar-nav-item.active { background: rgba(200,146,10,.15); color: var(--gold-light); font-weight: 700; }
-    .sidebar-nav-item.active::before {
-      content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-      width: 4px; height: 24px; background: var(--gold); border-radius: 0 4px 4px 0;
-    }
-    .sidebar-nav-item i { width: 20px; text-align: center; font-size: 16px; }
-    .sidebar-nav-badge {
-      margin-left: auto; background: var(--gold); color: var(--navy);
-      font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 20px;
-    }
-    .sidebar-footer { padding: 18px 14px 26px; border-top: 1px solid rgba(255,255,255,.08); }
-    .sidebar-user-card {
-      display: flex; align-items: center; gap: 13px; padding: 14px;
-      background: rgba(255,255,255,.05); border-radius: 13px;
-      border: 1px solid rgba(255,255,255,.08);
-    }
-    .sidebar-user-avatar {
-      width: 38px; height: 38px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
-      border: 2px solid rgba(200,146,10,.4);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 800; color: var(--white); flex-shrink: 0;
-    }
-    .sidebar-user-name { font-size: 14px; font-weight: 600; color: var(--white); }
-    .sidebar-user-role { font-size: 12px; color: rgba(255,255,255,.4); }
-
-    /* ══════════════════════════════════════
-       PROGRESS STEPPER
-    ══════════════════════════════════════ */
-    .progress-bar-wrap {
+    /* ── STEP PROGRESS BAR ── */
+    .stepper-wrap {
       background: var(--white); border-bottom: 1px solid var(--border);
-      padding: 0 20px; position: sticky; top: 56px; z-index: 100;
-      box-shadow: 0 2px 12px rgba(28,43,74,.06);
+      position: sticky; top: 58px; z-index: 100;
+      box-shadow: 0 2px 12px rgba(28,43,74,.05);
     }
-    .progress-bar-wrap::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--navy), var(--gold));
-      width: var(--prog-w, 0%);
-      transition: width .55s cubic-bezier(.4,0,.2,1);
-      border-radius: 0 2px 2px 0;
-    }
-    .progress-bar-inner {
-      max-width: 1200px; margin: 0 auto;
-      display: flex; align-items: center;
-      padding: 10px 0; gap: 2px; overflow-x: auto;
+    .stepper-inner {
+      max-width: 760px; margin: 0 auto;
+      padding: 16px 24px;
+      display: flex; align-items: center; gap: 0;
     }
     .step-item {
-      display: flex; align-items: center; gap: 7px;
-      flex-shrink: 0; cursor: pointer; transition: var(--transition);
-      padding: 4px 8px; border-radius: 8px;
+      display: flex; align-items: center; flex: 1; gap: 10px;
+      cursor: pointer; padding: 6px 8px; border-radius: 10px;
+      transition: var(--t);
     }
     .step-item:hover { background: var(--surface); }
-    .step-item:not(:last-child)::after {
-      content: ''; display: block;
-      width: 20px; height: 1.5px;
-      background: var(--border); margin: 0 3px; flex-shrink: 0; border-radius: 2px;
-      transition: background .4s ease;
-    }
-    .step-item.done:not(:last-child)::after {
-      background: linear-gradient(90deg, var(--success), rgba(5,150,105,.35));
-    }
-    .step-num {
-      width: 26px; height: 26px; border-radius: 50%;
+    .step-dot {
+      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 800; font-family: 'Times New Roman', Times, serif;
-      border: 2px solid var(--border); color: var(--text-pale);
-      transition: all .35s cubic-bezier(.34,1.3,.64,1); flex-shrink: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 800;
+      border: 2px solid var(--border); background: var(--white);
+      color: var(--text-pale); transition: var(--t);
     }
-    .step-item.done .step-num {
-      background: var(--success); border-color: var(--success); color: var(--white);
-      animation: stepPop .4s cubic-bezier(.34,1.56,.64,1) both;
+    .step-dot.done {
+      background: var(--navy); border-color: var(--navy); color: var(--white);
     }
-    .step-item.active .step-num {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-      border-color: var(--navy); color: var(--white);
-      box-shadow: 0 0 0 3px rgba(28,43,74,.12), 0 3px 10px rgba(28,43,74,.24);
-      animation: stepPop .4s cubic-bezier(.34,1.56,.64,1) both;
+    .step-dot.active {
+      background: var(--gold); border-color: var(--gold); color: var(--navy);
+      box-shadow: 0 0 0 4px rgba(200,146,10,.18);
     }
-    .step-label { font-size: 11px; font-weight: 600; color: var(--text-pale); white-space: nowrap; transition: color .25s; }
-    .step-item.active .step-label { color: var(--navy); font-weight: 800; }
-    .step-item.done .step-label { color: var(--success); }
+    .step-label { display: flex; flex-direction: column; gap: 1px; }
+    .step-name {
+      font-size: 13px; font-weight: 700; color: var(--text-pale);
+      transition: var(--t);
+    }
+    .step-name.active { color: var(--navy); }
+    .step-name.done { color: var(--text-mid); }
+    .step-sub { font-size: 11px; color: var(--text-pale); font-weight: 500; }
+    .step-connector {
+      flex: 0.8; height: 2px; background: var(--border);
+      border-radius: 2px; transition: var(--t); margin: 0 4px;
+    }
+    .step-connector.done { background: var(--navy); }
+    .stepper-track {
+      height: 3px; background: linear-gradient(90deg, var(--navy), var(--gold));
+      width: var(--prog-w, 0%);
+      transition: width .5s cubic-bezier(.4,0,.2,1);
+      margin-top: 6px; border-radius: 0 2px 2px 0;
+    }
 
-    /* ══════════════════════════════════════
-       PAGE HEADER
-    ══════════════════════════════════════ */
-    .page-header-banner {
-      background: linear-gradient(110deg, var(--navy-deep) 0%, var(--navy) 55%, var(--navy-mid) 100%);
-      padding: 18px 20px 20px;
-      border-bottom: 2px solid var(--gold);
-      position: relative; overflow: hidden;
+    /* ── PAGE HEADER ── */
+    .page-header {
+      background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-mid) 100%);
+      padding: 32px 24px 28px; position: relative; overflow: hidden;
     }
-    .page-header-banner::before {
+    .page-header::before {
       content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 80% 50%, rgba(200,146,10,.14) 0%, transparent 60%);
-      pointer-events: none;
+      position: absolute; top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(200,146,10,.15) 0%, transparent 70%);
+      border-radius: 50%;
     }
-    .page-header-banner::after {
+    .page-header::after {
       content: '';
-      position: absolute; inset: 0;
-      background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px);
-      background-size: 24px 24px;
-      animation: floatUp 8s ease-in-out infinite;
-      pointer-events: none;
+      position: absolute; bottom: -20px; left: 30%;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(200,146,10,.08) 0%, transparent 70%);
+      border-radius: 50%;
     }
-    .header-orb {
-      position: absolute; right: -60px; top: -60px;
-      width: 220px; height: 220px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(200,146,10,.18) 0%, transparent 70%);
-      pointer-events: none; animation: floatUp 5s ease-in-out infinite reverse;
+    .page-header-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+    .header-eyebrow {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(200,146,10,.18); border: 1px solid rgba(200,146,10,.35);
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 12px;
+      font-size: 11px; font-weight: 700; color: var(--gold-light); letter-spacing: .7px;
     }
-    .page-header-inner {
-      max-width: 1200px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between; gap: 14px;
-      flex-wrap: wrap; position: relative; z-index: 1;
+    .page-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 28px; font-weight: 900; color: var(--white);
+      line-height: 1.2; margin-bottom: 6px;
     }
-    .page-header-left { display: flex; align-items: center; gap: 13px; }
-    .page-header-icon {
-      width: 42px; height: 42px;
-      background: rgba(200,146,10,.2);
-      border: 1.5px solid rgba(200,146,10,.45);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; color: var(--gold);
-      animation: floatUp 3s ease-in-out infinite;
-    }
-    .page-header-title {
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 20px; font-weight: 800;
-      color: var(--white); line-height: 1.1;
-      letter-spacing: -.3px;
-    }
-    .page-header-subtitle { font-size: 12px; color: rgba(255,255,255,.55); margin-top: 2px; }
-    .page-header-badges { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .header-badge {
-      background: rgba(255,255,255,.1);
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 8px; padding: 5px 12px;
-      font-size: 11px; color: rgba(255,255,255,.7);
-      display: flex; align-items: center; gap: 6px; font-weight: 600;
-      backdrop-filter: blur(8px);
-    }
+    .page-title span { color: var(--gold-light); }
+    .page-subtitle { font-size: 14px; color: rgba(255,255,255,.55); font-weight: 500; }
 
-    /* ══════════════════════════════════════
-       LAYOUT
-    ══════════════════════════════════════ */
-    .page-container { max-width: 900px; margin: 0 auto; padding: 18px 20px 32px; }
+    /* ── FORM CONTAINER ── */
+    .page-container {
+      max-width: 760px; margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
+    #mainEventForm { overflow: hidden; position: relative; }
 
-    /* ══════════════════════════════════════
-       SECTION CARDS
-    ══════════════════════════════════════ */
-    .form-section {
-      background: var(--white);
-      border-radius: 16px;
-      margin-bottom: 0;
-      overflow: hidden;
+    /* ── FORM SECTION ── */
+    .form-section { display: none !important; opacity: 0; }
+    .form-section.step-active { display: block !important; opacity: 1 !important; }
+    .form-section.slide-in-right { animation: slideInRight .35s cubic-bezier(.4,0,.2,1) both !important; }
+    .form-section.slide-in-left  { animation: slideInLeft  .35s cubic-bezier(.4,0,.2,1) both !important; }
+
+    .section-card {
+      background: var(--white); border-radius: var(--r-xl);
+      border: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
-      opacity: 0;
-      transition: box-shadow .3s ease, transform .3s ease;
-      position: relative;
-      border: 1px solid transparent;
+      overflow: hidden;
+      animation: fadeInUp .4s both;
     }
-    .form-section.visible { animation: fadeInUp .5s cubic-bezier(.4,0,.2,1) both; }
-    .form-section.step-active { opacity: 1; border-color: rgba(28,43,74,.06); }
-    .form-section:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-
-    /* Left accent bar */
-    .form-section::before {
-      content: '';
-      position: absolute; left: 0; top: 0;
-      width: 4px; height: 100%;
-      border-radius: 16px 0 0 16px;
-      animation: borderGrow .6s ease both;
+    .section-head {
+      display: flex; align-items: center; gap: 14px;
+      padding: 20px 24px 18px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(to right, var(--surface), var(--white));
     }
-    .form-section[data-sec="1"]::before { background: var(--c1); }
-    .form-section[data-sec="2"]::before { background: var(--c2); }
-    .form-section[data-sec="3"]::before { background: var(--c3); }
-    .form-section[data-sec="4"]::before { background: var(--c4); }
-    .form-section[data-sec="5"]::before { background: var(--c5); }
-    .form-section[data-sec="6"]::before { background: var(--c6); }
-    .form-section[data-sec="7"]::before { background: var(--c7); }
-
-    /* Section header */
-    .section-header {
-      padding: 14px 18px 12px 20px;
-      display: flex; align-items: center; gap: 12px;
-      border-bottom: 1px solid var(--surface);
-      position: relative;
-    }
-    .form-section[data-sec="1"] .section-header,
-    .form-section[data-sec="2"] .section-header,
-    .form-section[data-sec="3"] .section-header,
-    .form-section[data-sec="4"] .section-header,
-    .form-section[data-sec="5"] .section-header,
-    .form-section[data-sec="6"] .section-header,
-    .form-section[data-sec="7"] .section-header { background: #f8f9fc; }
-    .section-header::after { display: none; }
-
-    .section-icon {
-      width: 36px; height: 36px; border-radius: 10px;
+    .section-icon-wrap {
+      width: 40px; height: 40px; border-radius: 11px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 15px; flex-shrink: 0;
-      transition: transform var(--spring);
+      font-size: 16px; flex-shrink: 0;
     }
-    .form-section:hover .section-icon { transform: scale(1.1) rotate(-4deg); }
-    .form-section[data-sec="1"] .section-icon { background: var(--c1-bg); color: var(--c1); }
-    .form-section[data-sec="2"] .section-icon { background: var(--c2-bg); color: var(--c2); }
-    .form-section[data-sec="3"] .section-icon { background: var(--c3-bg); color: var(--c3); }
-    .form-section[data-sec="4"] .section-icon { background: var(--c4-bg); color: var(--c4); }
-    .form-section[data-sec="5"] .section-icon { background: var(--c5-bg); color: var(--c5); }
-    .form-section[data-sec="6"] .section-icon { background: var(--c6-bg); color: var(--c6); }
-    .form-section[data-sec="7"] .section-icon { background: var(--c7-bg); color: var(--c7); }
-
-    .section-title-wrap { flex: 1; }
+    .section-icon-wrap.gold { background: var(--gold-pale); color: var(--gold); }
+    .section-icon-wrap.navy { background: rgba(28,43,74,.08); color: var(--navy); }
+    .section-title-group { flex: 1; }
     .section-title {
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 14px; font-weight: 800; color: var(--text-dark);
-      line-height: 1.2; letter-spacing: -.1px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px; font-weight: 800; color: var(--text-dark);
     }
-    .section-subtitle { font-size: 11px; color: var(--text-soft); margin-top: 1px; }
-
+    .section-subtitle { font-size: 12px; color: var(--text-pale); font-weight: 500; margin-top: 2px; }
     .section-badge {
-      padding: 3px 10px; border-radius: 20px;
-      font-size: 10px; font-weight: 800; letter-spacing: .5px;
-      animation: badgePop .5s cubic-bezier(.34,1.56,.64,1) both;
+      font-size: 10px; font-weight: 800; letter-spacing: 1px;
+      padding: 4px 10px; border-radius: 20px;
+      background: var(--navy); color: var(--gold-light);
     }
-    .form-section[data-sec="1"] .section-badge { background: var(--c1-bg); color: var(--c1); }
-    .form-section[data-sec="2"] .section-badge { background: var(--c2-bg); color: var(--c2); }
-    .form-section[data-sec="3"] .section-badge { background: var(--c3-bg); color: var(--c3); }
-    .form-section[data-sec="4"] .section-badge { background: var(--c4-bg); color: var(--c4); }
-    .form-section[data-sec="5"] .section-badge { background: var(--c5-bg); color: var(--c5); }
-    .form-section[data-sec="6"] .section-badge { background: var(--c6-bg); color: var(--c6); }
-    .form-section[data-sec="7"] .section-badge { background: var(--c7-bg); color: var(--c7); }
+    .section-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
 
-    .section-body { padding: 16px 18px 18px 20px; }
-
-    /* ══════════════════════════════════════
-       FORM FIELDS
-    ══════════════════════════════════════ */
-    .form-grid { display: grid; gap: 12px; }
+    /* ── FORM GRID ── */
+    .form-grid { display: grid; gap: 16px; }
     .col-1 { grid-template-columns: 1fr; }
     .col-2 { grid-template-columns: 1fr 1fr; }
     .col-3 { grid-template-columns: 1fr 1fr 1fr; }
-    .col-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
-    @media(max-width:900px) { .col-3,.col-4 { grid-template-columns: 1fr 1fr; } }
-    @media(max-width:600px) { .col-2,.col-3,.col-4 { grid-template-columns: 1fr; } }
-
-    /* Auto-tighten spacing within section body */
-    .section-body > * + * { margin-top: 10px; }
-    .section-body > *:first-child { margin-top: 0; }
-    /* Override inline style margin-bottom to be consistent */
-    .section-body .form-grid[style*="margin-bottom"],
-    .section-body .form-field[style*="margin-bottom"] { margin-bottom: 0 !important; }
-
-    .form-field { display: flex; flex-direction: column; gap: 4px; }
-
-    .form-label {
-      font-size: 11px; font-weight: 700;
-      color: var(--text-mid); letter-spacing: .3px;
-      display: flex; align-items: center; gap: 5px;
-      
+    @media (max-width: 600px) {
+      .col-2, .col-3 { grid-template-columns: 1fr; }
     }
-    .form-label-req { color: var(--gold); font-size: 13px; line-height: 1; }
+
+    /* ── FORM FIELD ── */
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-size: 12px; font-weight: 700; color: var(--text-mid);
+      letter-spacing: .2px;
+    }
+    .form-label-req { color: var(--gold); margin-left: 2px; }
+    .form-hint { font-size: 11px; color: var(--text-pale); font-weight: 500; }
+    .form-error { font-size: 11px; color: var(--danger); font-weight: 600; display: none; }
+    .form-error.show { display: block; }
 
     .form-input, .form-select, .form-textarea {
-      padding: 8px 11px;
-      border: 1.5px solid #9aa3be;
-      border-radius: 5px;
-      font-size: 13px; font-family: 'Times New Roman', Times, serif;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 500;
       color: var(--text-dark);
-      background: var(--white);
-      outline: none; width: 100%;
-      transition: border-color .2s ease, background .2s ease, box-shadow .25s ease, transform .15s ease;
-      line-height: 1.4;
-    }
-    .form-input:hover, .form-select:hover, .form-textarea:hover {
-      border-color: #6878a8; background: var(--white);
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-md);
+      padding: 11px 14px;
+      outline: none;
+      transition: var(--t);
+      width: 100%;
     }
     .form-input:focus, .form-select:focus, .form-textarea:focus {
-      border-color: var(--navy); background: var(--white);
-      box-shadow: 0 0 0 3px rgba(28,43,74,.12), 0 1px 6px rgba(28,43,74,.06);
-      transform: translateY(-1px);
+      border-color: var(--navy);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(28,43,74,.09);
     }
-    .form-input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(220,38,38,.09); }
-    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-pale); font-size: 12px; transition: opacity .2s; }
-    .form-input:focus::placeholder, .form-textarea:focus::placeholder { opacity: .5; }
-    .form-textarea { resize: vertical; min-height: 72px; }
-    .form-hint { font-size: 11px; color: var(--text-pale); margin-top: 1px; }
-    .form-error { font-size: 11px; color: var(--danger); margin-top: 1px; display: none; font-weight: 600; }
-    .form-error.show { display: flex; align-items: center; gap: 4px; animation: fadeInUp .25s both; }
-    .form-error.show::before { content: '⚠'; font-size: 10px; }
+    .form-input.error, .form-select.error { border-color: var(--danger); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-pale); font-weight: 400; }
+    .form-textarea { resize: vertical; min-height: 90px; }
 
     .select-wrap { position: relative; }
-    .select-wrap .form-select { appearance: none; padding-right: 30px; cursor: pointer; border-radius: 5px; }
     .select-wrap::after {
       content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
-      position: absolute; right: 11px; top: 50%; transform: translateY(-50%);
-      font-size: 9px; color: var(--text-pale); pointer-events: none;
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 10px; color: var(--text-pale); pointer-events: none;
     }
+    .form-select { appearance: none; cursor: pointer; padding-right: 36px; }
 
-    /* ── TAGS ── */
-    .tags-wrap {
-      border: 1.5px solid #9aa3be; border-radius: 5px;
-      background: var(--surface); padding: 6px 9px;
-      display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
-      cursor: text; transition: var(--transition); min-height: 38px;
+    /* ── MODE TOGGLE ── */
+    .mode-toggle { display: flex; gap: 8px; flex-wrap: wrap; }
+    .mode-btn {
+      display: flex; align-items: center; gap: 7px;
+      padding: 8px 14px; border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--surface); color: var(--text-mid);
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: var(--t);
     }
-    .tags-wrap:focus-within { border-color: var(--navy); background: var(--white); box-shadow: 0 0 0 3px rgba(28,43,74,.08); }
-    .tag-chip {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 3px 9px; background: var(--navy); color: var(--white);
-      border-radius: 20px; font-size: 11px; font-weight: 600;
-      animation: badgePop .3s cubic-bezier(.34,1.56,.64,1) both;
+    .mode-btn:hover { border-color: var(--navy-light); color: var(--navy); }
+    .mode-btn.active {
+      border-color: var(--navy); background: rgba(28,43,74,.07);
+      color: var(--navy); font-weight: 700;
+      box-shadow: 0 0 0 2px rgba(28,43,74,.07);
     }
-    .tag-remove { cursor: pointer; opacity: .7; transition: var(--transition); font-size: 10px; }
-    .tag-remove:hover { opacity: 1; }
-    .tag-input {
-      flex: 1; min-width: 90px; border: none; background: transparent;
-      outline: none; font-size: 12px; font-family: 'Times New Roman', Times, serif; color: var(--text-dark);
-    }
-    .tag-input::placeholder { color: var(--text-pale); font-size: 11px; }
+    .mode-btn i { font-size: 12px; }
 
-    /* ── FILE UPLOAD — compact ── */
+    /* ── UPLOAD ── */
     .upload-area {
-      border: 1.5px dashed #9aa3be; border-radius: 5px;
-      padding: 16px; text-align: center; cursor: pointer;
-      transition: var(--transition); position: relative;
+      border: 1.5px dashed #b0bbd8; border-radius: var(--r-md);
+      padding: 20px; text-align: center; cursor: pointer;
+      transition: var(--t); position: relative;
       background: var(--surface);
-      display: flex; align-items: center; justify-content: center; gap: 12px;
     }
-    .upload-area:hover, .upload-area.drag-over {
-      border-color: var(--navy); background: rgba(28,43,74,.03);
-    }
-    .upload-area input[type="file"] {
-      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
-    }
-    .upload-icon { font-size: 22px; color: var(--text-pale); flex-shrink: 0; }
+    .upload-area:hover { border-color: var(--navy); background: rgba(28,43,74,.03); }
+    .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-icon { font-size: 26px; color: var(--text-pale); margin-bottom: 6px; }
     .upload-text { font-size: 13px; font-weight: 700; color: var(--text-mid); }
-    .upload-hint { font-size: 11px; color: var(--text-pale); margin-top: 2px; }
+    .upload-hint { font-size: 11px; color: var(--text-pale); margin-top: 3px; }
     .upload-preview {
       display: none; margin-top: 10px;
-      background: var(--white); border: 1.5px solid #9aa3be;
-      border-radius: 5px; padding: 9px 12px;
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: var(--r-md); padding: 10px 14px;
       align-items: center; gap: 10px;
     }
     .upload-preview.show { display: flex; animation: fadeInUp .3s both; }
@@ -585,360 +318,275 @@
     .upload-preview-name { font-size: 12px; font-weight: 700; color: var(--text-dark); flex: 1; }
     .upload-preview-size { font-size: 11px; color: var(--text-pale); }
     .upload-preview-remove {
-      width: 24px; height: 24px; background: var(--surface);
-      border: 1px solid var(--border); border-radius: 6px;
+      width: 26px; height: 26px; background: transparent;
+      border: 1px solid var(--border); border-radius: 7px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 10px; color: var(--danger); cursor: pointer;
-      transition: var(--transition); flex-shrink: 0;
+      font-size: 10px; color: var(--danger); cursor: pointer; transition: var(--t);
     }
     .upload-preview-remove:hover { background: var(--danger); color: var(--white); border-color: var(--danger); }
 
-    /* ── RADIO / CHECKBOX ── */
-    .radio-group, .check-group { display: flex; gap: 7px; flex-wrap: wrap; }
-    .radio-option, .check-option {
-      display: flex; align-items: center; gap: 7px;
-      padding: 6px 12px;
-      border: 1.5px solid var(--border); border-radius: 8px;
-      cursor: pointer; transition: all var(--transition);
-      font-size: 12px; font-weight: 500; color: var(--text-mid);
-      background: var(--surface);
-    }
-    .radio-option input, .check-option input { display: none; }
-    .radio-option:hover, .check-option:hover { border-color: var(--navy-light); color: var(--navy); background: rgba(28,43,74,.04); }
-    .radio-option.selected, .check-option.selected {
-      border-color: var(--navy); background: rgba(28,43,74,.07);
-      color: var(--navy); font-weight: 700;
-      box-shadow: 0 0 0 2px rgba(28,43,74,.07);
-    }
-    .radio-dot {
-      width: 14px; height: 14px; border-radius: 50%;
-      border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
-      transition: var(--transition); flex-shrink: 0;
-    }
-    .radio-option.selected .radio-dot { border-color: var(--navy); }
-    .radio-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--navy); display: none; }
-    .radio-option.selected .radio-dot::after { display: block; }
-
-    /* ── SCHEDULE TABLE ── */
-    .schedule-table { width: 100%; border-collapse: collapse; }
-    .schedule-table th {
-      text-align: left; padding: 8px 10px;
-      font-size: 10px; font-weight: 800;
-      color: var(--text-pale); letter-spacing: .8px; 
-      background: var(--surface); border-bottom: 1.5px solid var(--border);
-    }
-    .schedule-table td { padding: 6px 5px; vertical-align: middle; }
-    .schedule-table tbody tr { border-bottom: 1px solid var(--surface2); transition: var(--transition); }
-    .schedule-table tbody tr:hover { background: var(--surface); }
-    .schedule-table .form-input { padding: 7px 10px; font-size: 12px; }
-    .schedule-remove-btn {
-      width: 28px; height: 28px; border-radius: 7px;
-      background: transparent; border: 1px solid var(--border);
-      color: var(--danger); cursor: pointer; font-size: 11px;
-      display: flex; align-items: center; justify-content: center;
-      transition: var(--transition);
-    }
-    .schedule-remove-btn:hover { background: var(--danger); color: var(--white); border-color: var(--danger); transform: scale(1.1); }
-    .add-row-btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 8px 14px; border-radius: 9px;
-      background: transparent; border: 1.5px dashed var(--border);
-      font-size: 12px; font-weight: 700; color: var(--text-soft);
-      cursor: pointer; transition: var(--transition); margin-top: 10px;
-      width: 100%; justify-content: center;
-    }
-    .add-row-btn:hover { border-color: var(--navy); color: var(--navy); background: rgba(28,43,74,.04); }
-
-    /* ── COUNTER FIELD ── */
+    /* ── CAPACITY COUNTER ── */
     .counter-field {
       display: flex; align-items: center;
-      border: 1.5px solid #9aa3be; border-radius: 5px; overflow: hidden;
-      background: var(--surface); transition: var(--transition);
+      border: 1.5px solid var(--border); border-radius: var(--r-md); overflow: hidden;
+      background: var(--surface); transition: var(--t);
     }
     .counter-field:focus-within { border-color: var(--navy); background: var(--white); box-shadow: 0 0 0 3px rgba(28,43,74,.08); }
     .counter-btn {
-      width: 34px; height: 36px; background: transparent;
+      width: 38px; height: 42px; background: transparent;
       border: none; color: var(--text-pale);
-      font-size: 13px; cursor: pointer; transition: var(--transition);
+      font-size: 12px; cursor: pointer; transition: var(--t);
       display: flex; align-items: center; justify-content: center;
     }
-    .counter-btn:hover { background: var(--surface2); color: var(--navy); }
+    .counter-btn:hover { background: rgba(28,43,74,.06); color: var(--navy); }
     .counter-input {
       flex: 1; border: none; background: transparent;
-      text-align: center; font-size: 14px; font-weight: 800;
-      color: var(--text-dark); outline: none;
-      font-family: 'Times New Roman', Times, serif; padding: 0;
+      text-align: center; font-size: 15px; font-weight: 800;
+      color: var(--text-dark); outline: none; font-family: 'Plus Jakarta Sans', sans-serif; padding: 0;
     }
 
-    /* ── CHAR COUNTER ── */
-    .char-counter { font-size: 10px; color: var(--text-pale); text-align: right; margin-top: -2px; font-weight: 600; }
-    .char-counter.warn { color: var(--gold); }
-    .char-counter.over { color: var(--danger); }
+    /* ── HIGHLIGHT BANNER ── */
+    .highlight-banner {
+      background: linear-gradient(135deg, rgba(200,146,10,.1), rgba(200,146,10,.05));
+      border: 1px solid rgba(200,146,10,.25); border-radius: var(--r-lg);
+      padding: 14px 16px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .highlight-icon { color: var(--gold); font-size: 15px; margin-top: 1px; flex-shrink: 0; }
+    .highlight-text { font-size: 13px; color: var(--text-mid); font-weight: 500; line-height: 1.55; }
+    .highlight-text strong { color: var(--navy); font-weight: 700; }
 
-    /* ══════════════════════════════════════
-       STICKY ACTIONS BAR
-    ══════════════════════════════════════ */
-    .form-actions-bar {
-      position: sticky; bottom: 0; z-index: 100;
-      background: rgba(255,255,255,.92); backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(216,220,240,.8);
-      box-shadow: 0 -4px 24px rgba(28,43,74,.1);
-    }
-    .form-actions-inner {
-      max-width: 900px; margin: 0 auto;
-      padding: 10px 20px;
-      display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
-    }
-    .actions-left { display: flex; align-items: center; gap: 8px; }
-    .actions-right { display: flex; align-items: center; gap: 8px; }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 9px 18px; border-radius: 10px;
-      font-family: 'Times New Roman', Times, serif; font-size: 13px; font-weight: 700;
-      cursor: pointer; transition: all .22s cubic-bezier(.4,0,.2,1); border: none; white-space: nowrap;
-      text-decoration: none; letter-spacing: .1px;
-      position: relative; overflow: hidden;
-    }
-    .btn:active { transform: scale(.97) !important; }
-    .btn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--text-mid); }
-    .btn-ghost:hover { border-color: var(--navy); color: var(--navy); background: rgba(28,43,74,.04); transform: translateY(-1px); }
-    .btn-outline-gold { background: var(--gold-pale); border: 1.5px solid rgba(200,146,10,.45); color: var(--gold); }
-    .btn-outline-gold:hover { background: var(--gold); color: var(--navy); border-color: var(--gold); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(200,146,10,.3); }
-    .btn-navy { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); color: var(--white); box-shadow: 0 3px 12px rgba(28,43,74,.3); }
-    .btn-navy:hover { transform: translateY(-1px); box-shadow: 0 7px 20px rgba(28,43,74,.38); }
-    .btn-gold { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%); color: var(--navy); box-shadow: 0 3px 12px rgba(200,146,10,.4); }
-    .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 7px 22px rgba(200,146,10,.5); filter: brightness(1.06); }
-    .btn-danger-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--danger); }
-    .btn-danger-ghost:hover { border-color: var(--danger); background: rgba(220,38,38,.06); transform: translateY(-1px); }
-
-    /* ══════════════════════════════════════
-       PREVIEW MODAL
-    ══════════════════════════════════════ */
-    .preview-backdrop {
-      position: fixed; inset: 0; z-index: 800;
-      background: rgba(11,17,30,.75); backdrop-filter: blur(10px);
-      display: flex; align-items: center; justify-content: center; padding: 12px;
-      opacity: 0; pointer-events: none; transition: opacity .3s;
-    }
-    .preview-backdrop.open { opacity: 1; pointer-events: all; }
-    .preview-box {
-      background: var(--white); border-radius: 16px;
-      width: min(96vw, 740px); max-height: 94vh;
-      overflow-x: hidden; overflow-y: auto;
-      box-shadow: 0 32px 80px rgba(0,0,0,.5);
-      transform: scale(.94) translateY(20px);
-      transition: transform .4s cubic-bezier(.34,1.1,.64,1);
-      display: flex; flex-direction: column;
-    }
-    .preview-backdrop.open .preview-box { transform: scale(1) translateY(0); }
-    .preview-header-band {
-      width: 100%;
-      border-radius: 16px 16px 0 0;
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg,#1C2B4A,#2E4370);
-      flex-shrink: 0;
-      /* Height controlled by the img inside */
-      display: block;
-    }
-    /* Full-poster image — contain so nothing is cropped */
-    .poster-img-fill {
-      display: block !important;
-      width: 100% !important;
-      height: auto !important;
-      max-height: 55vh;
-      object-fit: contain !important;
-      object-position: center !important;
-      background: #000;
-    }
-    .preview-header-band.has-poster { background: #000; }
-    .preview-header-band-icon {
-      font-size: 52px; color: rgba(255,255,255,.45);
-      display: flex; align-items: center; justify-content: center;
-      padding: 60px 0;
-    }
-    .preview-header-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,.1) 60%, transparent 100%);
-    }
-    .preview-body { padding: 20px 22px 22px; }
-    .preview-title { font-family: 'Times New Roman', Times, serif; font-size: 22px; font-weight: 900; color: var(--text-dark); margin-bottom: 8px; }
-    .preview-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-    .preview-chip { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-    .preview-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-    .preview-info-cell { background: var(--surface); border-radius: 10px; padding: 10px 12px; }
-    .preview-info-label { font-size: 10px; font-weight: 800; color: var(--text-pale); letter-spacing: .7px;  margin-bottom: 3px; }
-    .preview-info-value { font-size: 13px; font-weight: 700; color: var(--text-dark); }
-    .preview-desc { font-size: 13px; color: var(--text-soft); line-height: 1.65; margin-bottom: 18px; }
-    .preview-close-btn {
-      position: absolute; top: 12px; right: 12px;
-      width: 32px; height: 32px; background: rgba(255,255,255,.22);
-      backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.35);
-      border-radius: 9px; display: flex; align-items: center; justify-content: center;
-      font-size: 13px; color: var(--white); cursor: pointer; transition: var(--transition); z-index: 2;
-    }
-    .preview-close-btn:hover { background: rgba(255,255,255,.4); }
-
-    /* ══════════════════════════════════════
-       TOAST
-    ══════════════════════════════════════ */
-    @keyframes toastDrain { from{width:100%} to{width:0} }
-    .toast-notification {
-      position: fixed; bottom: 90px; left: 50%;
-      transform: translateX(-50%) translateY(80px) scale(.94);
-      background: var(--navy); color: var(--white);
-      padding: 14px 26px; border-radius: 16px;
-      display: flex; align-items: center; gap: 12px;
-      font-size: 15px; font-weight: 700;
-      box-shadow: 0 16px 48px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.08);
-      z-index: 900;
-      opacity: 0;
-      transition: transform .42s cubic-bezier(.34,1.3,.64,1), opacity .28s;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-    .toast-notification::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0;
-      height: 3px; border-radius: 0 0 16px 16px;
-      background: var(--gold);
-    }
-    .toast-notification.show {
-      transform: translateX(-50%) translateY(0) scale(1);
-      opacity: 1;
-    }
-    .toast-notification.show::after {
-      animation: toastDrain 3.2s linear forwards;
-    }
-    .toast-icon { color: var(--gold); font-size: 17px; }
-
-    /* ══════════════════════════════════════
-       SECTION DIVIDER
-    ══════════════════════════════════════ */
-    .section-divider { display: none; }
-
-    /* ══════════════════════════════════════
-       MULTI-STEP WIZARD — SLIDE TRANSITIONS
-    ══════════════════════════════════════ */
-    /* Wrap to clip slide overflow */
-    #mainEventForm { overflow: hidden; position: relative; }
-
-    /* All sections hidden by default */
-    .form-section { display: none !important; opacity: 0; }
-
-    /* Active step — slides in */
-    .form-section.step-active {
-      display: block !important;
-      opacity: 1 !important;
-    }
-    .form-section.slide-in-right  { animation: slideInRight .4s cubic-bezier(.4,0,.2,1) both !important; }
-    .form-section.slide-in-left   { animation: slideInLeft  .4s cubic-bezier(.4,0,.2,1) both !important; }
-
-    /* Wizard nav bar */
+    /* ── WIZARD NAV ── */
     .wizard-nav {
       display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; margin-top: 14px; padding: 13px 18px;
-      background: var(--white); border-radius: 14px;
-      border: 1.5px solid var(--border);
-      box-shadow: var(--shadow-md);
+      gap: 12px; margin-top: 16px; padding: 14px 18px;
+      background: var(--white); border-radius: var(--r-xl);
+      border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);
       position: relative; overflow: hidden;
     }
     .wizard-nav::before {
       content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent);
-      background-size: 200% 100%;
-      animation: shimmer 3.5s infinite;
-      pointer-events: none; border-radius: 14px;
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--navy), var(--gold));
+      width: var(--prog-w, 50%);
+      transition: width .5s cubic-bezier(.4,0,.2,1);
     }
-    .wizard-step-info {
-      font-size: 12px; color: var(--text-soft); font-weight: 600;
-      text-align: center; flex: 1; line-height: 1.3;
-    }
-    .wizard-step-info strong { color: var(--navy); font-weight: 900; font-size: 14px; }
-    .wizard-step-info span  { display: block; font-size: 10px; color: var(--text-pale); margin-top: 1px; font-weight: 500; }
-
     .wizard-btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 9px 18px; border-radius: 10px;
-      font-family: 'Times New Roman', Times, serif; font-size: 13px; font-weight: 700;
-      cursor: pointer; transition: all .25s cubic-bezier(.4,0,.2,1);
-      border: none; white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px; border-radius: var(--r-md);
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: var(--t); border: none; white-space: nowrap;
       position: relative; overflow: hidden;
     }
-    .wizard-btn .ripple-circle {
-      position: absolute; border-radius: 50%;
-      background: rgba(255,255,255,.35);
-      transform: scale(0); animation: ripple .6s linear;
-      pointer-events: none;
+    .wizard-btn::after {
+      content: ''; position: absolute;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: rgba(255,255,255,.4); pointer-events: none;
+      transform: scale(0); opacity: 0;
     }
+    .wizard-btn:active::after { animation: ripple .5s ease-out forwards; }
     .wizard-btn-back {
-      background: var(--surface2); color: var(--text-mid);
-      border: 1.5px solid var(--border);
+      background: var(--surface); color: var(--text-mid); border: 1.5px solid var(--border);
     }
-    .wizard-btn-back:hover:not(:disabled) { background: var(--border); color: var(--text-dark); transform: translateX(-2px); }
+    .wizard-btn-back:hover { border-color: var(--navy); color: var(--navy); transform: translateX(-2px); }
+    .wizard-btn-back:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
     .wizard-btn-next {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-      color: var(--white);
-      box-shadow: 0 3px 12px rgba(28,43,74,.28);
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      color: var(--white); box-shadow: 0 4px 16px rgba(28,43,74,.3);
     }
-    .wizard-btn-next:hover:not(:disabled) { transform: translateY(-1px) translateX(2px); box-shadow: 0 6px 20px rgba(28,43,74,.35); }
-    .wizard-btn-next:disabled, .wizard-btn-back:disabled { opacity: .35; cursor: not-allowed; transform: none !important; }
-    .wizard-btn-finish {
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-      color: var(--navy);
-      box-shadow: 0 3px 12px rgba(200,146,10,.4);
+    .wizard-btn-next:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(28,43,74,.4); }
+    .wizard-step-info {
+      font-size: 13px; font-weight: 600; color: var(--text-soft);
+      text-align: center;
     }
-    .wizard-btn-finish:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(200,146,10,.5); }
+    .wizard-step-info strong { color: var(--text-dark); font-weight: 800; }
 
-    /* Step dot states */
-    .step-item { cursor: pointer; }
-    .step-item.future { opacity: .42; }
+    /* ── STICKY ACTION BAR ── */
+    .actions-bar {
+      position: sticky; bottom: 0; z-index: 100;
+      background: rgba(255,255,255,.95); backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(224,228,240,.9);
+      box-shadow: 0 -4px 20px rgba(28,43,74,.08);
+    }
+    .actions-inner {
+      max-width: 760px; margin: 0 auto;
+      padding: 10px 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+    }
+    .actions-left { display: flex; gap: 8px; }
+    .actions-right { display: flex; gap: 8px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px; border-radius: var(--r-md);
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: var(--t); border: none; white-space: nowrap;
+      text-decoration: none; position: relative; overflow: hidden;
+    }
+    .btn:active { transform: scale(.97) !important; }
+    .btn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--text-mid); }
+    .btn-ghost:hover { border-color: var(--navy); color: var(--navy); background: rgba(28,43,74,.04); }
+    .btn-gold-outline { background: var(--gold-pale); border: 1.5px solid rgba(200,146,10,.4); color: var(--gold); }
+    .btn-gold-outline:hover { background: var(--gold); color: var(--navy); border-color: var(--gold); box-shadow: 0 4px 14px rgba(200,146,10,.3); }
+    .btn-gold { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); box-shadow: 0 4px 14px rgba(200,146,10,.4); font-weight: 800; }
+    .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(200,146,10,.5); filter: brightness(1.05); }
+    .btn-danger { background: transparent; border: 1.5px solid var(--border); color: var(--danger); }
+    .btn-danger:hover { border-color: var(--danger); background: rgba(220,38,38,.05); }
 
-    /* ══════════════════════════════════════
-       SECTION CARD ENHANCEMENTS
-    ══════════════════════════════════════ */
-    .form-section.step-active {
-      box-shadow: var(--shadow-md) !important;
+    /* ── PREVIEW MODAL ── */
+    .preview-backdrop {
+      position: fixed; inset: 0; z-index: 800;
+      background: rgba(11,17,30,.75); backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center; padding: 16px;
+      opacity: 0; pointer-events: none; transition: opacity .3s;
     }
-    /* Glowing left accent bar on active */
-    .form-section.step-active::before {
-      filter: drop-shadow(0 0 6px currentColor);
+    .preview-backdrop.open { opacity: 1; pointer-events: all; }
+    .preview-box {
+      background: var(--white); border-radius: 18px;
+      width: min(96vw, 680px); max-height: 92vh;
+      overflow-y: auto; overflow-x: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,.45);
+      transform: scale(.93) translateY(16px);
+      transition: transform .38s cubic-bezier(.34,1.1,.64,1);
     }
-    /* Section header subtle inner glow */
-    .section-header { position: relative; }
-    .section-header::after {
-      content: '';
-      position: absolute; bottom: 0; left: 32px; right: 28px;
-      height: 1px;
-      background: linear-gradient(90deg, var(--border), transparent);
+    .preview-backdrop.open .preview-box { transform: scale(1) translateY(0); }
+    .preview-band {
+      width: 100%; border-radius: 18px 18px 0 0;
+      background: linear-gradient(135deg, var(--navy-deep), var(--navy-mid));
+      position: relative; overflow: hidden;
     }
+    .preview-band-icon {
+      font-size: 52px; color: rgba(255,255,255,.35);
+      display: flex; align-items: center; justify-content: center; padding: 56px 0;
+    }
+    .poster-img-fill {
+      display: block !important; width: 100% !important; height: auto !important;
+      max-height: 52vh; object-fit: contain !important; background: #000;
+    }
+    .preview-band-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.5) 0%, transparent 60%);
+    }
+    .preview-close {
+      position: absolute; top: 12px; right: 12px;
+      width: 32px; height: 32px; background: rgba(255,255,255,.2);
+      backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.3);
+      border-radius: 9px; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; color: var(--white); cursor: pointer; transition: var(--t); z-index: 2;
+    }
+    .preview-close:hover { background: rgba(255,255,255,.38); }
+    .preview-body { padding: 22px 24px 24px; }
+    .preview-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 22px; font-weight: 900; color: var(--text-dark); margin-bottom: 8px;
+    }
+    .preview-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .preview-chip { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .preview-cell { background: var(--surface); border-radius: 10px; padding: 10px 12px; }
+    .preview-cell-label { font-size: 10px; font-weight: 800; color: var(--text-pale); letter-spacing: .7px; margin-bottom: 3px; }
+    .preview-cell-val { font-size: 13px; font-weight: 700; color: var(--text-dark); }
+    .preview-desc { font-size: 13px; color: var(--text-soft); line-height: 1.65; margin-bottom: 20px; }
+    .preview-actions { display: flex; gap: 12px; }
 
-    /* ══════════════════════════════════════
-       BUTTON RIPPLE (global)
-    ══════════════════════════════════════ */
-    .btn { position: relative; overflow: hidden; }
-    .btn .ripple-circle {
-      position: absolute; border-radius: 50%;
-      background: rgba(255,255,255,.3);
-      transform: scale(0); animation: ripple .55s linear;
-      pointer-events: none;
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 88px; left: 50%;
+      transform: translateX(-50%) translateY(72px) scale(.93);
+      background: var(--navy); color: var(--white);
+      padding: 13px 24px; border-radius: 14px;
+      display: flex; align-items: center; gap: 11px;
+      font-size: 14px; font-weight: 700;
+      box-shadow: 0 16px 48px rgba(0,0,0,.3), 0 0 0 1px rgba(255,255,255,.06);
+      z-index: 900; opacity: 0;
+      transition: transform .4s cubic-bezier(.34,1.3,.64,1), opacity .25s;
+      white-space: nowrap; overflow: hidden;
     }
+    .toast::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      height: 3px; border-radius: 0 0 14px 14px;
+      background: var(--gold);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+    .toast.show::after { animation: toastDrain 3s linear forwards; }
+    .toast.error { background: var(--danger); }
+    .toast-icon { color: var(--gold); font-size: 16px; }
+    .toast.error .toast-icon { color: var(--white); }
 
-    /* ══════════════════════════════════════
-       RESPONSIVE
-    ══════════════════════════════════════ */
-    @media(max-width: 768px) {
-      .navbar-inner { padding: 0 14px; }
-      .page-container { padding: 14px 14px 28px; }
-      .section-body { padding: 14px 14px 16px 16px; }
-      .section-header { padding: 11px 14px 10px 16px; }
-      .form-actions-inner { flex-direction: column; align-items: stretch; }
-      .actions-left, .actions-right { width: 100%; justify-content: flex-end; }
-      .nav-breadcrumb { display: none; }
-      .page-header-title { font-size: 16px; }
+    /* ── SIDEBAR ── */
+    .sidebar-backdrop {
+      position: fixed; inset: 0; z-index: 400;
+      background: rgba(11,17,30,.6); backdrop-filter: blur(4px);
+      opacity: 0; pointer-events: none; transition: opacity .3s;
     }
+    .sidebar-backdrop.open { opacity: 1; pointer-events: all; }
+    .sidebar {
+      position: fixed; top: 0; left: 0; height: 100%; width: 278px;
+      background: var(--navy-deep); z-index: 500;
+      transform: translateX(-100%); transition: transform .32s cubic-bezier(.4,0,.2,1);
+      display: flex; flex-direction: column; box-shadow: 8px 0 40px rgba(0,0,0,.35);
+    }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-header {
+      padding: 22px 18px 18px; border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sidebar-logo-group { display: flex; align-items: center; gap: 11px; }
+    .sidebar-logo-badge {
+      width: 40px; height: 40px; background: var(--gold); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 900; color: var(--navy);
+    }
+    .sidebar-close-btn {
+      width: 30px; height: 30px; background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12); border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.6); cursor: pointer; font-size: 13px; transition: var(--t);
+    }
+    .sidebar-close-btn:hover { background: rgba(255,255,255,.15); color: var(--white); }
+    .sidebar-nav { flex: 1; padding: 14px 10px; display: flex; flex-direction: column; gap: 3px; overflow-y: auto; }
+    .sidebar-section-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+      color: rgba(255,255,255,.3); padding: 10px 8px 5px;
+    }
+    .sidebar-nav-item {
+      display: flex; align-items: center; gap: 11px; padding: 10px 13px; border-radius: 9px;
+      font-size: 13.5px; font-weight: 500; color: rgba(255,255,255,.6); cursor: pointer;
+      transition: var(--t); text-decoration: none; position: relative;
+    }
+    .sidebar-nav-item:hover { background: rgba(255,255,255,.07); color: var(--white); }
+    .sidebar-nav-item.active { background: rgba(200,146,10,.15); color: var(--gold-light); font-weight: 600; }
+    .sidebar-nav-item.active::before {
+      content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+      width: 3px; height: 20px; background: var(--gold); border-radius: 0 3px 3px 0;
+    }
+    .sidebar-nav-item i { width: 17px; text-align: center; font-size: 14px; }
+    .sidebar-nav-badge {
+      margin-left: auto; background: var(--gold); color: var(--navy);
+      font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 20px;
+    }
+    .sidebar-footer { padding: 14px 10px 22px; border-top: 1px solid rgba(255,255,255,.08); }
+    .sidebar-user-card {
+      display: flex; align-items: center; gap: 11px; padding: 11px;
+      background: rgba(255,255,255,.05); border-radius: 11px; border: 1px solid rgba(255,255,255,.08);
+    }
+    .sidebar-user-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+      border: 2px solid rgba(200,146,10,.4); display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; color: var(--white); flex-shrink: 0;
+    }
+    .sidebar-user-name { font-size: 12px; font-weight: 600; color: var(--white); }
+    .sidebar-user-role { font-size: 10px; color: rgba(255,255,255,.4); }
+
+    /* ── HAMBURGER ── */
+    .hamburger-btn {
+      width: 36px; height: 36px; background: rgba(255,255,255,.08);
+      border: 1.5px solid rgba(255,255,255,.14); border-radius: 9px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      cursor: pointer; transition: var(--t); flex-shrink: 0;
+    }
+    .hamburger-btn:hover { background: rgba(255,255,255,.15); border-color: var(--gold); }
+    .hamburger-line { width: 15px; height: 2px; background: var(--white); border-radius: 2px; }
   </style>
 </head>
 <body>
@@ -952,8 +600,8 @@
       <div class="sidebar-logo-group">
         <div class="sidebar-logo-badge">JGI</div>
         <div>
-          <div style="font-family:'Times New Roman',Times,serif;font-size:15px;font-weight:800;color:white;line-height:1;">Jain University</div>
-          <div style="font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.6px;margin-top:2px;">Admin Portal</div>
+          <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;font-weight:800;color:#fff;">Jain University</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.45);letter-spacing:.5px;">Events Portal</div>
         </div>
       </div>
       <button class="sidebar-close-btn" id="sidebarCloseBtn"><i class="fas fa-times"></i></button>
@@ -973,15 +621,16 @@
       <div class="sidebar-section-label" style="margin-top:8px;">System</div>
       <a href="#" class="sidebar-nav-item"><i class="fas fa-chart-bar"></i>Reports</a>
       <a href="#" class="sidebar-nav-item"><i class="fas fa-cog"></i>Settings</a>
+      <a href="#" class="sidebar-nav-item"><i class="fas fa-question-circle"></i>Help &amp; Support</a>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user-card">
-        <div class="sidebar-user-avatar">JU</div>
+        <div class="sidebar-user-avatar">AR</div>
         <div style="flex:1;min-width:0;">
           <div class="sidebar-user-name">Jain University</div>
           <div class="sidebar-user-role">Admin Portal</div>
         </div>
-        <i class="fas fa-ellipsis-v" style="color:rgba(255,255,255,.3);font-size:13px;cursor:pointer;"></i>
+        <i class="fas fa-ellipsis-v" style="color:rgba(255,255,255,.3);font-size:11px;cursor:pointer;"></i>
       </div>
     </div>
   </aside>
@@ -994,577 +643,301 @@
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
       </button>
-      <div class="nav-logo-badge">JGI</div>
-      <div class="nav-brand-text">
-        <span class="nav-university-name">Jain University</span>
-        <span class="nav-portal-name">Event Spotlight</span>
+      <div class="nav-logo">JU</div>
+      <div class="nav-brand">
+        <div class="nav-uni">Jain University</div>
+        <div class="nav-sub">EVENTS PORTAL</div>
       </div>
-      <div style="width:1px;height:30px;background:rgba(255,255,255,.15);margin:0 10px;"></div>
-      <nav class="nav-breadcrumb">
-        <a href="index.html"><i class="fas fa-home" style="font-size:12px;"></i> Admin</a>
-        <span class="nav-breadcrumb-sep"><i class="fas fa-chevron-right"></i></span>
-        <span class="nav-breadcrumb-current">Register Event</span>
-      </nav>
       <div class="nav-spacer"></div>
-      <a href="index.html" class="nav-btn nav-btn-ghost"><i class="fas fa-calendar-alt"></i>All Events</a>
-      <div class="profile-wrapper">
-        <button class="profile-avatar-btn" id="profileAvatarBtn">JU<span class="profile-online-dot"></span></button>
-        <div class="profile-dropdown" id="profileDropdown">
-          <div class="dropdown-header">
-            <div class="dropdown-header-name">Jain University</div>
-            <div class="dropdown-header-role">Administrator</div>
-          </div>
-          <a href="#" class="dropdown-item"><i class="fas fa-user-tie"></i>Staff Login</a>
-          <a href="#" class="dropdown-item"><i class="fas fa-user-graduate"></i>Student Login</a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item"><i class="fas fa-cog"></i>Settings</a>
-          <a href="#" class="dropdown-item" style="color:#dc2626;"><i class="fas fa-sign-out-alt" style="color:#dc2626;"></i>Sign Out</a>
-        </div>
+      <div class="nav-breadcrumb">
+        <a href="index.html">Dashboard</a>
+        <span class="nav-breadcrumb-sep"><i class="fas fa-chevron-right"></i></span>
+        <span class="nav-breadcrumb-cur">Register Event</span>
+      </div>
+      <div class="nav-avatar" style="margin-left:16px;">
+        AR
+        <span class="nav-online"></span>
       </div>
     </div>
   </nav>
 
-  <!-- PROGRESS STEPS -->
-  <div class="progress-bar-wrap">
-    <div class="progress-bar-inner" id="progressBar">
-      <div class="step-item active" data-step="1"><div class="step-num">1</div><span class="step-label">Basic Info</span></div>
-      <div class="step-item" data-step="2"><div class="step-num">2</div><span class="step-label">Date & Venue</span></div>
-      <div class="step-item" data-step="3"><div class="step-num">3</div><span class="step-label">Eligibility</span></div>
-      <div class="step-item" data-step="4"><div class="step-num">4</div><span class="step-label">Registration</span></div>
-      <div class="step-item" data-step="5"><div class="step-num">5</div><span class="step-label">Schedule</span></div>
-      <div class="step-item" data-step="6"><div class="step-num">6</div><span class="step-label">Rules</span></div>
-      <div class="step-item" data-step="7"><div class="step-num">7</div><span class="step-label">Contact</span></div>
+  <!-- STEPPER -->
+  <div class="stepper-wrap">
+    <div class="stepper-inner">
+      <div class="step-item" id="stepItem1" onclick="goToStep(1)">
+        <div class="step-dot active" id="stepDot1">1</div>
+        <div class="step-label">
+          <div class="step-name active" id="stepName1">Event Details</div>
+          <div class="step-sub">Title, date, venue</div>
+        </div>
+      </div>
+      <div class="step-connector" id="stepConn1"></div>
+      <div class="step-item" id="stepItem2" onclick="goToStep(2)">
+        <div class="step-dot" id="stepDot2">2</div>
+        <div class="step-label">
+          <div class="step-name" id="stepName2">Organizer & Publish</div>
+          <div class="step-sub">Contact & confirm</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- PAGE HEADER -->
-  <div class="page-header-banner">
-    <div class="header-orb"></div>
+  <div class="page-header">
     <div class="page-header-inner">
-      <div class="page-header-left">
-        <div class="page-header-icon"><i class="fas fa-calendar-plus"></i></div>
-        <div>
-          <div class="page-header-title">Register New Event</div>
-          <div class="page-header-subtitle">Fill in all the details below to publish an event to the portal</div>
-        </div>
+      <div class="header-eyebrow">
+        <i class="fas fa-calendar-plus"></i> NEW EVENT REGISTRATION
       </div>
-      <div class="page-header-badges">
-        <div class="header-badge">
-          <i class="fas fa-circle" style="color:#f59e0b;font-size:9px;"></i>Draft
-        </div>
-        <div class="header-badge">
-          <i class="fas fa-clock" style="color:rgba(255,255,255,.4);font-size:13px;"></i>Auto-saving
-        </div>
-      </div>
+      <div class="page-title">Create an <span>Event</span></div>
+      <div class="page-subtitle">Fill in the essentials — quick, clean, done in 2 steps.</div>
     </div>
   </div>
 
-  <!-- MAIN FORM -->
+  <!-- FORM -->
   <div class="page-container">
   <form id="mainEventForm" novalidate>
 
-    <!-- ── SECTION 1: BASIC INFORMATION ── -->
-    <div class="section-divider visible">
-      <div class="divider-line"></div>
-      <div class="divider-label">Step 1 of 7</div>
-      <div class="divider-line"></div>
-    </div>
+    <!-- ── STEP 1: EVENT DETAILS ── -->
+    <div class="form-section step-active" data-sec="1" id="section1">
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-icon-wrap gold"><i class="fas fa-calendar-alt"></i></div>
+          <div class="section-title-group">
+            <div class="section-title">Event Details</div>
+            <div class="section-subtitle">The core info — keep it clear and accurate</div>
+          </div>
+          <span class="section-badge">STEP 1 / 2</span>
+        </div>
+        <div class="section-body">
 
-    <div class="form-section" data-sec="1" id="section1">
-      <div class="section-header">
-        <div class="section-icon"><i class="fas fa-info-circle"></i></div>
-        <div class="section-title-wrap">
-          <div class="section-title">Event Basic Information</div>
-          <div class="section-subtitle">Core details — title, department, description, and type</div>
-        </div>
-        <span class="section-badge">STEP 1</span>
-      </div>
-      <div class="section-body">
-        <!-- Row 1: Title (full width) -->
-        <div class="form-grid col-1" style="margin-bottom:10px;">
-          <div class="form-field">
-            <label class="form-label">Event Title <span class="form-label-req">*</span></label>
-            <input type="text" class="form-input" id="eventTitle" name="eventTitle" placeholder="e.g. Annual Tech Symposium 2026" required maxlength="120" />
-            <div style="display:flex;justify-content:space-between;">
+          <!-- Title -->
+          <div class="form-grid col-1">
+            <div class="form-field">
+              <label class="form-label">Event Title <span class="form-label-req">*</span></label>
+              <input type="text" class="form-input" id="eventTitle" placeholder="e.g. Annual Tech Symposium 2026" required maxlength="100" />
               <div class="form-error" id="titleError">Event title is required.</div>
-              <div class="char-counter" id="titleCounter">0 / 120</div>
             </div>
           </div>
-        </div>
-        <!-- Row 2: Dept + Organizer + Type (3-col) -->
-        <div class="form-grid col-3" style="margin-bottom:10px;">
-          <div class="form-field">
-            <label class="form-label">Department <span class="form-label-req">*</span></label>
-            <div class="select-wrap">
-              <select class="form-select" id="eventDept" name="eventDept" required>
-                <option value="">Select Department</option>
-                <option value="computer-science">Computer Science</option>
-                <option value="mathematics">Mathematics</option>
-                <option value="physics">Physics</option>
-                <option value="chemistry">Chemistry</option>
-                <option value="biology">Biology</option>
-                <option value="english">English</option>
-                <option value="history">History</option>
-                <option value="management">Management</option>
-                <option value="commerce">Commerce</option>
-                <option value="arts">Arts &amp; Design</option>
-                <option value="law">Law</option>
-              </select>
+
+          <!-- Dept + Type -->
+          <div class="form-grid col-2">
+            <div class="form-field">
+              <label class="form-label">Department <span class="form-label-req">*</span></label>
+              <div class="select-wrap">
+                <select class="form-select" id="eventDept" required>
+                  <option value="">Select Department</option>
+                  <option value="computer-science">Computer Science</option>
+                  <option value="mathematics">Mathematics</option>
+                  <option value="physics">Physics</option>
+                  <option value="chemistry">Chemistry</option>
+                  <option value="biology">Biology</option>
+                  <option value="english">English</option>
+                  <option value="history">History</option>
+                  <option value="management">Management</option>
+                  <option value="commerce">Commerce</option>
+                  <option value="arts">Arts &amp; Design</option>
+                  <option value="law">Law</option>
+                </select>
+              </div>
+              <div class="form-error" id="deptError">Please select a department.</div>
             </div>
-            <div class="form-error" id="deptError">Please select a department.</div>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Organizer / Club <span class="form-label-req">*</span></label>
-            <input type="text" class="form-input" id="organizerName" name="organizerName" placeholder="e.g. CSE Dept / Tech Club" required />
-            <div class="form-error" id="orgError">Organizer name is required.</div>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Event Type</label>
-            <div class="select-wrap">
-              <select class="form-select" id="eventTypeSelect" name="eventType">
-                <option value="workshop">Workshop</option>
-                <option value="seminar">Seminar</option>
-                <option value="lecture">Lecture</option>
-                <option value="symposium">Symposium</option>
-                <option value="field-trip">Field Trip</option>
-                <option value="competition">Competition</option>
-                <option value="cultural">Cultural</option>
-                <option value="other">Other</option>
-              </select>
+            <div class="form-field">
+              <label class="form-label">Event Type</label>
+              <div class="select-wrap">
+                <select class="form-select" id="eventType">
+                  <option value="workshop">Workshop</option>
+                  <option value="seminar">Seminar</option>
+                  <option value="lecture">Lecture</option>
+                  <option value="symposium">Symposium</option>
+                  <option value="competition">Competition</option>
+                  <option value="cultural">Cultural</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Row 3: Description (left) + Poster upload (right) -->
-        <div class="form-grid col-2" style="margin-bottom:10px;">
-          <div class="form-field">
-            <label class="form-label">Event Description <span class="form-label-req">*</span></label>
-            <textarea class="form-textarea" id="eventDesc" name="eventDesc" rows="3" placeholder="Describe the event, highlights, what to expect…" maxlength="1000" required style="min-height:80px;"></textarea>
-            <div style="display:flex;justify-content:space-between;">
+
+          <!-- Date + Time + Venue -->
+          <div class="form-grid col-3">
+            <div class="form-field">
+              <label class="form-label">Date <span class="form-label-req">*</span></label>
+              <input type="date" class="form-input" id="eventDate" required />
+              <div class="form-error" id="dateError">Please select a date.</div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Start Time <span class="form-label-req">*</span></label>
+              <input type="time" class="form-input" id="eventTime" required />
+              <div class="form-error" id="timeError">Please set a time.</div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">End Time</label>
+              <input type="time" class="form-input" id="eventEndTime" />
+            </div>
+          </div>
+
+          <div class="form-grid col-2">
+            <div class="form-field">
+              <label class="form-label">Venue <span class="form-label-req">*</span></label>
+              <input type="text" class="form-input" id="eventVenue" placeholder="e.g. Main Auditorium, Block A" required />
+              <div class="form-error" id="venueError">Venue is required.</div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Mode</label>
+              <div class="mode-toggle" id="modeGroup">
+                <button type="button" class="mode-btn active" data-mode="offline">
+                  <i class="fas fa-building"></i> Offline
+                </button>
+                <button type="button" class="mode-btn" data-mode="online">
+                  <i class="fas fa-wifi"></i> Online
+                </button>
+                <button type="button" class="mode-btn" data-mode="hybrid">
+                  <i class="fas fa-layer-group"></i> Hybrid
+                </button>
+              </div>
+              <input type="hidden" id="eventMode" value="offline" />
+            </div>
+          </div>
+
+          <!-- Description + Poster -->
+          <div class="form-grid col-2">
+            <div class="form-field">
+              <label class="form-label">Description <span class="form-label-req">*</span></label>
+              <textarea class="form-textarea" id="eventDesc" placeholder="Brief description of the event…" required maxlength="500" style="min-height:100px;"></textarea>
               <div class="form-error" id="descError">Description is required.</div>
-              <div class="char-counter" id="descCounter">0 / 1000</div>
             </div>
-          </div>
-          <div class="form-field">
-            <label class="form-label"><i class="fas fa-image" style="color:var(--gold);"></i> Event Poster</label>
-            <div class="upload-area" id="uploadArea" style="min-height:80px;">
-              <input type="file" id="posterInput" name="poster" accept="image/*" />
-              <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-              <div>
+            <div class="form-field">
+              <label class="form-label">Event Poster <span style="color:var(--text-pale);font-weight:500;">(optional)</span></label>
+              <div class="upload-area" id="uploadArea">
+                <input type="file" id="posterInput" accept="image/*" />
+                <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
                 <div class="upload-text">Click or drag &amp; drop</div>
                 <div class="upload-hint">PNG, JPG, WEBP · Max 5 MB</div>
               </div>
-            </div>
-            <div class="upload-preview" id="uploadPreview">
-              <img class="upload-preview-img" id="previewImg" src="" alt="Preview" />
-              <div><div class="upload-preview-name" id="previewName">—</div><div class="upload-preview-size" id="previewSize">—</div></div>
-              <button type="button" class="upload-preview-remove" id="removePreview" title="Remove"><i class="fas fa-times"></i></button>
-            </div>
-          </div>
-        </div>
-        <!-- Row 4: Tags -->
-        <div class="form-field">
-          <label class="form-label"><i class="fas fa-tags" style="color:var(--gold);font-size:11px;"></i> Tags</label>
-          <div class="tags-wrap" id="tagsWrap">
-            <input class="tag-input" id="tagInput" placeholder="Type a tag and press Enter…" />
-          </div>
-          <div class="form-hint">Press Enter or comma to add. E.g. Workshop, AI, Research</div>
-          <input type="hidden" id="tagsHidden" name="tags" />
-        </div>
-        <!-- Hidden radio group kept for JS compatibility -->
-        <div style="display:none;" id="eventTypeGroup">
-          <label class="radio-option selected"><input type="radio" name="eventType" value="workshop" checked /><div class="radio-dot"></div>Workshop</label>
-          <label class="radio-option"><input type="radio" name="eventType" value="seminar" /><div class="radio-dot"></div>Seminar</label>
-          <label class="radio-option"><input type="radio" name="eventType" value="lecture" /><div class="radio-dot"></div>Lecture</label>
-          <label class="radio-option"><input type="radio" name="eventType" value="symposium" /><div class="radio-dot"></div>Symposium</label>
-          <label class="radio-option"><input type="radio" name="eventType" value="field-trip" /><div class="radio-dot"></div>Field Trip</label>
-          <label class="radio-option"><input type="radio" name="eventType" value="competition" /><div class="radio-dot"></div>Competition</label>
-          <label class="radio-option"><input type="radio" name="eventType" value="cultural" /><div class="radio-dot"></div>Cultural</label>
-          <label class="radio-option"><input type="radio" name="eventType" value="other" /><div class="radio-dot"></div>Other</label>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── SECTION 2: DATE & VENUE ── -->
-    <div class="section-divider">
-      <div class="divider-line"></div>
-      <div class="divider-label">Step 2 of 7</div>
-      <div class="divider-line"></div>
-    </div>
-
-    <div class="form-section" data-sec="2" id="section2">
-      <div class="section-header">
-        <div class="section-icon"><i class="fas fa-map-marker-alt"></i></div>
-        <div class="section-title-wrap">
-          <div class="section-title">Event Date &amp; Venue</div>
-          <div class="section-subtitle">When and where will the event take place</div>
-        </div>
-        <span class="section-badge">STEP 2</span>
-      </div>
-      <div class="section-body">
-        <!-- Date / Time row -->
-        <div class="form-grid col-4" style="margin-bottom:10px;">
-          <div class="form-field">
-            <label class="form-label">Event Date <span class="form-label-req">*</span></label>
-            <input type="date" class="form-input" id="eventDate" name="eventDate" required />
-            <div class="form-error" id="dateError">Please select a date.</div>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Start Time <span class="form-label-req">*</span></label>
-            <input type="time" class="form-input" id="eventTime" name="eventTime" required />
-            <div class="form-error" id="timeError">Please set the event time.</div>
-          </div>
-          <div class="form-field">
-            <label class="form-label">End Time</label>
-            <input type="time" class="form-input" id="eventEndTime" name="eventEndTime" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">Mode</label>
-            <div class="select-wrap">
-              <select class="form-select" id="eventMode" name="eventMode">
-                <option value="offline">Offline</option>
-                <option value="online">Online</option>
-                <option value="hybrid">Hybrid</option>
-              </select>
+              <div class="upload-preview" id="uploadPreview">
+                <img class="upload-preview-img" id="previewImg" src="" alt="Preview" />
+                <div><div class="upload-preview-name" id="previewName">—</div><div class="upload-preview-size" id="previewSize">—</div></div>
+                <button type="button" class="upload-preview-remove" id="removePreview"><i class="fas fa-times"></i></button>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Venue + Status row -->
-        <div class="form-grid col-2" style="margin-bottom:10px;">
-          <div class="form-field">
-            <label class="form-label">Venue / Location <span class="form-label-req">*</span></label>
-            <input type="text" class="form-input" id="eventVenue" name="eventVenue" placeholder="e.g. Main Auditorium, Block A Room 301" required />
-            <div class="form-error" id="venueError">Venue is required.</div>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Event Status</label>
-            <div class="select-wrap">
-              <select class="form-select" id="eventStatus" name="eventStatus">
-                <option value="upcoming">Upcoming</option>
-                <option value="ongoing">Ongoing</option>
-                <option value="completed">Completed</option>
-                <option value="postponed">Postponed</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
+
+          <!-- Capacity + Deadline -->
+          <div class="form-grid col-2">
+            <div class="form-field">
+              <label class="form-label">Max Capacity <span class="form-label-req">*</span></label>
+              <div class="counter-field">
+                <button type="button" class="counter-btn" id="capMinus"><i class="fas fa-minus"></i></button>
+                <input type="number" class="counter-input" id="maxCapacity" value="50" min="1" max="5000" required />
+                <button type="button" class="counter-btn" id="capPlus"><i class="fas fa-plus"></i></button>
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Registration Deadline <span class="form-label-req">*</span></label>
+              <input type="date" class="form-input" id="regDeadline" required />
+              <div class="form-error" id="deadlineError">Please set a deadline.</div>
             </div>
           </div>
-        </div>
-        <div class="form-field">
-          <label class="form-label">Online / Maps Link</label>
-          <input type="url" class="form-input" id="venueLink" name="venueLink" placeholder="https://meet.google.com/... or Google Maps link" />
-          <div class="form-hint">Optional — for virtual or hybrid events</div>
+
         </div>
       </div>
-    </div>
 
-    <!-- ── SECTION 3: ELIGIBILITY ── -->
-    <div class="section-divider">
-      <div class="divider-line"></div>
-      <div class="divider-label">Step 3 of 7</div>
-      <div class="divider-line"></div>
-    </div>
-
-    <div class="form-section" data-sec="3" id="section3">
-      <div class="section-header">
-        <div class="section-icon"><i class="fas fa-user-check"></i></div>
-        <div class="section-title-wrap">
-          <div class="section-title">Eligibility</div>
-          <div class="section-subtitle">Who can participate in this event</div>
-        </div>
-        <span class="section-badge">STEP 3</span>
-      </div>
-      <div class="section-body">
-        <div class="form-grid col-2" style="margin-bottom:10px;">
-          <div class="form-field">
-            <label class="form-label">Eligible Department</label>
-            <div class="select-wrap">
-              <select class="form-select" id="eligDept" name="eligDept">
-                <option value="all">All Departments</option>
-                <option value="computer-science">Computer Science</option>
-                <option value="mathematics">Mathematics</option>
-                <option value="physics">Physics</option>
-                <option value="chemistry">Chemistry</option>
-                <option value="biology">Biology</option>
-                <option value="english">English</option>
-                <option value="history">History</option>
-                <option value="management">Management</option>
-                <option value="commerce">Commerce</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Maximum Capacity <span class="form-label-req">*</span></label>
-            <div class="counter-field">
-              <button type="button" class="counter-btn" id="capMinus"><i class="fas fa-minus"></i></button>
-              <input type="number" class="counter-input" id="maxCapacity" name="maxCapacity" value="50" min="1" max="10000" required />
-              <button type="button" class="counter-btn" id="capPlus"><i class="fas fa-plus"></i></button>
-            </div>
-          </div>
-        </div>
-        <div class="form-field" style="margin-bottom:10px;">
-          <label class="form-label">Eligible Student Year</label>
-          <div class="check-group" id="yearGroup">
-            <label class="check-option selected"><input type="checkbox" name="year" value="1" checked /><i class="fas fa-check" style="font-size:11px;"></i> 1st Year</label>
-            <label class="check-option selected"><input type="checkbox" name="year" value="2" checked /><i class="fas fa-check" style="font-size:11px;"></i> 2nd Year</label>
-            <label class="check-option selected"><input type="checkbox" name="year" value="3" checked /><i class="fas fa-check" style="font-size:11px;"></i> 3rd Year</label>
-            <label class="check-option selected"><input type="checkbox" name="year" value="4" checked /><i class="fas fa-check" style="font-size:11px;"></i> 4th Year</label>
-            <label class="check-option"><input type="checkbox" name="year" value="pg" /><i class="fas fa-check" style="font-size:11px;"></i> PG</label>
-            <label class="check-option"><input type="checkbox" name="year" value="phd" /><i class="fas fa-check" style="font-size:11px;"></i> PhD</label>
-          </div>
-        </div>
-        <div class="form-field">
-          <label class="form-label">Special Eligibility Criteria</label>
-          <textarea class="form-textarea" id="eligCriteria" name="eligCriteria" rows="2" placeholder="e.g. Must have completed Intro to Programming. Open to STEM students only." style="min-height:58px;"></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── SECTION 4: REGISTRATION ── -->
-    <div class="section-divider">
-      <div class="divider-line"></div>
-      <div class="divider-label">Step 4 of 7</div>
-      <div class="divider-line"></div>
-    </div>
-
-    <div class="form-section" data-sec="4" id="section4">
-      <div class="section-header">
-        <div class="section-icon"><i class="fas fa-clipboard-list"></i></div>
-        <div class="section-title-wrap">
-          <div class="section-title">Registration Settings</div>
-          <div class="section-subtitle">Control how students register for this event</div>
-        </div>
-        <span class="section-badge">STEP 4</span>
-      </div>
-      <div class="section-body">
-        <div class="form-grid col-2" style="margin-bottom:10px;">
-          <div class="form-field">
-            <label class="form-label">Registration Opens</label>
-            <input type="date" class="form-input" id="regOpenDate" name="regOpenDate" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">Registration Deadline <span class="form-label-req">*</span></label>
-            <input type="date" class="form-input" id="regDeadline" name="regDeadline" required />
-            <div class="form-error" id="regDeadlineError">Please set a registration deadline.</div>
-          </div>
-        </div>
-        <div class="form-grid col-3" style="margin-bottom:10px;">
-          <div class="form-field">
-            <label class="form-label">Total Seats</label>
-            <div class="counter-field">
-              <button type="button" class="counter-btn" id="seatsMinus"><i class="fas fa-minus"></i></button>
-              <input type="number" class="counter-input" id="totalSeats" name="totalSeats" value="50" min="1" />
-              <button type="button" class="counter-btn" id="seatsPlus"><i class="fas fa-plus"></i></button>
-            </div>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Seats Available</label>
-            <div class="counter-field">
-              <button type="button" class="counter-btn" id="availMinus"><i class="fas fa-minus"></i></button>
-              <input type="number" class="counter-input" id="seatsAvail" name="seatsAvail" value="50" min="0" />
-              <button type="button" class="counter-btn" id="availPlus"><i class="fas fa-plus"></i></button>
-            </div>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Registration Fee</label>
-            <input type="text" class="form-input" id="regFee" name="regFee" placeholder="₹0 (Free)" />
-          </div>
-        </div>
-        <div class="form-field" style="margin-bottom:10px;">
-          <label class="form-label">Registration Status</label>
-          <div class="radio-group" id="regStatusGroup">
-            <label class="radio-option selected"><input type="radio" name="regStatus" value="open" checked /><div class="radio-dot"></div><i class="fas fa-circle" style="color:#059669;font-size:9px;"></i> Open</label>
-            <label class="radio-option"><input type="radio" name="regStatus" value="closed" /><div class="radio-dot"></div><i class="fas fa-circle" style="color:#dc2626;font-size:9px;"></i> Closed</label>
-            <label class="radio-option"><input type="radio" name="regStatus" value="waitlist" /><div class="radio-dot"></div><i class="fas fa-circle" style="color:#f59e0b;font-size:9px;"></i> Waitlist Only</label>
-            <label class="radio-option"><input type="radio" name="regStatus" value="invite" /><div class="radio-dot"></div><i class="fas fa-circle" style="color:#8b5cf6;font-size:9px;"></i> Invite Only</label>
-          </div>
-        </div>
-        <div class="form-field">
-          <label class="form-label">Registration Link / Form URL</label>
-          <input type="url" class="form-input" id="regLink" name="regLink" placeholder="https://forms.google.com/... or registration portal link" />
-          <div class="form-hint">If using an external registration platform</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── SECTION 5: SCHEDULE ── -->
-    <div class="section-divider">
-      <div class="divider-line"></div>
-      <div class="divider-label">Step 5 of 7</div>
-      <div class="divider-line"></div>
-    </div>
-
-    <div class="form-section" data-sec="5" id="section5">
-      <div class="section-header">
-        <div class="section-icon"><i class="fas fa-stream"></i></div>
-        <div class="section-title-wrap">
-          <div class="section-title">Event Schedule / Agenda</div>
-          <div class="section-subtitle">Add sessions, activities, and timeline</div>
-        </div>
-        <span class="section-badge">STEP 5</span>
-      </div>
-      <div class="section-body">
-        <table class="schedule-table" id="scheduleTable">
-          <thead>
-            <tr>
-              <th style="width:160px;">Date</th>
-              <th style="width:130px;">Time</th>
-              <th>Session / Activity</th>
-              <th style="width:160px;">Speaker / Facilitator</th>
-              <th style="width:52px;"></th>
-            </tr>
-          </thead>
-          <tbody id="scheduleTbody">
-            <tr>
-              <td><input type="date" class="form-input" name="schedDate[]" /></td>
-              <td><input type="time" class="form-input" name="schedTime[]" /></td>
-              <td><input type="text" class="form-input" name="schedSession[]" placeholder="e.g. Opening Keynote" /></td>
-              <td><input type="text" class="form-input" name="schedSpeaker[]" placeholder="Dr. Name" /></td>
-              <td><button type="button" class="schedule-remove-btn" onclick="removeScheduleRow(this)" title="Remove"><i class="fas fa-trash"></i></button></td>
-            </tr>
-          </tbody>
-        </table>
-        <button type="button" class="add-row-btn" id="addScheduleRow">
-          <i class="fas fa-plus-circle" style="color:var(--gold);font-size:16px;"></i>Add Session
+      <!-- Wizard Nav -->
+      <div class="wizard-nav" style="--prog-w:50%;">
+        <button type="button" class="wizard-btn wizard-btn-back" disabled>
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <div class="wizard-step-info">Step <strong>1</strong> of 2 — Event Details</div>
+        <button type="button" class="wizard-btn wizard-btn-next" id="nextBtn1">
+          Next <i class="fas fa-arrow-right"></i>
         </button>
       </div>
     </div>
 
-    <!-- ── SECTION 6: RULES ── -->
-    <div class="section-divider">
-      <div class="divider-line"></div>
-      <div class="divider-label">Step 6 of 7</div>
-      <div class="divider-line"></div>
-    </div>
+    <!-- ── STEP 2: ORGANIZER & PUBLISH ── -->
+    <div class="form-section" data-sec="2" id="section2">
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-icon-wrap navy"><i class="fas fa-user-tie"></i></div>
+          <div class="section-title-group">
+            <div class="section-title">Organizer Contact</div>
+            <div class="section-subtitle">Who to reach if there are questions</div>
+          </div>
+          <span class="section-badge">STEP 2 / 2</span>
+        </div>
+        <div class="section-body">
 
-    <div class="form-section" data-sec="6" id="section6">
-      <div class="section-header">
-        <div class="section-icon"><i class="fas fa-gavel"></i></div>
-        <div class="section-title-wrap">
-          <div class="section-title">Participation Rules</div>
-          <div class="section-subtitle">Guidelines and requirements for participants</div>
-        </div>
-        <span class="section-badge">STEP 6</span>
-      </div>
-      <div class="section-body">
-        <div class="form-field" style="margin-bottom:10px;">
-          <label class="form-label"><i class="fas fa-list-ol" style="color:var(--gold);font-size:13px;"></i> Registration Steps</label>
-          <textarea class="form-textarea" id="regSteps" name="regSteps" rows="2" placeholder="Step 1: Fill the Google Form&#10;Step 2: Pay fee via UPI&#10;Step 3: Receive confirmation email" style="min-height:62px;"></textarea>
-        </div>
-        <div class="form-grid col-2" style="margin-bottom:10px;">
-          <div class="form-field">
-            <label class="form-label">Attendance Requirement</label>
-            <div class="select-wrap">
-              <select class="form-select" id="attendReq" name="attendReq">
-                <option value="mandatory">Mandatory (100%)</option>
-                <option value="75">Minimum 75%</option>
-                <option value="50">Minimum 50%</option>
-                <option value="optional">Optional</option>
-              </select>
+          <div class="highlight-banner">
+            <i class="fas fa-bolt highlight-icon"></i>
+            <div class="highlight-text">
+              <strong>Almost there!</strong> Just a name, email, and phone — then you're ready to publish.
             </div>
           </div>
-          <div class="form-field">
-            <label class="form-label">Certificate Eligibility</label>
-            <div class="select-wrap">
-              <select class="form-select" id="certElig" name="certElig">
-                <option value="all">All Participants</option>
-                <option value="completion">On Completion</option>
-                <option value="toppers">Top Performers Only</option>
-                <option value="none">No Certificate</option>
-              </select>
+
+          <div class="form-grid col-3">
+            <div class="form-field">
+              <label class="form-label">Coordinator Name <span class="form-label-req">*</span></label>
+              <input type="text" class="form-input" id="coordName" placeholder="Dr. / Prof. Full Name" required />
+              <div class="form-error" id="coordError">Name is required.</div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Email <span class="form-label-req">*</span></label>
+              <input type="email" class="form-input" id="coordEmail" placeholder="coordinator@jainuniversity.ac.in" required />
+              <div class="form-error" id="emailError">Valid email is required.</div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Phone <span class="form-label-req">*</span></label>
+              <input type="tel" class="form-input" id="coordPhone" placeholder="+91 98765 43210" required />
+              <div class="form-error" id="phoneError">Phone is required.</div>
             </div>
           </div>
-        </div>
-        <div class="form-field" style="margin-bottom:10px;">
-          <label class="form-label">Code of Conduct / Rules</label>
-          <textarea class="form-textarea" id="codeOfConduct" name="codeOfConduct" rows="2" placeholder="- Students must carry ID cards&#10;- Mobile phones on silent&#10;- No late entry after 10 mins" style="min-height:62px;"></textarea>
-        </div>
-        <div class="form-field">
-          <label class="form-label">Special Instructions</label>
-          <textarea class="form-textarea" id="specialInstr" name="specialInstr" rows="2" placeholder="e.g. Bring your own laptop, lab coat required, prior Python knowledge preferred"></textarea>
+
+          <div class="form-grid col-2">
+            <div class="form-field">
+              <label class="form-label">Organizer / Club</label>
+              <input type="text" class="form-input" id="organizerName" placeholder="e.g. CSE Dept / Tech Club" />
+            </div>
+            <div class="form-field">
+              <label class="form-label">Fee <span style="color:var(--text-pale);font-weight:500;">(leave blank if free)</span></label>
+              <input type="text" class="form-input" id="eventFee" placeholder="e.g. ₹200 / Free" />
+            </div>
+          </div>
+
         </div>
       </div>
-    </div>
 
-    <!-- ── SECTION 7: CONTACT ── -->
-    <div class="section-divider">
-      <div class="divider-line"></div>
-      <div class="divider-label">Step 7 of 7</div>
-      <div class="divider-line"></div>
-    </div>
-
-    <div class="form-section" data-sec="7" id="section7">
-      <div class="section-header">
-        <div class="section-icon"><i class="fas fa-address-card"></i></div>
-        <div class="section-title-wrap">
-          <div class="section-title">Organizer Contact</div>
-          <div class="section-subtitle">Primary contact person for this event</div>
-        </div>
-        <span class="section-badge">STEP 7</span>
-      </div>
-      <div class="section-body">
-        <div class="form-grid col-3" style="margin-bottom:10px;">
-          <div class="form-field">
-            <label class="form-label">Coordinator Name <span class="form-label-req">*</span></label>
-            <input type="text" class="form-input" id="coordName" name="coordName" placeholder="Dr. / Prof. Full Name" required />
-            <div class="form-error" id="coordError">Coordinator name is required.</div>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Email Address <span class="form-label-req">*</span></label>
-            <input type="email" class="form-input" id="coordEmail" name="coordEmail" placeholder="coordinator@jainuniversity.ac.in" required />
-            <div class="form-error" id="emailError">Valid email is required.</div>
-          </div>
-          <div class="form-field">
-            <label class="form-label">Phone Number <span class="form-label-req">*</span></label>
-            <input type="tel" class="form-input" id="coordPhone" name="coordPhone" placeholder="+91 98765 43210" required />
-            <div class="form-error" id="phoneError">Phone number is required.</div>
-          </div>
-        </div>
-        <div class="form-grid col-2">
-          <div class="form-field">
-            <label class="form-label">Designation / Role</label>
-            <input type="text" class="form-input" id="coordDesig" name="coordDesig" placeholder="e.g. Assistant Professor, Event Coordinator" />
-          </div>
-          <div class="form-field">
-            <label class="form-label">WhatsApp Group Link</label>
-            <input type="url" class="form-input" id="whatsappLink" name="whatsappLink" placeholder="https://chat.whatsapp.com/..." />
-            <div class="form-hint">Optional — participants will be added</div>
-          </div>
-        </div>
+      <!-- Wizard Nav -->
+      <div class="wizard-nav" style="--prog-w:100%;">
+        <button type="button" class="wizard-btn wizard-btn-back" id="backBtn2">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <div class="wizard-step-info">Step <strong>2</strong> of 2 — Final Step</div>
+        <button type="button" class="wizard-btn wizard-btn-next" id="publishDirectBtn"
+          style="background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);box-shadow:0 4px 16px rgba(200,146,10,.4);">
+          <i class="fas fa-paper-plane"></i> Publish Event
+        </button>
       </div>
     </div>
-
-  <!-- WIZARD NAVIGATION -->
-  <div class="wizard-nav" id="wizardNav">
-    <button type="button" class="wizard-btn wizard-btn-back" id="wizardBack" disabled>
-      <i class="fas fa-arrow-left"></i> Back
-    </button>
-    <div class="wizard-step-info" id="wizardStepInfo">
-      Step <strong>1</strong> of 7 — <span id="wizardStepName">Event Basic Information</span>
-    </div>
-    <button type="button" class="wizard-btn wizard-btn-next" id="wizardNext">
-      Next <i class="fas fa-arrow-right"></i>
-    </button>
-  </div>
 
   </form>
   </div>
 
-  <!-- STICKY ACTIONS BAR -->
-  <div class="form-actions-bar">
-    <div class="form-actions-inner">
+  <!-- STICKY ACTION BAR -->
+  <div class="actions-bar">
+    <div class="actions-inner">
       <div class="actions-left">
-        <button type="button" class="btn btn-danger-ghost" id="clearFormBtn">
-          <i class="fas fa-undo"></i>Clear Form
+        <button type="button" class="btn btn-danger" id="clearFormBtn">
+          <i class="fas fa-undo"></i> Clear
         </button>
       </div>
       <div class="actions-right">
         <button type="button" class="btn btn-ghost" id="saveDraftBtn">
-          <i class="fas fa-save"></i>Save Draft
+          <i class="fas fa-save"></i> Save Draft
         </button>
-        <button type="button" class="btn btn-outline-gold" id="previewBtn">
-          <i class="fas fa-eye"></i>Preview Event
+        <button type="button" class="btn btn-gold-outline" id="previewBtn">
+          <i class="fas fa-eye"></i> Preview
         </button>
         <button type="button" class="btn btn-gold" id="publishBtn">
-          <i class="fas fa-paper-plane"></i>Publish Event
+          <i class="fas fa-paper-plane"></i> Publish
         </button>
       </div>
     </div>
@@ -1573,480 +946,306 @@
   <!-- PREVIEW MODAL -->
   <div class="preview-backdrop" id="previewBackdrop">
     <div class="preview-box">
-      <div class="preview-header-band" id="previewBand" style="background:linear-gradient(135deg,#1C2B4A,#2E4370);">
-        <button class="preview-close-btn" id="previewClose"><i class="fas fa-times"></i></button>
-        <div class="preview-header-overlay"></div>
-        <div class="preview-header-band-icon" id="previewIcon"><i class="fas fa-calendar-star"></i></div>
+      <div class="preview-band" id="previewBand">
+        <button class="preview-close" id="previewClose"><i class="fas fa-times"></i></button>
+        <div class="preview-band-overlay"></div>
+        <div class="preview-band-icon" id="previewIcon"><i class="fas fa-calendar-star"></i></div>
       </div>
       <div class="preview-body">
         <div class="preview-chips" id="previewChips"></div>
         <div class="preview-title" id="previewTitle">—</div>
-        <div class="preview-info-grid" id="previewInfoGrid"></div>
-        <div style="font-size:13px;font-weight:800;color:var(--text-mid);margin-bottom:10px;letter-spacing:.6px;"><i class="fas fa-align-left" style="margin-right:7px;color:var(--text-pale);"></i>About</div>
+        <div class="preview-grid" id="previewGrid"></div>
+        <div style="font-size:12px;font-weight:800;color:var(--text-pale);letter-spacing:.8px;margin-bottom:8px;">ABOUT</div>
         <div class="preview-desc" id="previewDesc">—</div>
-        <div style="display:flex;gap:12px;">
-          <button class="btn btn-navy" style="flex:1;" id="previewPublish"><i class="fas fa-paper-plane"></i>Publish Event</button>
-          <button class="btn btn-ghost" id="previewEditBtn"><i class="fas fa-pen"></i>Edit</button>
+        <div class="preview-actions">
+          <button class="btn btn-gold" style="flex:1;" id="previewPublish"><i class="fas fa-paper-plane"></i> Publish Event</button>
+          <button class="btn btn-ghost" id="previewEdit"><i class="fas fa-pen"></i> Edit</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- TOAST -->
-  <div class="toast-notification" id="toast">
-    <i class="fas fa-check-circle toast-icon"></i>
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle toast-icon" id="toastIcon"></i>
     <span id="toastMsg">Saved</span>
   </div>
 
   <script>
-    /* ── SIDEBAR ── */
-    const hamburgerBtn    = document.getElementById('hamburgerBtn');
-    const sidebar         = document.getElementById('sidebar');
-    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
-    const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
-    hamburgerBtn.addEventListener('click', ()=>{ sidebar.classList.add('open'); sidebarBackdrop.classList.add('open'); document.body.style.overflow='hidden'; });
-    sidebarCloseBtn.addEventListener('click', closeSidebar);
-    sidebarBackdrop.addEventListener('click', closeSidebar);
-    function closeSidebar(){ sidebar.classList.remove('open'); sidebarBackdrop.classList.remove('open'); document.body.style.overflow=''; }
+    /* ── STATE ── */
+    let currentStep = 1;
+    const totalSteps = 2;
+    let posterFile = null, posterDataUrl = null;
 
-    /* ── PROFILE DROPDOWN ── */
-    const profileAvatarBtn = document.getElementById('profileAvatarBtn');
-    const profileDropdown  = document.getElementById('profileDropdown');
-    profileAvatarBtn.addEventListener('click', e=>{ e.stopPropagation(); profileDropdown.classList.toggle('open'); });
-    document.addEventListener('click', ()=>profileDropdown.classList.remove('open'));
-    profileDropdown.addEventListener('click', e=>e.stopPropagation());
-
-    /* Section reveals handled by wizard showStep() */
-
-    /* ── TOAST ── */
-    let toastTimer;
-    function showToast(msg, type='success') {
-      const el   = document.getElementById('toast');
-      const icon = el.querySelector('.toast-icon');
-      document.getElementById('toastMsg').textContent = msg;
-      icon.className = 'toast-icon fas ' + (type==='error'?'fa-exclamation-circle':'fa-check-circle');
-      el.style.background = type==='error'?'#dc2626':'var(--navy)';
-      el.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(()=>el.classList.remove('show'), 3200);
+    /* ── STEP NAVIGATION ── */
+    function goToStep(n, direction = 'forward') {
+      if (n < 1 || n > totalSteps) return;
+      const prev = document.getElementById('section' + currentStep);
+      const next = document.getElementById('section' + n);
+      prev.classList.remove('step-active', 'slide-in-right', 'slide-in-left');
+      prev.style.display = 'none';
+      prev.style.opacity = '0';
+      next.classList.add('step-active');
+      next.classList.remove('slide-in-right', 'slide-in-left');
+      void next.offsetWidth;
+      next.classList.add(direction === 'forward' ? 'slide-in-right' : 'slide-in-left');
+      currentStep = n;
+      updateStepper();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    /* ── CHAR COUNTERS ── */
-    function bindCharCounter(inputId, counterId, max) {
-      const inp = document.getElementById(inputId);
-      const cnt = document.getElementById(counterId);
-      if(!inp||!cnt) return;
-      inp.addEventListener('input', ()=>{
-        const len = inp.value.length;
-        cnt.textContent = `${len} / ${max}`;
-        cnt.className = 'char-counter' + (len>max*.9?' warn':'') + (len>=max?' over':'');
-      });
-    }
-    bindCharCounter('eventTitle','titleCounter',120);
-    bindCharCounter('eventDesc','descCounter',1000);
-
-    /* ── RADIO / CHECKBOX GROUPS ── */
-    document.querySelectorAll('.radio-group').forEach(group=>{
-      group.querySelectorAll('.radio-option').forEach(opt=>{
-        opt.addEventListener('click', ()=>{
-          group.querySelectorAll('.radio-option').forEach(o=>o.classList.remove('selected'));
-          opt.classList.add('selected');
-          const inp = opt.querySelector('input[type="radio"]');
-          if(inp) inp.checked=true;
-        });
-      });
-    });
-    document.querySelectorAll('.check-group').forEach(group=>{
-      group.querySelectorAll('.check-option').forEach(opt=>{
-        opt.addEventListener('click', ()=>{
-          opt.classList.toggle('selected');
-          const inp = opt.querySelector('input[type="checkbox"]');
-          if(inp) inp.checked=!inp.checked;
-        });
-      });
-    });
-
-    /* ── COUNTER FIELDS ── */
-    function bindCounter(minusBtnId, plusBtnId, inputId, min=0, max=99999) {
-      const minus = document.getElementById(minusBtnId);
-      const plus  = document.getElementById(plusBtnId);
-      const inp   = document.getElementById(inputId);
-      if(!minus||!plus||!inp) return;
-      minus.addEventListener('click', ()=>{ const v=parseInt(inp.value)||0; if(v>min){ inp.value=v-1; inp.dispatchEvent(new Event('change')); }});
-      plus.addEventListener('click',  ()=>{ const v=parseInt(inp.value)||0; if(v<max){ inp.value=v+1; inp.dispatchEvent(new Event('change')); }});
-    }
-    bindCounter('capMinus','capPlus','maxCapacity',1,10000);
-    bindCounter('seatsMinus','seatsPlus','totalSeats',1,10000);
-    bindCounter('availMinus','availPlus','seatsAvail',0,10000);
-
-    /* ── TAGS INPUT ── */
-    const tagsWrap   = document.getElementById('tagsWrap');
-    const tagInput   = document.getElementById('tagInput');
-    const tagsHidden = document.getElementById('tagsHidden');
-    let tags = [];
-    function renderTags() {
-      tagsWrap.querySelectorAll('.tag-chip').forEach(c=>c.remove());
-      tags.forEach((tag, i)=>{
-        const chip = document.createElement('span');
-        chip.className = 'tag-chip';
-        chip.innerHTML = `${tag} <span class="tag-remove" data-i="${i}">×</span>`;
-        tagsWrap.insertBefore(chip, tagInput);
-      });
-      tagsHidden.value = tags.join(',');
-      tagsWrap.querySelectorAll('.tag-remove').forEach(btn=>{
-        btn.addEventListener('click', ()=>{ tags.splice(+btn.dataset.i,1); renderTags(); });
-      });
-    }
-    tagInput.addEventListener('keydown', e=>{
-      if((e.key==='Enter'||e.key===',') && tagInput.value.trim()) {
-        e.preventDefault();
-        const val = tagInput.value.trim().replace(/,/g,'');
-        if(val && !tags.includes(val) && tags.length<10) { tags.push(val); renderTags(); }
-        tagInput.value='';
+    function updateStepper() {
+      for (let i = 1; i <= totalSteps; i++) {
+        const dot = document.getElementById('stepDot' + i);
+        const name = document.getElementById('stepName' + i);
+        dot.classList.remove('active', 'done');
+        name.classList.remove('active', 'done');
+        if (i < currentStep) { dot.classList.add('done'); dot.innerHTML = '<i class="fas fa-check" style="font-size:12px;"></i>'; name.classList.add('done'); }
+        else if (i === currentStep) { dot.classList.add('active'); dot.innerHTML = i; name.classList.add('active'); }
+        else { dot.innerHTML = i; }
+        if (i < totalSteps) {
+          const conn = document.getElementById('stepConn' + i);
+          conn && (i < currentStep ? conn.classList.add('done') : conn.classList.remove('done'));
+        }
       }
-      if(e.key==='Backspace' && !tagInput.value && tags.length) { tags.pop(); renderTags(); }
+    }
+
+    /* ── STEP 1 → 2 ── */
+    document.getElementById('nextBtn1').addEventListener('click', () => {
+      if (validateStep1()) goToStep(2, 'forward');
     });
-    tagsWrap.addEventListener('click', ()=>tagInput.focus());
 
-    /* ── FILE UPLOAD ── */
-    const posterInput   = document.getElementById('posterInput');
-    const uploadArea    = document.getElementById('uploadArea');
-    const uploadPreview = document.getElementById('uploadPreview');
-    const previewImg    = document.getElementById('previewImg');
-    const previewName   = document.getElementById('previewName');
-    const previewSize   = document.getElementById('previewSize');
-    const removePreviewBtn = document.getElementById('removePreview');
-    let posterFile=null, posterDataUrl=null;
+    document.getElementById('backBtn2').addEventListener('click', () => goToStep(1, 'backward'));
 
-    posterInput.addEventListener('change', e=>{
-      const f = e.target.files[0];
-      if(!f) return;
-      if(f.size > 5*1024*1024) { showToast('File too large (max 5 MB)', 'error'); return; }
-      posterFile = f;
+    /* ── MODE TOGGLE ── */
+    document.querySelectorAll('#modeGroup .mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#modeGroup .mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('eventMode').value = btn.dataset.mode;
+      });
+    });
+
+    /* ── COUNTER ── */
+    document.getElementById('capMinus').addEventListener('click', () => {
+      const el = document.getElementById('maxCapacity');
+      if (+el.value > 1) el.value = +el.value - 1;
+    });
+    document.getElementById('capPlus').addEventListener('click', () => {
+      const el = document.getElementById('maxCapacity');
+      el.value = +el.value + 1;
+    });
+
+    /* ── POSTER UPLOAD ── */
+    document.getElementById('posterInput').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) { showToast('File too large (max 5 MB)', 'error'); return; }
+      posterFile = file;
       const reader = new FileReader();
       reader.onload = ev => {
         posterDataUrl = ev.target.result;
-        previewImg.src = posterDataUrl;
-        previewName.textContent = f.name;
-        previewSize.textContent = (f.size/1024).toFixed(1)+' KB';
-        uploadPreview.classList.add('show');
+        document.getElementById('previewImg').src = posterDataUrl;
+        document.getElementById('previewName').textContent = file.name;
+        document.getElementById('previewSize').textContent = (file.size / 1024).toFixed(0) + ' KB';
+        document.getElementById('uploadPreview').classList.add('show');
       };
-      reader.readAsDataURL(f);
+      reader.readAsDataURL(file);
     });
-    removePreviewBtn.addEventListener('click', ()=>{
-      posterInput.value=''; posterFile=null; posterDataUrl=null;
-      uploadPreview.classList.remove('show'); previewImg.src='';
-    });
-    uploadArea.addEventListener('dragover', e=>{ e.preventDefault(); uploadArea.classList.add('drag-over'); });
-    uploadArea.addEventListener('dragleave', ()=>uploadArea.classList.remove('drag-over'));
-    uploadArea.addEventListener('drop', e=>{
-      e.preventDefault(); uploadArea.classList.remove('drag-over');
-      if(e.dataTransfer.files[0]) { posterInput.files = e.dataTransfer.files; posterInput.dispatchEvent(new Event('change')); }
+    document.getElementById('removePreview').addEventListener('click', () => {
+      posterFile = null; posterDataUrl = null;
+      document.getElementById('posterInput').value = '';
+      document.getElementById('uploadPreview').classList.remove('show');
     });
 
-    /* ── SCHEDULE ROWS ── */
-    function addScheduleRow() {
-      const tbody = document.getElementById('scheduleTbody');
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><input type="date" class="form-input" name="schedDate[]" /></td>
-        <td><input type="time" class="form-input" name="schedTime[]" /></td>
-        <td><input type="text" class="form-input" name="schedSession[]" placeholder="Session / Activity" /></td>
-        <td><input type="text" class="form-input" name="schedSpeaker[]" placeholder="Speaker" /></td>
-        <td><button type="button" class="schedule-remove-btn" onclick="removeScheduleRow(this)" title="Remove"><i class="fas fa-trash"></i></button></td>`;
-      tbody.appendChild(tr);
-      tr.style.animation = 'fadeInUp .3s both';
-    }
-    function removeScheduleRow(btn) {
-      const rows = document.querySelectorAll('#scheduleTbody tr');
-      if(rows.length > 1) btn.closest('tr').remove();
-      else showToast('At least one schedule row is required', 'error');
-    }
-    document.getElementById('addScheduleRow').addEventListener('click', addScheduleRow);
-
-    /* ── MULTI-STEP WIZARD — SLIDE TRANSITIONS ── */
-    const STEP_NAMES = [
-      'Event Basic Information',
-      'Event Date & Venue',
-      'Eligibility',
-      'Registration Settings',
-      'Schedule',
-      'Participation Rules',
-      'Organizer Contact'
-    ];
-    const TOTAL_STEPS = 7;
-    let currentStep = 1;
-    let isTransitioning = false;
-    const stepItems = document.querySelectorAll('.step-item');
-
-    /* Ripple helper */
-    function addRipple(btn, e) {
-      const rect = btn.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height) * 2;
-      const x = (e.clientX - rect.left) - size/2;
-      const y = (e.clientY - rect.top)  - size/2;
-      const circle = document.createElement('span');
-      circle.className = 'ripple-circle';
-      circle.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px;`;
-      btn.appendChild(circle);
-      circle.addEventListener('animationend', ()=>circle.remove());
-    }
-
-    function updateProgressBar(step) {
-      const pct = ((step - 1) / (TOTAL_STEPS - 1)) * 100;
-      document.querySelector('.progress-bar-wrap').style.setProperty('--prog-w', pct + '%');
-    }
-
-    function showStep(step, direction='right') {
-      if(isTransitioning) return;
-      isTransitioning = true;
-
-      const incoming = document.getElementById('section' + step);
-      const outgoing = document.querySelector('.form-section.step-active');
-
-      /* Slide out current */
-      if(outgoing && outgoing !== incoming) {
-        outgoing.classList.remove('step-active','slide-in-right','slide-in-left');
-        outgoing.style.display = 'none';
-      }
-
-      /* Slide in new */
-      incoming.style.display = 'block';
-      incoming.classList.remove('slide-in-right','slide-in-left');
-      void incoming.offsetWidth; // reflow
-      incoming.classList.add('step-active', direction==='right' ? 'slide-in-right' : 'slide-in-left');
-
-      /* Update stepper dots */
-      stepItems.forEach((item, i) => {
-        item.classList.remove('active','done','future');
-        if(i+1 < step)       item.classList.add('done');
-        else if(i+1 === step) item.classList.add('active');
-        else                  item.classList.add('future');
-        const num = item.querySelector('.step-num');
-        if(num) {
-          if(i+1 < step) num.innerHTML = '<i class="fas fa-check" style="font-size:11px;"></i>';
-          else           num.textContent = i+1;
-        }
-      });
-
-      /* Progress fill */
-      updateProgressBar(step);
-
-      /* Wizard info */
-      document.getElementById('wizardStepInfo').innerHTML =
-        `<strong>${step}</strong> / ${TOTAL_STEPS}<span>${STEP_NAMES[step-1]}</span>`;
-
-      /* Buttons */
-      const backBtn = document.getElementById('wizardBack');
-      const nextBtn = document.getElementById('wizardNext');
-      backBtn.disabled = (step === 1);
-      if(step === TOTAL_STEPS) {
-        nextBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Publish';
-        nextBtn.className = 'wizard-btn wizard-btn-finish';
-      } else {
-        nextBtn.innerHTML = 'Next <i class="fas fa-arrow-right"></i>';
-        nextBtn.className = 'wizard-btn wizard-btn-next';
-      }
-
-      /* Scroll to top of page — after animation starts */
-      setTimeout(() => {
-        const container = document.querySelector('.progress-bar-wrap');
-        if(container) container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 50);
-
-      setTimeout(() => { isTransitioning = false; }, 420);
-    }
-
-    document.getElementById('wizardNext').addEventListener('click', function(e) {
-      addRipple(this, e);
-      if(currentStep === TOTAL_STEPS) { publishEvent(); return; }
-      currentStep++;
-      showStep(currentStep, 'right');
-    });
-
-    document.getElementById('wizardBack').addEventListener('click', function(e) {
-      addRipple(this, e);
-      if(currentStep > 1) { currentStep--; showStep(currentStep, 'left'); }
-    });
-
-    /* Clicking step dot */
-    stepItems.forEach((item, i) => {
-      item.addEventListener('click', () => {
-        const dir = (i+1) > currentStep ? 'right' : 'left';
-        currentStep = i+1;
-        showStep(currentStep, dir);
-      });
-    });
-
-    /* Ripple on all .btn elements */
-    document.querySelectorAll('.btn').forEach(btn => {
-      btn.addEventListener('click', function(e) { addRipple(this, e); });
-    });
-
-    /* Init */
-    showStep(1, 'right');
-
-    /* ── FORM VALIDATION ── */
-    function validateForm() {
-      let valid = true;
+    /* ── VALIDATION ── */
+    function validateStep1() {
+      let ok = true;
       const checks = [
-        ['eventTitle','titleError',v=>v.trim().length>0],
-        ['eventDept','deptError',v=>v!==''],
-        ['organizerName','orgError',v=>v.trim().length>0],
-        ['eventDesc','descError',v=>v.trim().length>0],
-        ['eventDate','dateError',v=>v!==''],
-        ['eventTime','timeError',v=>v!==''],
-        ['eventVenue','venueError',v=>v.trim().length>0],
-        ['regDeadline','regDeadlineError',v=>v!==''],
-        ['coordName','coordError',v=>v.trim().length>0],
-        ['coordEmail','emailError',v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)],
-        ['coordPhone','phoneError',v=>v.trim().length>=7],
+        ['eventTitle',  'titleError'],
+        ['eventDept',   'deptError'],
+        ['eventDate',   'dateError'],
+        ['eventTime',   'timeError'],
+        ['eventVenue',  'venueError'],
+        ['eventDesc',   'descError'],
+        ['regDeadline', 'deadlineError'],
       ];
-      checks.forEach(([inputId, errorId, fn])=>{
-        const inp = document.getElementById(inputId);
-        const err = document.getElementById(errorId);
-        if(!inp||!err) return;
-        const ok = fn(inp.value);
-        inp.classList.toggle('error', !ok);
-        err.classList.toggle('show', !ok);
-        if(!ok) valid=false;
+      checks.forEach(([id, err]) => {
+        const el = document.getElementById(id);
+        const errEl = document.getElementById(err);
+        const empty = !el.value.trim();
+        el.classList.toggle('error', empty);
+        errEl && errEl.classList.toggle('show', empty);
+        if (empty) ok = false;
       });
-      return valid;
+      return ok;
     }
 
-    /* ── GATHER FORM DATA ── */
-    function getFormData() {
-      return {
-        title:       document.getElementById('eventTitle').value.trim(),
-        department:  document.getElementById('eventDept').value,
-        organizer:   document.getElementById('organizerName').value.trim(),
-        description: document.getElementById('eventDesc').value.trim(),
-        tags, date:  document.getElementById('eventDate').value,
-        time:        document.getElementById('eventTime').value,
-        endTime:     document.getElementById('eventEndTime').value,
-        venue:       document.getElementById('eventVenue').value.trim(),
-        mode:        document.getElementById('eventMode').value,
-        status:      document.getElementById('eventStatus').value,
-        capacity:    document.getElementById('maxCapacity').value,
-        deadline:    document.getElementById('regDeadline').value,
-        seats:       document.getElementById('totalSeats').value,
-        seatsAvail:  document.getElementById('seatsAvail').value,
-        coordName:   document.getElementById('coordName').value.trim(),
-        coordEmail:  document.getElementById('coordEmail').value.trim(),
-        coordPhone:  document.getElementById('coordPhone').value.trim(),
-      };
+    function validateStep2() {
+      let ok = true;
+      const checks = [
+        ['coordName',  'coordError'],
+        ['coordEmail', 'emailError'],
+        ['coordPhone', 'phoneError'],
+      ];
+      checks.forEach(([id, err]) => {
+        const el = document.getElementById(id);
+        const errEl = document.getElementById(err);
+        const empty = !el.value.trim();
+        el.classList.toggle('error', empty);
+        errEl && errEl.classList.toggle('show', empty);
+        if (empty) ok = false;
+      });
+      const email = document.getElementById('coordEmail');
+      if (email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+        email.classList.add('error');
+        document.getElementById('emailError').classList.add('show');
+        ok = false;
+      }
+      return ok;
     }
 
-    const DEPT_COLORS = { 'computer-science':'#6366f1','mathematics':'#8b5cf6','physics':'#ec4899','chemistry':'#f59e0b','biology':'#10b981','english':'#3b82f6','history':'#ef4444','management':'#0ea5e9','commerce':'#14b8a6','arts':'#f97316','law':'#8b5cf6' };
-    const DEPT_NAMES  = { 'computer-science':'Computer Science','mathematics':'Mathematics','physics':'Physics','chemistry':'Chemistry','biology':'Biology','english':'English','history':'History','management':'Management','commerce':'Commerce','arts':'Arts & Design','law':'Law' };
-    const DEPT_ICONS2 = { 'computer-science':'fa-laptop-code','mathematics':'fa-square-root-alt','physics':'fa-atom','chemistry':'fa-flask','biology':'fa-dna','english':'fa-book-open','history':'fa-landmark','management':'fa-briefcase','commerce':'fa-chart-line','arts':'fa-palette','law':'fa-balance-scale' };
-    function fmtDate(d){ if(!d)return'—'; return new Date(d).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}); }
-    function fmtTime(t){ if(!t)return'—'; const[h,m]=t.split(':'); const hh=parseInt(h); return`${hh%12||12}:${m} ${hh>=12?'PM':'AM'}`; }
+    /* ── PUBLISH ── */
+    function publishEvent() {
+      if (currentStep === 1 && !validateStep1()) { showToast('Fill all required fields', 'error'); return; }
+      if (currentStep === 2 && !validateStep1()) { showToast('Fill all required fields in Step 1', 'error'); return; }
+      if (!validateStep2()) { showToast('Fill all required fields', 'error'); return; }
+      const title = document.getElementById('eventTitle').value.trim() || 'Event';
+      showToast(`"${title}" published successfully! 🎉`);
+      setTimeout(() => { window.location.href = 'index.html'; }, 2500);
+    }
+
+    document.getElementById('publishBtn').addEventListener('click', publishEvent);
+    document.getElementById('publishDirectBtn').addEventListener('click', publishEvent);
+    document.getElementById('previewPublish').addEventListener('click', () => { closePreview(); publishEvent(); });
 
     /* ── PREVIEW ── */
-    document.getElementById('previewBtn').addEventListener('click', ()=>{
-      const data  = getFormData();
-      const color = DEPT_COLORS[data.department]||'#6366f1';
-      const dname = DEPT_NAMES[data.department]||data.department;
-      const icon  = DEPT_ICONS2[data.department]||'fa-calendar';
+    const DEPT_COLORS = { 'computer-science':'#6366f1','mathematics':'#8b5cf6','physics':'#ec4899','chemistry':'#f59e0b','biology':'#10b981','english':'#3b82f6','history':'#ef4444','management':'#0ea5e9','commerce':'#14b8a6','arts':'#f97316','law':'#8b5cf6' };
+    const DEPT_NAMES  = { 'computer-science':'Computer Science','mathematics':'Mathematics','physics':'Physics','chemistry':'Chemistry','biology':'Biology','english':'English','history':'History','management':'Management','commerce':'Commerce','arts':'Arts & Design','law':'Law' };
+    const DEPT_ICONS  = { 'computer-science':'fa-laptop-code','mathematics':'fa-square-root-alt','physics':'fa-atom','chemistry':'fa-flask','biology':'fa-dna','english':'fa-book-open','history':'fa-landmark','management':'fa-briefcase','commerce':'fa-chart-line','arts':'fa-palette','law':'fa-balance-scale' };
+    function fmtDate(d){ if(!d) return '—'; return new Date(d).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}); }
+    function fmtTime(t){ if(!t) return '—'; const[h,m]=t.split(':'); const hh=parseInt(h); return`${hh%12||12}:${m} ${hh>=12?'PM':'AM'}`; }
+
+    document.getElementById('previewBtn').addEventListener('click', () => {
+      const title  = document.getElementById('eventTitle').value.trim();
+      const dept   = document.getElementById('eventDept').value;
+      const date   = document.getElementById('eventDate').value;
+      const time   = document.getElementById('eventTime').value;
+      const endT   = document.getElementById('eventEndTime').value;
+      const venue  = document.getElementById('eventVenue').value.trim();
+      const desc   = document.getElementById('eventDesc').value.trim();
+      const cap    = document.getElementById('maxCapacity').value;
+      const mode   = document.getElementById('eventMode').value;
+      const type   = document.getElementById('eventType').value;
+      const color  = DEPT_COLORS[dept] || '#6366f1';
+      const dname  = DEPT_NAMES[dept]  || dept;
+      const icon   = DEPT_ICONS[dept]  || 'fa-calendar';
+
       document.getElementById('previewBand').style.background = `linear-gradient(135deg,${color}dd,${color}88)`;
-      document.getElementById('previewTitle').textContent = data.title||'(No title)';
-      document.getElementById('previewDesc').textContent  = data.description||'No description provided.';
+      document.getElementById('previewTitle').textContent = title || '(No title)';
+      document.getElementById('previewDesc').textContent  = desc  || 'No description provided.';
       document.getElementById('previewChips').innerHTML = `
-        <span class="preview-chip" style="background:${color}22;color:${color};"><i class="fas ${icon}" style="font-size:11px;margin-right:5px;"></i>${dname}</span>
-        <span class="preview-chip" style="background:#d1fae5;color:#059669;">${data.status||'Upcoming'}</span>
-        ${tags.map(t=>`<span class="preview-chip" style="background:var(--surface2);color:var(--text-soft);">${t}</span>`).join('')}`;
-      document.getElementById('previewInfoGrid').innerHTML = `
-        <div class="preview-info-cell"><div class="preview-info-label">Date</div><div class="preview-info-value">${fmtDate(data.date)}</div></div>
-        <div class="preview-info-cell"><div class="preview-info-label">Time</div><div class="preview-info-value">${fmtTime(data.time)}${data.endTime?' – '+fmtTime(data.endTime):''}</div></div>
-        <div class="preview-info-cell"><div class="preview-info-label">Venue</div><div class="preview-info-value">${data.venue||'—'}</div></div>
-        <div class="preview-info-cell"><div class="preview-info-label">Capacity</div><div class="preview-info-value">${data.capacity} seats</div></div>
-        <div class="preview-info-cell"><div class="preview-info-label">Organizer</div><div class="preview-info-value">${data.organizer||'—'}</div></div>
-        <div class="preview-info-cell"><div class="preview-info-label">Reg. Deadline</div><div class="preview-info-value">${fmtDate(data.deadline)}</div></div>`;
-      const band = document.getElementById('previewBand');
+        <span class="preview-chip" style="background:${color}22;color:${color}"><i class="fas ${icon}" style="font-size:10px;margin-right:4px;"></i>${dname}</span>
+        <span class="preview-chip" style="background:#d1fae5;color:#059669">${type.charAt(0).toUpperCase()+type.slice(1)}</span>
+        <span class="preview-chip" style="background:var(--surface);color:var(--text-soft)">${mode.charAt(0).toUpperCase()+mode.slice(1)}</span>`;
+      document.getElementById('previewGrid').innerHTML = `
+        <div class="preview-cell"><div class="preview-cell-label">DATE</div><div class="preview-cell-val">${fmtDate(date)}</div></div>
+        <div class="preview-cell"><div class="preview-cell-label">TIME</div><div class="preview-cell-val">${fmtTime(time)}${endT?' – '+fmtTime(endT):''}</div></div>
+        <div class="preview-cell"><div class="preview-cell-label">VENUE</div><div class="preview-cell-val">${venue||'—'}</div></div>
+        <div class="preview-cell"><div class="preview-cell-label">CAPACITY</div><div class="preview-cell-val">${cap} seats</div></div>`;
+
+      const band   = document.getElementById('previewBand');
       const oldImg = band.querySelector('.poster-img-fill');
-      if(oldImg) oldImg.remove();
-      if(posterDataUrl){
-        band.style.cssText = '';
-        band.classList.add('has-poster');
+      if (oldImg) oldImg.remove();
+      if (posterDataUrl) {
+        band.style.background = '#000';
         const img = document.createElement('img');
         img.className = 'poster-img-fill';
         img.src = posterDataUrl;
         band.insertBefore(img, band.firstChild);
         document.getElementById('previewIcon').style.display = 'none';
       } else {
-        band.classList.remove('has-poster');
-        band.style.cssText = '';
         document.getElementById('previewIcon').style.display = '';
         document.getElementById('previewIcon').innerHTML = `<i class="fas ${icon}"></i>`;
       }
       document.getElementById('previewBackdrop').classList.add('open');
-      document.body.style.overflow='hidden';
+      document.body.style.overflow = 'hidden';
     });
+
+    function closePreview() { document.getElementById('previewBackdrop').classList.remove('open'); document.body.style.overflow = ''; }
     document.getElementById('previewClose').addEventListener('click', closePreview);
-    document.getElementById('previewEditBtn').addEventListener('click', closePreview);
-    document.getElementById('previewBackdrop').addEventListener('click', e=>{ if(e.target===document.getElementById('previewBackdrop')) closePreview(); });
-    function closePreview(){ document.getElementById('previewBackdrop').classList.remove('open'); document.body.style.overflow=''; }
-    document.getElementById('previewPublish').addEventListener('click', ()=>{ closePreview(); publishEvent(); });
+    document.getElementById('previewEdit').addEventListener('click', closePreview);
+    document.getElementById('previewBackdrop').addEventListener('click', e => { if(e.target === document.getElementById('previewBackdrop')) closePreview(); });
 
     /* ── SAVE DRAFT ── */
-    document.getElementById('saveDraftBtn').addEventListener('click', ()=>{
-      try { localStorage.setItem('jain_event_draft', JSON.stringify(getFormData())); } catch(e){}
-      showToast('Draft saved successfully ✓');
+    document.getElementById('saveDraftBtn').addEventListener('click', () => {
+      try {
+        const data = {
+          title: document.getElementById('eventTitle').value,
+          dept: document.getElementById('eventDept').value,
+          date: document.getElementById('eventDate').value,
+          time: document.getElementById('eventTime').value,
+          venue: document.getElementById('eventVenue').value,
+          desc: document.getElementById('eventDesc').value,
+          coordName: document.getElementById('coordName').value,
+          coordEmail: document.getElementById('coordEmail').value,
+          coordPhone: document.getElementById('coordPhone').value,
+        };
+        localStorage.setItem('jain_event_draft_v2', JSON.stringify(data));
+      } catch(e){}
+      showToast('Draft saved ✓');
     });
 
-    /* ── PUBLISH ── */
-    function publishEvent() {
-      if(!validateForm()) {
-        showToast('Please fill all required fields', 'error');
-        const firstErr = document.querySelector('.form-input.error, .form-select.error');
-        if(firstErr) firstErr.scrollIntoView({behavior:'smooth', block:'center'});
-        return;
-      }
-      const data = getFormData();
-      showToast(`"${data.title}" published successfully! 🎉`);
-      setTimeout(()=>{ window.location.href='index.html'; }, 2500);
-    }
-    document.getElementById('publishBtn').addEventListener('click', publishEvent);
-
-    /* ── CLEAR FORM ── */
-    document.getElementById('clearFormBtn').addEventListener('click', ()=>{
-      if(!confirm('Clear all fields and start over?')) return;
+    /* ── CLEAR ── */
+    document.getElementById('clearFormBtn').addEventListener('click', () => {
+      if(!confirm('Clear all fields?')) return;
       document.getElementById('mainEventForm').reset();
-      tags=[]; renderTags();
-      posterFile=null; posterDataUrl=null;
+      posterFile = null; posterDataUrl = null;
       document.getElementById('uploadPreview').classList.remove('show');
-      document.querySelectorAll('.form-input.error,.form-select.error').forEach(el=>el.classList.remove('error'));
-      document.querySelectorAll('.form-error.show').forEach(el=>el.classList.remove('show'));
-      document.querySelectorAll('.radio-option').forEach(opt=>opt.classList.remove('selected'));
-      document.querySelectorAll('.radio-group').forEach(g=>{ const first=g.querySelector('.radio-option'); if(first) first.classList.add('selected'); });
+      document.getElementById('eventMode').value = 'offline';
+      document.querySelectorAll('#modeGroup .mode-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+      document.querySelectorAll('.form-input.error,.form-select.error,.form-textarea.error').forEach(el => el.classList.remove('error'));
+      document.querySelectorAll('.form-error.show').forEach(el => el.classList.remove('show'));
       showToast('Form cleared');
     });
 
+    /* ── TOAST ── */
+    let toastTimer;
+    function showToast(msg, type='success') {
+      const t = document.getElementById('toast');
+      const icon = document.getElementById('toastIcon');
+      document.getElementById('toastMsg').textContent = msg;
+      t.className = 'toast' + (type==='error' ? ' error' : '');
+      icon.className = 'toast-icon fas ' + (type==='error' ? 'fa-exclamation-circle' : 'fa-check-circle');
+      void t.offsetWidth;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+    }
+
     /* ── LOAD DRAFT ── */
-    document.addEventListener('DOMContentLoaded', ()=>{
+    document.addEventListener('DOMContentLoaded', () => {
       try {
-        const draft = JSON.parse(localStorage.getItem('jain_event_draft'));
-        if(draft && draft.title) {
-          if(confirm(`Restore saved draft "${draft.title}"?`)) {
-            if(draft.title)       document.getElementById('eventTitle').value=draft.title;
-            if(draft.department)  document.getElementById('eventDept').value=draft.department;
-            if(draft.organizer)   document.getElementById('organizerName').value=draft.organizer;
-            if(draft.description) document.getElementById('eventDesc').value=draft.description;
-            if(draft.date)        document.getElementById('eventDate').value=draft.date;
-            if(draft.time)        document.getElementById('eventTime').value=draft.time;
-            if(draft.venue)       document.getElementById('eventVenue').value=draft.venue;
-            if(draft.coordName)   document.getElementById('coordName').value=draft.coordName;
-            if(draft.coordEmail)  document.getElementById('coordEmail').value=draft.coordEmail;
-            if(draft.coordPhone)  document.getElementById('coordPhone').value=draft.coordPhone;
-            if(draft.tags && Array.isArray(draft.tags)) { tags=draft.tags; renderTags(); }
-            showToast('Draft restored');
-          }
+        const draft = JSON.parse(localStorage.getItem('jain_event_draft_v2'));
+        if (draft && draft.title && confirm(`Restore draft "${draft.title}"?`)) {
+          Object.entries({
+            eventTitle: draft.title, eventDept: draft.dept, eventDate: draft.date,
+            eventTime: draft.time, eventVenue: draft.venue, eventDesc: draft.desc,
+            coordName: draft.coordName, coordEmail: draft.coordEmail, coordPhone: draft.coordPhone,
+          }).forEach(([id, val]) => { if(val) document.getElementById(id).value = val; });
+          showToast('Draft restored');
         }
       } catch(e){}
     });
 
-    document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closePreview(); closeSidebar(); } });
+    document.addEventListener('keydown', e => { if(e.key==='Escape') { closePreview(); closeSidebar(); } });
+
+    /* ── SIDEBAR ── */
+    function openSidebar()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarBackdrop').classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarBackdrop').classList.remove('open'); document.body.style.overflow = ''; }
+    document.getElementById('hamburgerBtn').addEventListener('click', openSidebar);
+    document.getElementById('sidebarCloseBtn').addEventListener('click', closeSidebar);
+    document.getElementById('sidebarBackdrop').addEventListener('click', closeSidebar);
   </script>
 </body>
 </html>
