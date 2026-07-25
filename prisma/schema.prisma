@@ -1,0 +1,379 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  name              String
+  password          String
+  role              UserRole  @default(STUDENT)
+  department        String
+  year              Int?
+  branch            String?
+  avatar            String?
+  phone             String?
+  bio               String?
+  skills            String[]
+  interests         String[]
+  linkedin          String?
+  github            String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  events            Event[]
+  registrations     Registration[]
+
+  @@index([email])
+  @@index([department])
+}
+
+enum UserRole {
+  STUDENT
+  FACULTY
+  COORDINATOR
+  ADMIN
+  HOD
+  DEAN
+}
+
+model Department {
+  id                String    @id @default(cuid())
+  name              String    @unique
+  code              String    @unique
+  color             String
+  icon              String?
+  isActive          Boolean   @default(true)
+}
+
+model Club {
+  id                String    @id @default(cuid())
+  name              String    @unique
+  department        String
+  description       String?
+  logo              String?
+  isActive          Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  events            Event[]
+}
+
+model Event {
+  id                String    @id @default(cuid())
+  title             String
+  description       String    @db.Text
+  clubId            String
+  type              EventType
+  category          String?   // Event category (academic, cultural, technical, etc.)
+  theme             String?
+  school            String?   // School/College
+  venue             String
+  mode              EventMode
+  startDate         DateTime
+  endDate           DateTime
+  maxCapacity       Int
+  currentCapacity   Int       @default(0)
+  budget            Decimal?
+  actualCost        Decimal?
+  status            EventStatus @default(UPCOMING)
+  approvalStatus    ApprovalStatus @default(PENDING) // Approval workflow status
+  poster            String?
+  qrCode            String?   // QR Code image URL
+  tags              String[]
+  createdBy         String
+  facultyCoordinator String?   // Faculty coordinator name
+  facultyIncharge   String?   // Faculty in-charge
+  studentCoordinators String[] // Student coordinators list
+  contactInfo       Json?     // Contact information (phone, email, etc.)
+  sponsorshipDetails Json?     // Sponsorship information
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  club              Club      @relation(fields: [clubId], references: [id])
+  creator           User      @relation(fields: [createdBy], references: [id])
+  proposal          EventProposal?
+  report            EventReport?
+  reviews           Review[]
+  registrations     Registration[]
+  photos            Photo[]
+
+  @@index([clubId])
+  @@index([startDate])
+  @@index([status])
+  @@index([type])
+  @@index([approvalStatus])
+}
+
+enum EventType {
+  WORKSHOP
+  SEMINAR
+  LECTURE
+  SYMPOSIUM
+  COMPETITION
+  CULTURAL
+  HACKATHON
+  CONFERENCE
+  PANEL_DISCUSSION
+  EXHIBITION
+  OTHER
+}
+
+enum EventMode {
+  OFFLINE
+  ONLINE
+  HYBRID
+}
+
+enum EventStatus {
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+  POSTPONED
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  UNDER_REVIEW
+}
+
+model Review {
+  id                String    @id @default(cuid())
+  eventId           String
+  userId            String?
+  rating            Int
+  liked             String[]
+  disliked          String[]
+  suggestions       String    @db.Text
+  freeText          String    @db.Text
+  isAnonymous       Boolean   @default(false)
+  department        String?
+  year              Int?
+  branch            String?
+  role              UserRole?
+  attendance        AttendanceStatus
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  event             Event     @relation(fields: [eventId], references: [id])
+  
+  @@index([eventId])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([rating])
+}
+
+enum AttendanceStatus {
+  ATTENDED
+  REGISTERED_DIDNT_ATTEND
+  DIDNT_REGISTER
+}
+
+model Registration {
+  id                String    @id @default(cuid())
+  eventId           String
+  userId            String
+  status            RegistrationStatus @default(REGISTERED)
+  registeredAt      DateTime  @default(now())
+  attendedAt        DateTime?
+  certificateIssued Boolean   @default(false)
+
+  event             Event     @relation(fields: [eventId], references: [id])
+  user              User      @relation(fields: [userId], references: [id])
+
+  @@unique([eventId, userId])
+  @@index([eventId])
+  @@index([userId])
+  @@index([status])
+}
+
+enum RegistrationStatus {
+  REGISTERED
+  ATTENDED
+  CANCELLED
+}
+
+model Photo {
+  id                String   @id @default(cuid())
+  eventId           String
+  url               String
+  caption           String?
+  albumTag          String    @default("General")
+  uploadedBy        String?
+  uploadedAt        DateTime @default(now())
+  
+  event             Event    @relation(fields: [eventId], references: [id])
+  
+  @@index([eventId])
+  @@index([albumTag])
+}
+
+// ============================================
+// PROPOSAL & REPORT MODELS
+// ============================================
+
+model EventProposal {
+  id                    String   @id @default(cuid())
+  eventId               String   @unique
+  status                ProposalStatus @default(DRAFT)
+  
+  // User Input Fields
+  eventName             String
+  eventType             String
+  eventCategory         String?
+  eventTheme            String
+  proposedDate          DateTime
+  eventTime             String
+  venue                 String
+  mode                  String
+  facultyCoordinator    String
+  facultyIncharge       String?
+  studentCoordinators   String[]
+  clubName              String
+  department            String
+  school                String?
+  clubHead              String?   // Club head name
+  departmentHead        String?   // Department head (HOD)
+  resourcePerson        Json?
+  expectedParticipants  Int
+  budgetItems           Json
+  logistics             Json
+  registrationLink      String?
+  brochureLink          String?
+  qrCode                String?   // QR Code image URL
+  contactInfo           Json?     // Contact information
+  sponsorshipDetails    Json?     // Sponsorship information
+  
+  // AI-Generated Fields
+  description           String   @db.Text
+  objectives            String[]
+  targetAudience        String
+  eventSchedule         Json
+  publicityPlan         String   @db.Text
+  expectedOutcomes      String[]
+  risksAndMitigation    String   @db.Text
+  
+  // Generated Files
+  aiJson                Json
+  latexContent          String   @db.Text
+  pdfUrl                String?
+  texFile               String?
+  
+  // Metadata
+  generatedAt           DateTime?
+  regeneratedAt         DateTime?
+  version               Int      @default(1)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  
+  event                 Event    @relation(fields: [eventId], references: [id])
+  
+  @@index([eventId])
+  @@index([status])
+}
+
+model EventReport {
+  id                    String   @id @default(cuid())
+  eventId               String   @unique
+  status                ReportStatus @default(DRAFT)
+  
+  // User Input Fields
+  eventName             String
+  date                  DateTime
+  time                  String
+  venue                 String
+  eventType             String
+  eventCategory         String?
+  organizer             String
+  facultyCoordinator    String
+  facultyIncharge       String?
+  studentCoordinators   String[]
+  resourcePerson        Json?
+  actualParticipants    Int
+  participantStats      Json
+  budgetUtilized        Json
+  links                 Json
+  socialMediaLinks      String[]
+  photos                Json
+  qrCode                String?   // QR Code image URL
+  contactInfo           Json?     // Contact information
+  sponsorshipDetails    Json?     // Sponsorship information
+  
+  // AI-Generated Fields
+  description           String   @db.Text
+  objectives            String[]
+  eventProceedings      String   @db.Text
+  keyHighlights         String[]
+  learningOutcomes      String[]
+  feedbackSummary       String   @db.Text
+  mediaCoverage         String   @db.Text
+  futureRecommendations String   @db.Text
+  conclusion            String   @db.Text
+  
+  // Generated Files
+  aiJson                Json
+  latexContent          String   @db.Text
+  pdfUrl                String?
+  texFile               String?
+  
+  // Metadata
+  generatedAt           DateTime?
+  regeneratedAt         DateTime?
+  version               Int      @default(1)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  
+  event                 Event    @relation(fields: [eventId], references: [id])
+  
+  @@index([eventId])
+  @@index([status])
+}
+
+enum ProposalStatus {
+  DRAFT
+  GENERATED
+  APPROVED
+  REJECTED
+}
+
+enum ReportStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+model EventIdea {
+  id                    String   @id @default(cuid())
+  title                 String
+  description           String
+  department            String
+  eventType             String
+  proposedDate          DateTime
+  expectedAudience      String?
+  resourcesNeeded       String?
+  estimatedBudget       String?
+  additionalNotes       String?
+  status                IdeaStatus @default(PENDING)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([department])
+  @@index([status])
+  @@index([proposedDate])
+}
+
+enum IdeaStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}

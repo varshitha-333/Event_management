@@ -1,0 +1,110 @@
+# Dependencies
+node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env
+.env*.local
+.env.production
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Prisma
+prisma/migrations/
+
+# Generated files
+/public/proposals/
+/public/reports/
+*.pdf
+*.tex
+
+# Temporary LaTeX files
+latex-*/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+logs
+*.log
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads
+/uploads/
+/temp/
+.env
+.vscode
+files (6)
+jain_template_tex_pipeline_fix
+latex generation
+node_modules
+.env
+AI_EVENT_INTELLIGENCE_SYSTEM.md
+app.js
+auth_guard_snippet.html
+auth.js
+bento.css
+bento.html
+bento.js
+CLIENT_PRESENTATION.md
+code
+compile.py
+Event registration.html
+event_proposal_template.aux
+event_proposal_template.log
+event_proposal_template.out
+index.html
+login.html
+manage_event.html
+miktex-installer.exe
+navigation.css
+navigation.html
+PROPOSAL_REPORT_SYSTEM.md
+register-event.html
+register.html
+test-latex-flow.js
+test-proposal.pdf
+test-report-flow.js
+test-report.pdf
+bento.js
+index.html
+manage_event.html
+app.js
+regiser-event.html
