@@ -47,8 +47,10 @@ export default function RegisterEvent() {
   });
   const [posterFile, setPosterFile] = useState<File | null>(null);
   const [posterPreview, setPosterPreview] = useState<string | null>(null);
+  const [posterUrl, setPosterUrl] = useState<string | null>(null);
   const [qrCodeFile, setQrCodeFile] = useState<File | null>(null);
   const [qrCodePreview, setQrCodePreview] = useState<string | null>(null);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
@@ -130,22 +132,46 @@ export default function RegisterEvent() {
     setFormData({ ...formData, maxCapacity: newValue });
   };
 
-  const handlePosterUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePosterUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) {
       showToastMsg('File too large (max 5 MB)', true);
       return;
     }
+    
     setPosterFile(file);
     const reader = new FileReader();
     reader.onload = (ev) => {
       setPosterPreview(ev.target?.result as string);
     };
     reader.readAsDataURL(file);
+    
+    // Upload to server and get URL
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('type', 'poster');
+      
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setPosterUrl(data.url);
+        console.log('[UPLOAD] Poster uploaded:', data.url);
+      } else {
+        showToastMsg('Failed to upload poster', true);
+      }
+    } catch (error) {
+      console.error('[UPLOAD] Poster upload error:', error);
+      showToastMsg('Failed to upload poster', true);
+    }
   };
 
-  const handleQrCodeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQrCodeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     
@@ -168,6 +194,29 @@ export default function RegisterEvent() {
       setQrCodePreview(ev.target?.result as string);
     };
     reader.readAsDataURL(file);
+    
+    // Upload to server and get URL
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('type', 'qr');
+      
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setQrCodeUrl(data.url);
+        console.log('[UPLOAD] QR code uploaded:', data.url);
+      } else {
+        showToastMsg('Failed to upload QR code', true);
+      }
+    } catch (error) {
+      console.error('[UPLOAD] QR code upload error:', error);
+      showToastMsg('Failed to upload QR code', true);
+    }
   };
 
   const removeQrCode = () => {
@@ -249,7 +298,8 @@ export default function RegisterEvent() {
           mode: formData.eventMode,
           maxCapacity: formData.maxCapacity,
           clubId: formData.organizerName || undefined,
-          qrCode: qrCodePreview || null
+          poster: posterUrl || null,
+          qrCode: qrCodeUrl || null
         })
       });
 
@@ -803,7 +853,7 @@ export default function RegisterEvent() {
                     <button
                       type="button"
                       className="wizard-btn wizard-btn-next"
-                      onClick={() => handleGenerateProposal(createdEventId)}
+                      onClick={() => createdEventId && handleGenerateProposal(createdEventId)}
                       disabled={isGeneratingProposal}
                       style={{
                         background: 'linear-gradient(135deg,var(--navy),var(--navy-light))',

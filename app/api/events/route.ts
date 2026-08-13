@@ -1,8 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient, EventType, EventMode } from '@prisma/client';
 import { getAuthUser } from '@/lib/auth';
+import prisma, { withRetry } from '@/lib/prisma';
 
-const prisma = new PrismaClient();
+const prismaClient = new PrismaClient();
+
+// Background function to generate proposal without blocking the response
+async function generateProposalInBackground(eventId: string) {
+  try {
+    console.log(`[BACKGROUND-PROPOSAL] Starting generation for event ${eventId}`);
+    
+    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/proposal/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ eventId })
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      console.log(`[BACKGROUND-PROPOSAL] Successfully generated proposal for event ${eventId}`);
+    } else {
+      console.error(`[BACKGROUND-PROPOSAL] Failed to generate proposal for event ${eventId}: ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error(`[BACKGROUND-PROPOSAL] Error generating proposal for event ${eventId}:`, error);
+  }
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -42,7 +65,7 @@ export async function GET(request: NextRequest) {
       ];
     }
 
-    const events = await prisma.event.findMany({
+    const events = await withRetry(() => prisma.event.findMany({
       where,
       include: {
         club: true,
@@ -57,7 +80,9 @@ export async function GET(request: NextRequest) {
       orderBy: {
         startDate: 'asc'
       }
-    });
+    }));
+
+    console.log(`[EVENTS] Fetched ${events.length} events`);
 
     // Transform events to match frontend format
     const transformedEvents = events.map((event: any) => ({
@@ -126,7 +151,9 @@ export async function POST(request: NextRequest) {
       mode,
       maxCapacity,
       clubId,
-      qrCode
+      poster,
+      qrCode,
+      generateProposal
     } = body;
 
     if (!title || !description || !startDate || !venue) {
@@ -215,9 +242,21 @@ export async function POST(request: NextRequest) {
         status: 'UPCOMING',
         clubId: resolvedClubId,
         createdBy: authUser.userId,
+        poster: poster || null,
         qrCode: qrCode || null
       }
     });
+
+    console.log(`[EVENT] Event created: ${event.id}`);
+
+    // Trigger proposal generation in background if requested
+    if (body.generateProposal === true) {
+      console.log(`[EVENT] Triggering background proposal generation for event ${event.id}`);
+      // Fire and forget - don't await
+      generateProposalInBackground(event.id).catch(error => {
+        console.error(`[EVENT] Background proposal generation failed for event ${event.id}:`, error);
+      });
+    }
 
     return NextResponse.json(event, { status: 201 });
   } catch (error) {

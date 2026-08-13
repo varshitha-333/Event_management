@@ -69,42 +69,19 @@ logs
 # Uploads
 /uploads/
 /temp/
-.env
-.vscode
+
+# User added files
+AI_EVENT_INTELLIGENCE_SYSTEM.md
 files (6)
 jain_template_tex_pipeline_fix
 latex generation
-node_modules
-.env
-AI_EVENT_INTELLIGENCE_SYSTEM.md
-app.js
-auth_guard_snippet.html
-auth.js
-bento.css
-bento.html
-bento.js
-CLIENT_PRESENTATION.md
-code
+miktex-installer.exe
 compile.py
-Event registration.html
+CLIENT_PRESENTATION.md
+PROPOSAL_REPORT_SYSTEM.md
+test-latex-flow.js
+test-proposal.pdf
+test-report.pdf
 event_proposal_template.aux
 event_proposal_template.log
 event_proposal_template.out
-index.html
-login.html
-manage_event.html
-miktex-installer.exe
-navigation.css
-navigation.html
-PROPOSAL_REPORT_SYSTEM.md
-register-event.html
-register.html
-test-latex-flow.js
-test-proposal.pdf
-test-report-flow.js
-test-report.pdf
-bento.js
-index.html
-manage_event.html
-app.js
-regiser-event.html

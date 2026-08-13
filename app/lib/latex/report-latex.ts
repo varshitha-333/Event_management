@@ -129,8 +129,14 @@ export function buildReportLatex(
   ];
   for (let i = 0; i < 3; i++) {
     const photo = photos[i];
-    tokens[`PHOTO${i + 1}`] = photo?.url || `event_photo_${i + 1}.jpg`;
-    tokens[`PHOTO${i + 1}_CAPTION`] = photo?.caption || defaultPhotoCaptions[i];
+    // If photo has a URL, use it; otherwise use placeholder
+    if (photo && photo.url) {
+      tokens[`PHOTO${i + 1}`] = photo.url;
+      tokens[`PHOTO${i + 1}_CAPTION`] = photo.caption || defaultPhotoCaptions[i];
+    } else {
+      tokens[`PHOTO${i + 1}`] = `event_photo_${i + 1}.jpg`;
+      tokens[`PHOTO${i + 1}_CAPTION`] = defaultPhotoCaptions[i];
+    }
   }
 
   // Budget utilized (template has exactly 5 rows + a total)

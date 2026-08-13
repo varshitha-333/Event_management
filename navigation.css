@@ -1,0 +1,161 @@
+/* CSS Variables for Navigation */
+:root {
+  --navy:       #1C2B4A;
+  --navy-deep:  #111C33;
+  --navy-mid:   #2E4370;
+  --navy-light: #3A5C8C;
+  --gold:       #C8920A;
+  --gold-light: #E8B030;
+  --white:      #FFFFFF;
+  --surface:    #F4F6FB;
+  --border:     #DDE1EE;
+  --text-dark:  #0F1B33;
+  --text-mid:   #374151;
+  --text-soft:  #6B7280;
+  --text-pale:  #9CA3AF;
+  --shadow-lg:  0 12px 40px rgba(28,43,74,.18);
+  --transition: all .2s cubic-bezier(.34,1.3,.64,1);
+}
+
+/* ════════════════════════════════
+   NAVBAR
+═════════════════════════════════ */
+.navbar{
+  position:sticky;top:0;z-index:200;
+  background:var(--navy);
+  border-bottom:2px solid var(--gold);
+  box-shadow:0 4px 24px rgba(0,0,0,.22);
+  animation:slideDown .5s cubic-bezier(.34,1.1,.64,1) both;
+}
+.navbar-inner{
+  max-width:1400px;margin:0 auto;height:68px;padding:0 24px;
+  display:flex;align-items:center;gap:14px;
+}
+.hamburger-btn{
+  width:38px;height:38px;background:rgba(255,255,255,.08);
+  border:1.5px solid rgba(255,255,255,.14);border-radius:10px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  cursor:pointer;transition:var(--transition);flex-shrink:0;
+}
+.hamburger-btn:hover{background:rgba(255,255,255,.15);border-color:var(--gold)}
+.hamburger-line{width:16px;height:2px;background:#fff;border-radius:2px}
+.nav-logo-badge{
+  width:44px;height:44px;background:var(--gold);border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:900;font-size:13px;color:var(--navy);
+  flex-shrink:0;box-shadow:0 4px 12px rgba(200,146,10,.35);transition:var(--transition);
+}
+.nav-logo-badge:hover{transform:scale(1.06)}
+.nav-brand-text{display:flex;flex-direction:column;gap:1px}
+.nav-university-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:800;color:#fff;line-height:1;letter-spacing:-.2px}
+.nav-portal-name{font-size:10.5px;color:rgba(255,255,255,.5);letter-spacing:.6px;font-weight:500}
+.nav-spacer{flex:1}
+.nav-action-btn{
+  display:inline-flex;align-items:center;gap:7px;padding:8px 16px;
+  border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;transition:var(--transition);white-space:nowrap;text-decoration:none;
+}
+.nav-btn-gold{background:var(--gold);color:var(--navy);border:none;box-shadow:0 2px 8px rgba(200,146,10,.3)}
+.nav-btn-gold:hover{background:var(--gold-light);transform:scale(1.02)}
+.nav-btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.22)}
+.nav-btn-ghost:hover{border-color:var(--gold);color:var(--gold-light)}
+.profile-wrapper{position:relative}
+.profile-avatar-btn{
+  width:38px;height:38px;background:linear-gradient(135deg,var(--navy-mid),var(--navy-light));
+  border:2px solid rgba(200,146,10,.5);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:800;color:#fff;
+  cursor:pointer;transition:var(--transition);position:relative;
+}
+.profile-avatar-btn:hover{border-color:var(--gold);transform:scale(1.05)}
+.profile-online-dot{
+  position:absolute;bottom:1px;right:1px;width:8px;height:8px;
+  background:#22c55e;border-radius:50%;border:1.5px solid var(--navy);
+  animation:pulse-dot 2s infinite;
+}
+.profile-dropdown{
+  position:absolute;top:calc(100% + 10px);right:0;width:196px;
+  background:#fff;border:1px solid var(--border);border-radius:14px;
+  box-shadow:var(--shadow-lg);padding:8px;
+  transform:translateY(6px) scale(.97);opacity:0;pointer-events:none;
+  transition:transform .2s cubic-bezier(.34,1.3,.64,1),opacity .18s;z-index:300;
+}
+.profile-dropdown.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all}
+.dropdown-header{padding:8px 12px 12px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.dropdown-header-name{font-size:13px;font-weight:700;color:var(--text-dark)}
+.dropdown-header-role{font-size:11px;color:var(--text-pale)}
+.dropdown-item{
+  display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+  font-size:13px;font-weight:500;color:var(--text-mid);cursor:pointer;transition:var(--transition);text-decoration:none;
+}
+.dropdown-item:hover{background:var(--surface);color:var(--navy)}
+.dropdown-item i{width:16px;text-align:center;color:var(--text-pale);font-size:12px}
+.dropdown-item:hover i{color:var(--gold)}
+.dropdown-divider{height:1px;background:var(--border);margin:4px 0}
+
+/* ════════════════════════════════
+   SIDEBAR
+═════════════════════════════════ */
+.sidebar-backdrop{
+  position:fixed;inset:0;z-index:400;background:rgba(11,17,30,.6);
+  backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.sidebar-backdrop.open{opacity:1;pointer-events:all}
+.sidebar{
+  position:fixed;top:0;left:0;height:100%;width:278px;
+  background:var(--navy-deep);z-index:500;
+  transform:translateX(-100%);transition:transform .32s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;box-shadow:8px 0 40px rgba(0,0,0,.35);
+}
+.sidebar.open{transform:translateX(0)}
+.sidebar-header{
+  padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sidebar-logo-group{display:flex;align-items:center;gap:11px}
+.sidebar-logo-badge{
+  width:40px;height:40px;background:var(--gold);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:900;color:var(--navy);
+}
+.sidebar-close-btn{
+  width:30px;height:30px;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.6);cursor:pointer;font-size:13px;transition:var(--transition);
+}
+.sidebar-close-btn:hover{background:rgba(255,255,255,.15);color:#fff}
+.sidebar-nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:3px;overflow-y:auto}
+.sidebar-section-label{
+  font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:rgba(255,255,255,.3);padding:10px 8px 5px;
+}
+.sidebar-nav-item{
+  display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:9px;
+  font-size:13.5px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;
+  transition:var(--transition);text-decoration:none;position:relative;
+}
+.sidebar-nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.sidebar-nav-item.active{background:rgba(200,146,10,.15);color:var(--gold-light);font-weight:600}
+.sidebar-nav-item.active::before{
+  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:20px;background:var(--gold);border-radius:0 3px 3px 0;
+}
+.sidebar-nav-item i{width:17px;text-align:center;font-size:14px}
+.sidebar-nav-badge{
+  margin-left:auto;background:var(--gold);color:var(--navy);
+  font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;
+}
+.sidebar-footer{padding:14px 10px 22px;border-top:1px solid rgba(255,255,255,.08)}
+.sidebar-user-card{
+  display:flex;align-items:center;gap:11px;padding:11px;
+  background:rgba(255,255,255,.05);border-radius:11px;border:1px solid rgba(255,255,255,.08);
+}
+.sidebar-user-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--navy-mid),var(--navy-light));
+  border:2px solid rgba(200,146,10,.4);display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:#fff;flex-shrink:0;
+}
+.sidebar-user-name{font-size:12px;font-weight:600;color:#fff}
+.sidebar-user-role{font-size:10px;color:rgba(255,255,255,.4)}

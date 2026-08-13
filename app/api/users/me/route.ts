@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { getAuthUser } from '@/lib/auth';
-
-const prisma = new PrismaClient();
+import prisma, { withRetry } from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,7 +10,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await withRetry(() => prisma.user.findUnique({
       where: { id: authUser.userId },
       select: {
         id: true,
@@ -31,7 +30,7 @@ export async function GET(request: NextRequest) {
         createdAt: true,
         updatedAt: true
       }
-    });
+    }));
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });

@@ -6,6 +6,7 @@ import child_process from 'child_process';
 import { promisify } from 'util';
 import { generateProposalContentWithRetry, ProposalInput } from '@/lib/ai/proposal-generator';
 import { buildProposalLatex } from '@/lib/latex/proposal-latex';
+import { getTectonicPath } from '@/lib/latex/tectonic-setup';
 
 const execAsync = promisify(child_process.exec);
 const prisma = new PrismaClient();
@@ -142,9 +143,19 @@ export async function POST(request: NextRequest) {
 
       // Compile using Tectonic
       try {
-        await execAsync(`tectonic "${texFilePath}"`, {
+        const tectonicPath = await getTectonicPath();
+        
+        // Set environment variables for Tectonic
+        const env = {
+          ...process.env,
+          FONTCONFIG_PATH: path.join(process.cwd(), 'fonts'),
+          FONTCONFIG_FILE: path.join(process.cwd(), 'fonts', 'fonts.conf')
+        };
+        
+        await execAsync(`"${tectonicPath}" --keep-logs "${texFilePath}"`, {
           cwd: outputDir,
-          timeout: 120000
+          timeout: 180000, // 3 minute timeout
+          env
         });
         
         if (fs.existsSync(pdfFilePath)) {

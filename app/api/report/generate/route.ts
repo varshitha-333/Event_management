@@ -57,7 +57,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Fetch registrations for participant stats (photos excluded to reduce AI context length)
+    // Fetch photos for this event
+    const photos = await (prisma as any).photo.findMany({
+      where: { eventId },
+      orderBy: { uploadedAt: 'desc' }
+    });
+
+    console.log(`[REPORT-GENERATE] Fetched ${photos.length} photos for event ${eventId}`);
+
+    // Fetch registrations for participant stats
     const registrations = await prisma.registration.findMany({
       where: { eventId }
     });
@@ -140,6 +148,12 @@ export async function POST(request: NextRequest) {
       attachmentNotes: formData.attachmentNotes,
       qrCode: event.qrCode || formData.qrCode || null
     });
+
+    // Update photos in normalizedInput to include uploaded photos
+    normalizedInput.photos = photos.map((p: any) => ({
+      url: p.url,
+      caption: p.caption || ''
+    }));
 
     // Create or update report
     const report = await prisma.eventReport.upsert({

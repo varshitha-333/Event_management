@@ -220,10 +220,16 @@ function extractJsonPayload(raw: string): string {
 }
 
 export async function generateProposalContent(input: ProposalInput, templatePath?: string): Promise<ProposalOutput> {
+  const startTime = Date.now();
+  console.log('[AI-PROPOSAL] Starting generation...');
+  
   try {
+    const clientSetupStart = Date.now();
     const { client, model } = getAIProvider();
+    console.log(`[AI-PROPOSAL] Client setup: ${Date.now() - clientSetupStart}ms`);
     
     // Extract placeholders from template if path is provided
+    const placeholderExtractionStart = Date.now();
     let requiredPlaceholders: string[] = [];
     if (templatePath) {
       try {
@@ -234,7 +240,9 @@ export async function generateProposalContent(input: ProposalInput, templatePath
         console.warn('Could not extract placeholders from template:', error);
       }
     }
+    console.log(`[AI-PROPOSAL] Placeholder extraction: ${Date.now() - placeholderExtractionStart}ms`);
 
+    const promptConstructionStart = Date.now();
     let prompt = PROPOSAL_GENERATION_PROMPT.replace('{{INPUT_DATA}}', JSON.stringify(input, null, 2));
     
     // Add required placeholders to prompt if available
@@ -246,7 +254,9 @@ export async function generateProposalContent(input: ProposalInput, templatePath
     } else {
       prompt = prompt.replace('{{REQUIRED_PLACEHOLDERS}}', 'None - use standard fields');
     }
+    console.log(`[AI-PROPOSAL] Prompt construction: ${Date.now() - promptConstructionStart}ms`);
 
+    const apiCallStart = Date.now();
     const response = await client.chat.completions.create({
       model,
       messages: [
@@ -263,6 +273,7 @@ export async function generateProposalContent(input: ProposalInput, templatePath
       max_tokens: 4096,
       response_format: { type: 'json_object' }
     });
+    console.log(`[AI-PROPOSAL] AI API call: ${Date.now() - apiCallStart}ms`);
 
     console.log('AI response:', JSON.stringify(response, null, 2));
 
@@ -275,6 +286,7 @@ export async function generateProposalContent(input: ProposalInput, templatePath
       throw new Error('No content generated');
     }
 
+    const jsonParsingStart = Date.now();
     let parsed: ProposalOutput;
     try {
       parsed = JSON.parse(extractJsonPayload(content)) as ProposalOutput;
@@ -282,6 +294,10 @@ export async function generateProposalContent(input: ProposalInput, templatePath
       console.error('Raw AI content that failed to parse:', content);
       throw new Error('AI returned malformed JSON');
     }
+    console.log(`[AI-PROPOSAL] JSON parsing: ${Date.now() - jsonParsingStart}ms`);
+    
+    const totalTime = Date.now() - startTime;
+    console.log(`[AI-PROPOSAL] Total generation time: ${totalTime}ms`);
 
     // Validate structure
     if (!parsed.description || !Array.isArray(parsed.objectives) || parsed.objectives.length !== 4) {

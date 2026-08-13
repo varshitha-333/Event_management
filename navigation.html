@@ -1,0 +1,110 @@
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="hamburger-btn" id="hamburgerBtn">
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+      <div class="hamburger-line"></div>
+    </div>
+    <div class="nav-logo-badge">JU</div>
+    <div class="nav-brand-text">
+      <div class="nav-university-name">Jain University</div>
+      <div class="nav-portal-name">Events Portal</div>
+    </div>
+    <div class="nav-spacer"></div>
+    <a href="index.html" class="nav-action-btn nav-btn-gold">
+      <i class="fas fa-plus"></i> Add Event
+    </a>
+    <div class="profile-wrapper">
+      <div class="profile-avatar-btn" id="profileAvatarBtn">
+        <span id="navUserInitials">JU</span>
+        <div class="profile-online-dot"></div>
+      </div>
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="dropdown-header">
+          <div class="dropdown-header-name" id="navUserName">Jain University</div>
+          <div class="dropdown-header-role" id="navUserRole">Administrator</div>
+          <div style="font-size:10px;color:var(--text-pale);margin-top:2px;" id="navUserEmail"></div>
+        </div>
+        <a href="#" class="dropdown-item"><i class="fas fa-user"></i>My Profile</a>
+        <a href="#" class="dropdown-item"><i class="fas fa-cog"></i>Settings</a>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item" style="color:#ef4444;" onclick="event.preventDefault();window.JainAuth&&window.JainAuth.logout();">
+          <i class="fas fa-sign-out-alt" style="color:#ef4444;"></i>Sign Out
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- SIDEBAR BACKDROP -->
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo-group">
+      <div class="sidebar-logo-badge">JU</div>
+      <div style="display:flex;flex-direction:column;gap:1px;">
+        <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;color:#fff;">Jain University</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.6px;font-weight:500;">Events Portal</div>
+      </div>
+    </div>
+    <div class="sidebar-close-btn" id="sidebarCloseBtn">
+      <i class="fas fa-times"></i>
+    </div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="sidebar-section-label">MAIN</div>
+    <a href="index.html" class="sidebar-nav-item active">
+      <i class="fas fa-th-large"></i>
+      <span>Dashboard</span>
+    </a>
+    <a href="register-event.html" class="sidebar-nav-item">
+      <i class="fas fa-calendar-plus"></i>
+      <span>Create Event</span>
+    </a>
+    <a href="manage_event.html" class="sidebar-nav-item">
+      <i class="fas fa-images"></i>
+      <span>Manage Events</span>
+    </a>
+    <div class="sidebar-section-label">DEPARTMENTS</div>
+    <a href="#" class="sidebar-nav-item">
+      <i class="fas fa-laptop-code"></i>
+      <span>Computer Science</span>
+    </a>
+    <a href="#" class="sidebar-nav-item">
+      <i class="fas fa-square-root-alt"></i>
+      <span>Mathematics</span>
+    </a>
+    <a href="#" class="sidebar-nav-item">
+      <i class="fas fa-atom"></i>
+      <span>Physics</span>
+    </a>
+    <a href="#" class="sidebar-nav-item">
+      <i class="fas fa-flask"></i>
+      <span>Chemistry</span>
+    </a>
+    <a href="#" class="sidebar-nav-item">
+      <i class="fas fa-dna"></i>
+      <span>Biology</span>
+    </a>
+    <a href="#" class="sidebar-nav-item">
+      <i class="fas fa-book-open"></i>
+      <span>English</span>
+    </a>
+    <a href="#" class="sidebar-nav-item">
+      <i class="fas fa-landmark"></i>
+      <span>History</span>
+    </a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="sidebar-user-card">
+      <div class="sidebar-user-avatar" id="sidebarUserInitials">JU</div>
+      <div style="flex:1;min-width:0;">
+        <div class="sidebar-user-name" id="sidebarUserName">Jain University</div>
+        <div class="sidebar-user-role" id="sidebarUserRole">Student</div>
+      </div>
+    </div>
+  </div>
+</div>

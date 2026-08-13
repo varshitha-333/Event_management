@@ -5,6 +5,7 @@ import { promisify } from 'util';
 import { writeFile, unlink, mkdir, readFile, readdir, copyFile } from 'fs/promises';
 import { join } from 'path';
 import { tmpdir, homedir } from 'os';
+import { getTectonicPath } from '@/lib/latex/tectonic-setup';
 
 const execAsync = promisify(exec);
 const prisma = new PrismaClient();
@@ -92,10 +93,10 @@ async function compileLatexToPdf(latexContent: string): Promise<{ buffer: Buffer
     await writeFile(texFile, sanitizedContent, 'utf-8');
 
     // Use Tectonic for compilation
-    const tectonicPath = process.env.TECTONIC_PATH || 'D:\\event_folde\\Event_management\\tectonic.exe';
+    const tectonicPath = await getTectonicPath();
     const pdfFile = join(tempDir, 'document.pdf');
     
-    // Use Tectonic compilation options (simpler syntax)
+    // Use Tectonic compilation options with proper environment
     console.log('Starting Tectonic compilation...');
     console.log(`Tectonic path: ${tectonicPath}`);
     console.log(`Input file: ${texFile}`);
@@ -103,10 +104,18 @@ async function compileLatexToPdf(latexContent: string): Promise<{ buffer: Buffer
     
     const startTime = Date.now();
     
+    // Set environment variables for Tectonic
+    const env = {
+      ...process.env,
+      FONTCONFIG_PATH: join(process.cwd(), 'fonts'),
+      FONTCONFIG_FILE: join(process.cwd(), 'fonts', 'fonts.conf')
+    };
+    
     // Change to temp directory and run tectonic with correct syntax
-    const { stdout, stderr } = await execAsync(`"${tectonicPath}" "${texFile}"`, {
+    const { stdout, stderr } = await execAsync(`"${tectonicPath}" --keep-logs "${texFile}"`, {
       cwd: tempDir,
-      timeout: 120000 // 2 minute timeout
+      timeout: 180000, // 3 minute timeout
+      env
     });
     
     const compileTime = Date.now() - startTime;
