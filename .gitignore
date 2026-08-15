@@ -1,57 +1,57 @@
 # Dependencies
 node_modules
-/.pnp
+.pnp
 .pnp.js
 
 # Testing
-/coverage
+coverage
 
 # Next.js
-/.next/
-/out/
+.next
+out
 
 # Production
-/build
+build
 
 # Misc
 .DS_Store
-*.pem
+.pem
 
 # Debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+npm-debug.log
+yarn-debug.log
+yarn-error.log
 
 # Local env files
 .env
-.env*.local
+.env.local
 .env.production
 
 # Vercel
 .vercel
 
 # TypeScript
-*.tsbuildinfo
+.tsbuildinfo
 next-env.d.ts
 
 # Prisma
-prisma/migrations/
+prismamigrations
 
 # Generated files
-/public/proposals/
-/public/reports/
-*.pdf
-*.tex
+publicproposals
+publicreports
+.pdf
+
 
 # Temporary LaTeX files
-latex-*/
+latex-
 
 # IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+.vscode
+.idea
+.swp
+.swo
+~
 
 # OS
 Thumbs.db
@@ -59,16 +59,16 @@ Thumbs.db
 
 # Logs
 logs
-*.log
+.log
 
 # Database
-*.db
-*.sqlite
-*.sqlite3
+.db
+.sqlite
+.sqlite3
 
 # Uploads
-/uploads/
-/temp/
+uploads
+temp
 
 # User added files
 AI_EVENT_INTELLIGENCE_SYSTEM.md

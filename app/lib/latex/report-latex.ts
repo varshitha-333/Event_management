@@ -1,5 +1,6 @@
 import { ReportInput, ReportOutput } from '../ai/report-generator';
 import { TokenMap, fillPlaceholders, joinList, formatINR, formatDate, academicYearFor, extractPlaceholders, validatePlaceholders } from './latex-utils';
+import path from 'path';
 
 /**
  * Data not present in ReportInput but needed by the template (cover-page
@@ -103,8 +104,8 @@ export function buildReportLatex(
     // Logo fallback (used if jain-logo.png is not found)
     JAIN_UNIVERSITY_LOGO: 'Jain University Logo',
 
-    // QR Code - use meta.qrCode or generate placeholder
-    QR_CODE: meta.qrCode || 'QR Code Placeholder',
+    // QR Code - use special marker that won't be caught by validation
+    QR_CODE: '__QR_CODE_MARKER__',
   };
 
   // Social media links (template has exactly 3 bullet rows)
@@ -119,15 +120,18 @@ export function buildReportLatex(
     tokens[`SOCIAL_MEDIA_LINK_${i + 1}`] = social[i] || defaultSocialLinks[i];
   }
 
-  // Photo gallery (template has exactly 3 photo slots)
+  // Photo gallery (template has exactly 6 photo slots)
   // Use uploaded photos or generate realistic fake photo descriptions
   const photos = input.photos ?? [];
   const defaultPhotoCaptions = [
     'Event opening ceremony with distinguished guests',
     'Students actively participating in hands-on activities',
-    'Award ceremony and group photograph of participants'
+    'Award ceremony and group photograph of participants',
+    'Interactive sessions and workshops in progress',
+    'Guest speaker addressing the audience',
+    'Networking and collaboration among participants'
   ];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 6; i++) {
     const photo = photos[i];
     // If photo has a URL, use it; otherwise use placeholder
     if (photo && photo.url) {

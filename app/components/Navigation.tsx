@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 export default function Navigation() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   const openSidebar = () => {
     setIsSidebarOpen(true);
@@ -31,6 +32,24 @@ export default function Navigation() {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      try {
+        const response = await fetch('/api/users/me');
+        if (response.ok) {
+          const data = await response.json();
+          setUserRole(data.role);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user role:', error);
+      }
+    };
+
+    fetchUserRole();
+  }, []);
+
+  const isStaff = userRole && ['FACULTY', 'COORDINATOR', 'ADMIN', 'HOD', 'DEAN'].includes(userRole);
+
   return (
     <>
       {/* NAVBAR */}
@@ -47,9 +66,11 @@ export default function Navigation() {
             <div className="nav-portal-name">Events Portal</div>
           </div>
           <div className="nav-spacer"></div>
-          <a href="/register-event" className="nav-action-btn nav-btn-gold">
-            <i className="fas fa-plus"></i> Add Event
-          </a>
+          {isStaff && (
+            <a href="/register-event" className="nav-action-btn nav-btn-gold">
+              <i className="fas fa-plus"></i> Add Event
+            </a>
+          )}
           <div className="profile-wrapper">
             <div className="profile-avatar-btn" onClick={toggleDropdown}>
               <span>JU</span>
@@ -98,14 +119,18 @@ export default function Navigation() {
             <i className="fas fa-th-large"></i>
             <span>Dashboard</span>
           </a>
-          <a href="/register-event" className="sidebar-nav-item">
-            <i className="fas fa-calendar-plus"></i>
-            <span>Create Event</span>
-          </a>
-          <a href="/manage-event" className="sidebar-nav-item">
-            <i className="fas fa-images"></i>
-            <span>Manage Events</span>
-          </a>
+          {isStaff && (
+            <a href="/register-event" className="sidebar-nav-item">
+              <i className="fas fa-calendar-plus"></i>
+              <span>Create Event</span>
+            </a>
+          )}
+          {isStaff && (
+            <a href="/manage-event" className="sidebar-nav-item">
+              <i className="fas fa-images"></i>
+              <span>Manage Events</span>
+            </a>
+          )}
           <a href="/suggest-idea" className="sidebar-nav-item">
             <i className="fas fa-lightbulb"></i>
             <span>Get Suggestions</span>

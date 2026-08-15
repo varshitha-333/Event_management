@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { getTectonicPath } from '@/lib/latex/tectonic-setup';
+import prisma from '@/lib/prisma';
 import { writeFile, unlink, mkdir, readFile, readdir, copyFile } from 'fs/promises';
 import { join } from 'path';
 import { tmpdir, homedir } from 'os';
+import path from 'path';
+import fs from 'fs';
 
 const execAsync = promisify(exec);
-const prisma = new PrismaClient();
 
 /**
  * Get the next available filename in the Downloads folder.
@@ -62,50 +64,115 @@ async function validatePdf(pdfBuffer: Buffer): Promise<void> {
   console.log(`PDF validation passed: ${pdfBuffer.length} bytes`);
 }
 
-async function compileLatexToPdf(latexContent: string): Promise<{ buffer: Buffer; filename: string }> {
+async function compileLatexToPdf(latexContent: string, eventId: string): Promise<{ buffer: Buffer; filename: string }> {
   try {
     // Create temporary directory for compilation
     const tempDir = join(tmpdir(), `latex-${Date.now()}`);
     await mkdir(tempDir, { recursive: true });
+    console.log('[PROPOSAL-LATEX] Temp directory:', tempDir);
 
-    // Copy logo file to temp directory if it exists
-    const logoSource = 'D:\\event_folde\\Event_management\\jain-logo.png';
+    // Copy logo file to temp directory
+    const logoSource = join(process.cwd(), 'jain-logo.png');
     const logoDest = join(tempDir, 'jain-logo.png');
+    console.log('[PROPOSAL-LOGO] Configured logo:', logoSource);
+    console.log('[PROPOSAL-LOGO] Destination:', logoDest);
+    
     try {
-      await copyFile(logoSource, logoDest);
-      console.log('Logo file copied to temp directory');
+      if (fs.existsSync(logoSource)) {
+        const logoStats = fs.statSync(logoSource);
+        console.log('[PROPOSAL-LOGO] Exists: true');
+        console.log('[PROPOSAL-LOGO] File size:', logoStats.size, 'bytes');
+        await copyFile(logoSource, logoDest);
+        console.log('[PROPOSAL-LOGO] Copied successfully');
+      } else {
+        console.log('[PROPOSAL-LOGO] Exists: false - logo file not found');
+      }
     } catch (logoError) {
-      console.log('Logo file not found or could not be copied, compilation will use fallback');
+      console.log('[PROPOSAL-LOGO] Logo copy failed:', logoError);
+    }
+
+    // Check if QR code is referenced in LaTeX and copy it
+    // Extract QR filename from LaTeX content (it's in \includegraphics{filename})
+    const qrMatch = latexContent.match(/\\includegraphics\[.*?\]\{([^}]+)\}/);
+    let qrFilename = null;
+    let qrDest = null;
+    
+    if (qrMatch) {
+      qrFilename = qrMatch[1];
+      console.log('[PROPOSAL-QR] QR filename extracted from LaTeX:', qrFilename);
+    }
+    
+    if (qrFilename && qrFilename.includes('.png')) {
+      // QR file is referenced in LaTeX
+      const qrSource = join(process.cwd(), 'public', 'proposals', qrFilename);
+      qrDest = join(tempDir, qrFilename);
+      
+      console.log('[PROPOSAL-QR] Looking for QR at:', qrSource);
+      console.log('[PROPOSAL-QR] File exists:', fs.existsSync(qrSource));
+      
+      if (fs.existsSync(qrSource)) {
+        try {
+          await copyFile(qrSource, qrDest);
+          console.log('[PROPOSAL-QR] QR code copied to temp directory');
+        } catch (qrError) {
+          console.log('[PROPOSAL-QR] QR copy failed:', qrError);
+        }
+      } else {
+        console.log('[PROPOSAL-QR] QR source file not found, trying uploads directory');
+        // Try to find it in uploads/qr directory
+        const qrUploadSource = join(process.cwd(), 'public', 'uploads', 'qr', qrFilename);
+        console.log('[PROPOSAL-QR] Checking uploads path:', qrUploadSource);
+        
+        if (fs.existsSync(qrUploadSource)) {
+          try {
+            await copyFile(qrUploadSource, qrDest);
+            console.log('[PROPOSAL-QR] QR code copied from uploads directory');
+          } catch (qrError) {
+            console.log('[PROPOSAL-QR] QR copy from uploads failed:', qrError);
+          }
+        }
+      }
+    } else {
+      console.log('[PROPOSAL-QR] No QR filename found in LaTeX content');
     }
 
     // Write LaTeX file
     const texFile = join(tempDir, 'document.tex');
     await writeFile(texFile, latexContent, 'utf-8');
+    console.log('[PROPOSAL-LATEX] LaTeX file written:', texFile);
 
     // Use Tectonic for compilation
     const tectonicPath = process.env.TECTONIC_PATH || 'D:\\event_folde\\Event_management\\tectonic.exe';
     const pdfFile = join(tempDir, 'document.pdf');
     
-    // Use Tectonic compilation options (simpler syntax)
-    console.log('Starting Tectonic compilation...');
-    console.log(`Tectonic path: ${tectonicPath}`);
-    console.log(`Input file: ${texFile}`);
-    console.log(`Output dir: ${tempDir}`);
+    console.log('[PROPOSAL-TECTONIC] Starting compilation...');
+    console.log('[PROPOSAL-TECTONIC] Tectonic path:', tectonicPath);
+    console.log('[PROPOSAL-TECTONIC] Input file:', texFile);
+    console.log('[PROPOSAL-TECTONIC] Output dir:', tempDir);
     
     const startTime = Date.now();
     
-    // Change to temp directory and run tectonic
-    const { stdout, stderr } = await execAsync(`cd "${tempDir}" && "${tectonicPath}" "${texFile}"`, {
-      cwd: tempDir
+    // Set environment variables for Tectonic
+    const env = {
+      ...process.env,
+      FONTCONFIG_PATH: join(process.cwd(), 'fonts'),
+      FONTCONFIG_FILE: join(process.cwd(), 'fonts', 'fonts.conf')
+    };
+    
+    const { stdout, stderr } = await execAsync(`"${tectonicPath}" --keep-logs "${texFile}"`, {
+      cwd: tempDir,
+      timeout: 180000, // 3 minute timeout
+      env
     });
     
     const compileTime = Date.now() - startTime;
-    console.log(`Tectonic compilation completed in ${compileTime}ms`);
-    console.log('stdout:', stdout);
-    if (stderr) console.log('stderr:', stderr);
+    console.log(`[PROPOSAL-TECTONIC] Compilation completed in ${compileTime}ms`);
+    console.log('[PROPOSAL-TECTONIC] stdout:', stdout);
+    if (stderr) console.log('[PROPOSAL-TECTONIC] stderr:', stderr);
 
     // Read the generated PDF
     const pdfBuffer = await readFile(pdfFile);
+    console.log('[PROPOSAL-PDF] PDF buffer size:', pdfBuffer.length, 'bytes');
 
     // Validate the generated PDF
     await validatePdf(pdfBuffer);
@@ -117,25 +184,24 @@ async function compileLatexToPdf(latexContent: string): Promise<{ buffer: Buffer
     
     // Save PDF to Downloads folder
     await writeFile(outputPath, pdfBuffer);
-    console.log(`PDF saved to Downloads folder: ${outputPath}`);
-    console.log(`PDF size in Downloads: ${pdfBuffer.length} bytes`);
+    console.log('[PROPOSAL-PDF] PDF saved to Downloads:', outputPath);
 
     // Verify the saved file and return the verified buffer
     const savedBuffer = await readFile(outputPath);
-    console.log(`Verified saved PDF size: ${savedBuffer.length} bytes`);
-    console.log(`PDF signature check: ${savedBuffer.toString('ascii', 0, 5)}`);
+    console.log('[PROPOSAL-PDF] Verified saved PDF size:', savedBuffer.length, 'bytes');
 
     // Cleanup temp files
     await unlink(texFile).catch(() => {});
     await unlink(pdfFile).catch(() => {});
     await unlink(logoDest).catch(() => {});
+    if (qrDest) await unlink(qrDest).catch(() => {});
+    console.log('[PROPOSAL-CLEANUP] Temp files cleaned up');
 
     // Return the verified buffer from the saved file
     return { buffer: savedBuffer, filename };
   } catch (error) {
-    console.error('Local LaTeX compilation error:', error);
-    console.error('Error details:', error instanceof Error ? error.message : 'Unknown error');
-    throw new Error('Local LaTeX compilation failed');
+    console.error('[PROPOSAL-ERROR] LaTeX compilation error:', error);
+    throw new Error('LaTeX compilation failed');
   }
 }
 
@@ -146,18 +212,98 @@ export async function GET(
   try {
     const { eventId } = await params;
 
+    console.log(`[PROPOSAL-DOWNLOAD] eventId=${eventId}`);
+
     const proposal = await prisma.eventProposal.findUnique({
       where: { eventId }
     });
 
     if (!proposal) {
+      console.log(`[PROPOSAL-DOWNLOAD] Proposal not found for eventId=${eventId}`);
       return NextResponse.json(
         { error: 'Proposal not found' },
         { status: 404 }
       );
     }
 
-    // Use the stored LaTeX content from the database
+    console.log(`[PROPOSAL-DOWNLOAD] proposalId=${proposal.id}, status=${proposal.status}`);
+
+    // Priority 1: Fetch PDF binary data from database
+    if (proposal.pdfData) {
+      console.log('[PROPOSAL-DOWNLOAD] source=DATABASE');
+      console.log('[PROPOSAL-DOWNLOAD] proposalId=', proposal.id);
+      console.log('[PROPOSAL-DOWNLOAD] pdfBytes=', proposal.pdfData.length);
+      console.log('[PROPOSAL-DOWNLOAD] generationSkipped=true');
+      
+      const pdfBuffer = Buffer.from(proposal.pdfData);
+      
+      // Validate PDF
+      await validatePdf(pdfBuffer);
+      
+      // Get next available filename in Downloads folder
+      const filename = await getNextDownloadFilename();
+      
+      // Save PDF to Downloads folder
+      const downloadsDir = join(homedir(), 'Downloads');
+      const outputPath = join(downloadsDir, filename);
+      await writeFile(outputPath, pdfBuffer);
+      console.log(`[PROPOSAL-DOWNLOAD] PDF saved to Downloads: ${outputPath}`);
+      
+      // Return the PDF from database
+      const response = new NextResponse(pdfBuffer, {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': `attachment; filename="${filename}"`,
+          'Content-Length': pdfBuffer.length.toString(),
+          'Cache-Control': 'no-cache'
+        }
+      });
+      
+      return response;
+    }
+
+    // Priority 2: Legacy filesystem path (for backward compatibility)
+    if (proposal.pdfUrl) {
+      const pdfPath = path.join(process.cwd(), 'public', proposal.pdfUrl);
+      console.log(`[PROPOSAL-DOWNLOAD] PDF not in database, checking filesystem: ${pdfPath}`);
+      
+      try {
+        const pdfBuffer = await readFile(pdfPath);
+        await validatePdf(pdfBuffer);
+        
+        console.log(`[PROPOSAL-DOWNLOAD] Filesystem PDF found and valid (${pdfBuffer.length} bytes)`);
+        console.log(`[PROPOSAL-DOWNLOAD] generationSkipped=true, aiSkipped=true, tectonicSkipped=true`);
+        
+        // Get next available filename in Downloads folder
+        const filename = await getNextDownloadFilename();
+        
+        // Save PDF to Downloads folder
+        const downloadsDir = join(homedir(), 'Downloads');
+        const outputPath = join(downloadsDir, filename);
+        await writeFile(outputPath, pdfBuffer);
+        console.log(`[PROPOSAL-DOWNLOAD] PDF saved to Downloads: ${outputPath}`);
+        
+        // Return the stored PDF
+        const response = new NextResponse(Buffer.from(pdfBuffer), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': `attachment; filename="${filename}"`,
+            'Content-Length': pdfBuffer.length.toString(),
+            'Cache-Control': 'no-cache'
+          }
+        });
+        
+        return response;
+      } catch (pdfError) {
+        console.log(`[PROPOSAL-DOWNLOAD] Filesystem PDF not accessible, falling back to recompilation: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}`);
+      }
+    }
+
+    // Fallback: Recompile from LaTeX if PDF is not available
+    console.log(`[PROPOSAL-DOWNLOAD] No stored PDF available, recompiling from LaTeX`);
+    
     const latexContent = proposal.latexContent;
     if (!latexContent) {
       return NextResponse.json(
@@ -169,9 +315,8 @@ export async function GET(
     // Compile LaTeX to PDF using Tectonic
     let pdfResult: { buffer: Buffer; filename: string };
     try {
-      pdfResult = await compileLatexToPdf(latexContent);
-      console.log(`PDF compilation successful. Returning buffer of size: ${pdfResult.buffer.length} bytes`);
-      console.log(`Filename for download: ${pdfResult.filename}`);
+      pdfResult = await compileLatexToPdf(latexContent, eventId);
+      console.log(`[PROPOSAL-DOWNLOAD] PDF compilation successful. Returning buffer of size: ${pdfResult.buffer.length} bytes`);
     } catch (compileError) {
       console.error('LaTeX compilation error:', compileError);
       // Fallback: return LaTeX source as .tex file for manual compilation
@@ -184,7 +329,7 @@ export async function GET(
       });
     }
 
-    // Create response with the verified buffer
+    // Create response with the compiled buffer
     const response = new NextResponse(Buffer.from(pdfResult.buffer), {
       status: 200,
       headers: {
@@ -194,10 +339,6 @@ export async function GET(
         'Cache-Control': 'no-cache'
       }
     });
-    
-    console.log(`Response headers: Content-Type=${response.headers.get('Content-Type')}, Content-Disposition=${response.headers.get('Content-Disposition')}, Content-Length=${response.headers.get('Content-Length')}`);
-    console.log(`Response body size: ${pdfResult.buffer.length} bytes`);
-    console.log(`Buffer type: ${pdfResult.buffer.constructor.name}`);
     
     return response;
 

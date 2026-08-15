@@ -84,7 +84,10 @@ model Event {
   status            EventStatus @default(UPCOMING)
   approvalStatus    ApprovalStatus @default(PENDING) // Approval workflow status
   poster            String?
-  qrCode            String?   // QR Code image URL
+  qrCode            String?   // QR Code image URL (legacy, for backward compatibility)
+  qrCodeData        Bytes?    // QR Code binary data
+  qrCodeMimeType    String?   // QR Code MIME type (e.g., image/png)
+  qrCodeFilename    String?   // QR Code original filename
   tags              String[]
   createdBy         String
   facultyCoordinator String?   // Faculty coordinator name
@@ -149,6 +152,7 @@ model Review {
   id                String    @id @default(cuid())
   eventId           String
   userId            String?
+  name              String?
   rating            Int
   liked             String[]
   disliked          String[]
@@ -214,6 +218,7 @@ model Photo {
   
   @@index([eventId])
   @@index([albumTag])
+  @@index([uploadedAt])
 }
 
 // ============================================
@@ -248,7 +253,7 @@ model EventProposal {
   logistics             Json
   registrationLink      String?
   brochureLink          String?
-  qrCode                String?   // QR Code image URL
+  qrCode                String?   // QR Code image URL (legacy, for backward compatibility)
   contactInfo           Json?     // Contact information
   sponsorshipDetails    Json?     // Sponsorship information
   
@@ -260,22 +265,26 @@ model EventProposal {
   publicityPlan         String   @db.Text
   expectedOutcomes      String[]
   risksAndMitigation    String   @db.Text
-  
+
   // Generated Files
   aiJson                Json
   latexContent          String   @db.Text
-  pdfUrl                String?
+  pdfUrl                String?  // PDF URL (legacy, for backward compatibility)
+  pdfData               Bytes?   // PDF binary data
+  pdfMimeType           String?  // PDF MIME type (application/pdf)
+  pdfFilename           String?  // PDF filename
   texFile               String?
-  
+  contentHash           String?  // Hash of input data for caching
+
   // Metadata
   generatedAt           DateTime?
   regeneratedAt         DateTime?
   version               Int      @default(1)
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
-  
+
   event                 Event    @relation(fields: [eventId], references: [id])
-  
+
   @@index([eventId])
   @@index([status])
 }
@@ -303,7 +312,7 @@ model EventReport {
   links                 Json
   socialMediaLinks      String[]
   photos                Json
-  qrCode                String?   // QR Code image URL
+  qrCode                String?   // QR Code image URL (legacy, for backward compatibility)
   contactInfo           Json?     // Contact information
   sponsorshipDetails    Json?     // Sponsorship information
   
@@ -317,22 +326,26 @@ model EventReport {
   mediaCoverage         String   @db.Text
   futureRecommendations String   @db.Text
   conclusion            String   @db.Text
-  
+
   // Generated Files
   aiJson                Json
   latexContent          String   @db.Text
-  pdfUrl                String?
+  pdfUrl                String?  // PDF URL (legacy, for backward compatibility)
+  pdfData               Bytes?   // PDF binary data
+  pdfMimeType           String?  // PDF MIME type (application/pdf)
+  pdfFilename           String?  // PDF filename
   texFile               String?
-  
+  contentHash           String?  // Hash of input data for caching
+
   // Metadata
   generatedAt           DateTime?
   regeneratedAt         DateTime?
   version               Int      @default(1)
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
-  
+
   event                 Event    @relation(fields: [eventId], references: [id])
-  
+
   @@index([eventId])
   @@index([status])
 }

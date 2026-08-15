@@ -1,0 +1,527 @@
+\documentclass[12pt,a4paper]{article}
+
+% =========================
+% Packages
+% =========================
+\usepackage[a4paper,top=1.15in,bottom=1.10in,left=1.00in,right=1.00in,headheight=56pt,headsep=18pt,footskip=24pt]{geometry}
+\usepackage{fontspec}
+\IfFontExistsTF{Times New Roman}
+  {\setmainfont{Times New Roman}}
+  {\setmainfont{Liberation Serif}} % metric-compatible fallback if TNR isn't installed
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{array,booktabs,longtable,tabularx}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usepackage{eso-pic}
+\usepackage{caption}
+\usepackage[strings]{underscore} % lets raw "_" in placeholder text (e.g. CLUB_NAME) print correctly
+
+% =========================
+% Colors
+% =========================
+\definecolor{JainBlue}{HTML}{0B2D67}
+\definecolor{JainGold}{HTML}{D4A62A}
+\definecolor{JainText}{HTML}{1A1A1A}
+\definecolor{JainGray}{HTML}{666666}
+\definecolor{JainLine}{HTML}{D9D9D9}
+\definecolor{JainFill}{HTML}{F7F9FC}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=JainBlue,
+    urlcolor=JainBlue,
+    citecolor=JainBlue,
+    pdfauthor={JAIN Deemed-to-be University Template},
+    pdftitle={Post Event Report Template}
+}
+\urlstyle{same}
+
+% =========================
+% Spacing
+% =========================
+\setstretch{1.15}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+
+% =========================
+% Page Border
+% =========================
+\AddToShipoutPictureBG{%
+\begin{tikzpicture}[remember picture,overlay]
+\draw[line width=1.0pt, color=JainBlue]
+([xshift=0.55in,yshift=-0.55in]current page.north west)
+rectangle
+([xshift=-0.55in,yshift=0.55in]current page.south east);
+\draw[line width=0.5pt, color=JainGold]
+([xshift=0.68in,yshift=-0.68in]current page.north west)
+rectangle
+([xshift=-0.68in,yshift=0.68in]current page.south east);
+\end{tikzpicture}
+}
+
+% =========================
+% Placeholder System
+% =========================
+\newcommand{\PH}[1]{{\ttfamily\small\{\{#1\}\}}}
+
+% Semantic placeholders
+\newcommand{\ClubName}{\PH{CLUB_NAME}}
+\newcommand{\DepartmentName}{\PH{DEPARTMENT}}
+\newcommand{\AcademicYear}{\PH{ACADEMIC_YEAR}}
+\newcommand{\PreparedBy}{\PH{REPORT_PREPARED_BY}}
+\newcommand{\PreparedDate}{\PH{DATE}}
+
+\newcommand{\EventName}{\PH{EVENT_NAME}}
+\newcommand{\EventDate}{\PH{DATE}}
+\newcommand{\EventTime}{\PH{TIME}}
+\newcommand{\Venue}{\PH{VENUE}}
+\newcommand{\EventType}{\PH{EVENT_TYPE}}
+\newcommand{\Organizer}{\PH{ORGANIZER}}
+\newcommand{\FacultyCoordinator}{\PH{FACULTY_COORDINATOR}}
+\newcommand{\StudentCoordinators}{\PH{STUDENT_COORDINATORS}}
+\newcommand{\ResourcePerson}{\PH{RESOURCE_PERSON}}
+\newcommand{\Participants}{\PH{NO_OF_PARTICIPANTS}}
+
+\newcommand{\AboutEvent}{\PH{DESCRIPTION}}
+\newcommand{\Proceedings}{\PH{EVENT_PROCEEDINGS}}
+\newcommand{\FeedbackSummary}{\PH{FEEDBACK_SUMMARY}}
+\newcommand{\MediaCoverage}{\PH{MEDIA_COVERAGE}}
+\newcommand{\FutureRecommendations}{\PH{FUTURE_RECOMMENDATIONS}}
+\newcommand{\ConclusionText}{\PH{CONCLUSION}}
+\newcommand{\ContactInformation}{\PH{CONTACT_INFORMATION}}
+
+\newcommand{\SpeakerDesignation}{\PH{RESOURCE_PERSON_DESIGNATION}}
+\newcommand{\SpeakerOrganization}{\PH{RESOURCE_PERSON_ORGANIZATION}}
+
+\newcommand{\DriveLinkText}{\PH{DRIVE_LINK}}
+\newcommand{\DriveLinkURL}{https://placeholder.invalid/drive}
+\newcommand{\RegistrationLinkText}{\PH{REGISTRATION_LINK}}
+\newcommand{\RegistrationLinkURL}{https://placeholder.invalid/registration}
+\newcommand{\AttendanceLinkText}{\PH{ATTENDANCE_LINK}}
+\newcommand{\AttendanceLinkURL}{https://placeholder.invalid/attendance}
+
+% =========================
+% Logo helpers
+% =========================
+\newcommand{\LogoFile}{jain-logo.png}
+
+\newcommand{\HeaderLogo}{%
+\IfFileExists{\LogoFile}
+    {\includegraphics[height=1.10cm]{\LogoFile}}
+    {\fbox{\parbox[c][1.10cm][c]{5.5cm}{\centering \PH{JAIN_UNIVERSITY_LOGO}}}}%
+}
+
+\newcommand{\CoverLogo}{%
+\IfFileExists{\LogoFile}
+    {\includegraphics[width=0.78\textwidth]{\LogoFile}}
+    {\fbox{\parbox[c][2.2cm][c]{0.78\textwidth}{\centering \PH{JAIN_UNIVERSITY_LOGO}}}}%
+}
+
+% =========================
+% Header / Footer
+% =========================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\HeaderLogo}
+\fancyhead[R]{%
+\begin{tabular}{r}
+\textbf{\color{JainBlue}POST EVENT REPORT}\\
+\textcolor{JainGray}{\small \DepartmentName}\\
+\textcolor{JainGray}{\small Academic Year: \AcademicYear}
+\end{tabular}
+}
+\fancyfoot[L]{\textcolor{JainGray}{\small JAIN (Deemed-to-be University)}}
+\fancyfoot[C]{\textcolor{JainGray}{\small Faculty of Engineering and Technology}}
+\fancyfoot[R]{\textcolor{JainGray}{\small Page \thepage\ of \pageref{LastPage}}}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{JainGold}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{JainGold}\leaders\hrule height \footrulewidth\hfill}}
+
+% =========================
+% Section Styling
+% =========================
+\titleformat{\section}
+  {\Large\bfseries\color{JainBlue}}
+  {\thesection.}{0.6em}{}
+  [\vspace{-0.35em}\color{JainGold}\titlerule]
+
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{JainBlue}}
+  {\thesubsection}{0.5em}{}
+
+\titlespacing*{\section}{0pt}{1.1em}{0.8em}
+\titlespacing*{\subsection}{0pt}{0.8em}{0.4em}
+
+\setlist[itemize]{leftmargin=1.6em,itemsep=0.2em,topsep=0.3em,label=\textcolor{JainGold}{\small$\bullet$}}
+
+% =========================
+% Reusable Layout Commands
+% =========================
+\newcommand{\SectionBox}[1]{%
+\begin{tcolorbox}[colback=JainFill,colframe=JainBlue,boxrule=0.8pt,arc=1mm,left=6pt,right=6pt,top=5pt,bottom=5pt]
+#1
+\end{tcolorbox}
+}
+
+\newcommand{\TextArea}[2]{%
+\begin{tcolorbox}[colback=white,colframe=JainBlue!70,boxrule=0.6pt,arc=1mm,left=6pt,right=6pt,top=6pt,bottom=6pt,height=#1]
+#2
+\end{tcolorbox}
+}
+
+\newcommand{\InfoRow}[2]{%
+\begin{tabularx}{\textwidth}{>{\bfseries\raggedright\arraybackslash}p{0.30\textwidth}X}
+#1 & #2
+\end{tabularx}\par
+}
+
+\newcommand{\SignatureBlock}[2]{%
+\begin{minipage}[t]{0.31\textwidth}
+\vspace{1.2cm}
+\centering
+\rule{0.9\linewidth}{0.6pt}\\[4pt]
+\textbf{#1}\\
+#2
+\end{minipage}
+}
+
+\newcommand{\PlaceholderLink}[2]{%
+\begin{tcolorbox}[colback=white,colframe=JainGold,boxrule=0.7pt,arc=1mm,left=6pt,right=6pt,top=5pt,bottom=5pt]
+\textbf{#1: }\textcolor{JainBlue}{\underline{#2}}
+\end{tcolorbox}
+}
+
+\newcommand{\PhotoPlaceholder}[2]{%
+\begin{minipage}[t]{0.31\textwidth}
+\centering
+\fbox{\parbox[c][4.6cm][c]{0.93\linewidth}{\centering #2}}\\[6pt]
+\textbf{#1}
+\end{minipage}
+}
+
+% =========================
+% Document
+% =========================
+\begin{document}
+
+% =========================
+% Cover Page
+% =========================
+\thispagestyle{empty}
+
+\vspace*{0.4cm}
+\begin{center}
+    \CoverLogo
+\end{center}
+
+\vspace{0.7cm}
+
+\begin{center}
+    {\Large\bfseries\color{JainBlue} JAIN (Deemed-to-be University)}\\[4pt]
+    {\large\color{JainText} Faculty of Engineering and Technology}\\[8pt]
+    {\large\bfseries\color{JainText} \ClubName}\\[4pt]
+    {\normalsize\color{JainGray} \DepartmentName}
+\end{center}
+
+\vspace{1.0cm}
+
+\begin{center}
+\begin{tcolorbox}[width=0.82\textwidth,colback=JainFill,colframe=JainBlue,boxrule=1pt,arc=1mm]
+    \centering
+    {\Huge\bfseries\color{JainBlue} POST EVENT REPORT}\\[8pt]
+    {\large Academic Year: \AcademicYear}
+\end{tcolorbox}
+\end{center}
+
+\vspace{0.7cm}
+
+\SectionBox{
+\InfoRow{Prepared By}{\PreparedBy}
+\InfoRow{Date}{\PreparedDate}
+\InfoRow{Club / Unit}{\ClubName}
+\InfoRow{Department}{\DepartmentName}
+}
+
+\vfill
+
+\begin{center}
+{\small\color{JainGray}Official documentation template for event reporting and archival records}
+\end{center}
+
+\newpage
+
+% =========================
+% 1. Event Summary
+% =========================
+\section{Event Summary}
+
+\SectionBox{
+\InfoRow{Event Name}{\EventName}
+\InfoRow{Date}{\EventDate}
+\InfoRow{Time}{\EventTime}
+\InfoRow{Venue}{\Venue}
+\InfoRow{Event Type}{\EventType}
+\InfoRow{Organizer}{\Organizer}
+\InfoRow{Faculty Coordinator}{\FacultyCoordinator}
+\InfoRow{Student Coordinator}{\StudentCoordinators}
+\InfoRow{Resource Person}{\ResourcePerson}
+\InfoRow{Number of Participants}{\Participants}
+}
+
+% =========================
+% 2. About the Event
+% =========================
+\section{About the Event}
+
+\TextArea{5.8cm}{\AboutEvent}
+
+% =========================
+% 3. Objectives
+% =========================
+\section{Objectives}
+
+\SectionBox{
+\begin{itemize}
+    \item \PH{OBJECTIVE_1}
+    \item \PH{OBJECTIVE_2}
+    \item \PH{OBJECTIVE_3}
+    \item \PH{OBJECTIVE_4}
+\end{itemize}
+}
+
+% =========================
+% 4. Event Proceedings
+% =========================
+\section{Event Proceedings}
+
+\TextArea{7.2cm}{\Proceedings}
+
+% =========================
+% 5. Key Highlights
+% =========================
+\section{Key Highlights}
+
+\SectionBox{
+\begin{itemize}
+    \item \PH{KEY_HIGHLIGHT_1}
+    \item \PH{KEY_HIGHLIGHT_2}
+    \item \PH{KEY_HIGHLIGHT_3}
+    \item \PH{KEY_HIGHLIGHT_4}
+\end{itemize}
+}
+
+% =========================
+% 6. Learning Outcomes
+% =========================
+\section{Learning Outcomes}
+
+\SectionBox{
+\begin{itemize}
+    \item \PH{LEARNING_OUTCOME_1}
+    \item \PH{LEARNING_OUTCOME_2}
+    \item \PH{LEARNING_OUTCOME_3}
+    \item \PH{LEARNING_OUTCOME_4}
+\end{itemize}
+}
+
+% =========================
+% 7. Speaker Details
+% =========================
+\section{Speaker Details}
+
+\SectionBox{
+\InfoRow{Name}{\ResourcePerson}
+\InfoRow{Designation}{\SpeakerDesignation}
+\InfoRow{Organization}{\SpeakerOrganization}
+}
+
+% =========================
+% 8. Participant Statistics
+% =========================
+\section{Participant Statistics}
+
+\rowcolors{2}{JainFill}{white}
+\begin{tabularx}{\textwidth}{>{\bfseries\raggedright\arraybackslash}p{0.52\textwidth} X}
+\rowcolor{JainBlue}
+\color{white}\textbf{Category} & \color{white}\textbf{Count} \\
+\midrule
+Registered & \PH{REGISTERED_COUNT} \\
+Attended & \PH{ATTENDED_COUNT} \\
+Male & \PH{MALE_COUNT} \\
+Female & \PH{FEMALE_COUNT} \\
+Others & \PH{OTHERS_COUNT} \\
+Certificates Issued & \PH{CERTIFICATES_ISSUED} \\
+\end{tabularx}
+
+% =========================
+% 9. Feedback Summary
+% =========================
+\section{Feedback Summary}
+
+\TextArea{4.8cm}{\FeedbackSummary}
+
+% =========================
+% 10. Budget Utilized
+% =========================
+\section{Budget Utilized}
+
+\rowcolors{2}{JainFill}{white}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.08\textwidth} X >{\raggedright\arraybackslash}p{0.22\textwidth}}
+\rowcolor{JainBlue}
+\color{white}\textbf{S.No.} & \color{white}\textbf{Particulars} & \color{white}\textbf{Amount} \\
+\midrule
+1 & \PH{UTILIZED_ITEM_1} & \PH{UTILIZED_AMOUNT_1} \\
+2 & \PH{UTILIZED_ITEM_2} & \PH{UTILIZED_AMOUNT_2} \\
+3 & \PH{UTILIZED_ITEM_3} & \PH{UTILIZED_AMOUNT_3} \\
+4 & \PH{UTILIZED_ITEM_4} & \PH{UTILIZED_AMOUNT_4} \\
+5 & \PH{UTILIZED_ITEM_5} & \PH{UTILIZED_AMOUNT_5} \\
+\rowcolor{JainFill}
+\multicolumn{2}{>{\raggedleft\arraybackslash}p{0.70\textwidth}}{\textbf{Total Budget Utilized}} & \textbf{\PH{TOTAL_BUDGET_UTILIZED}} \\
+\end{tabularx}
+
+% =========================
+% 11. Media Coverage
+% =========================
+\section{Media Coverage}
+
+\TextArea{4.6cm}{\MediaCoverage}
+
+% =========================
+% 12. Deliverables
+% =========================
+\section{Deliverables}
+
+\rowcolors{2}{JainFill}{white}
+\begin{tabularx}{\textwidth}{>{\bfseries\raggedright\arraybackslash}p{0.36\textwidth} X}
+\rowcolor{JainBlue}
+\color{white}\textbf{Deliverable} & \color{white}\textbf{Details / Link Placeholder} \\
+\midrule
+Certificates & \PH{CERTIFICATES_STATUS} \\
+Recording & \PH{RECORDING_LINK} \\
+Presentation & \PH{PRESENTATION_LINK} \\
+Attendance & \PH{ATTENDANCE_LINK} \\
+Feedback & \PH{FEEDBACK_LINK} \\
+\end{tabularx}
+
+% =========================
+% 13. Drive Link
+% =========================
+\section{Drive Link}
+
+\PlaceholderLink{Google Drive Link}{\DriveLinkText}
+
+% =========================
+% 14. Registration Link
+% =========================
+\section{Registration Link}
+
+\PlaceholderLink{Registration Link}{\RegistrationLinkText}
+
+% =========================
+% 15. Attendance Link
+% =========================
+\section{Attendance Link}
+
+\PlaceholderLink{Attendance Link}{\AttendanceLinkText}
+
+% =========================
+% 16. Social Media Links
+% =========================
+\section{Social Media Links}
+
+\SectionBox{
+\begin{itemize}
+    \item \PH{SOCIAL_MEDIA_LINK_1}
+    \item \PH{SOCIAL_MEDIA_LINK_2}
+    \item \PH{SOCIAL_MEDIA_LINK_3}
+\end{itemize}
+}
+
+% =========================
+% 17. Future Recommendations
+% =========================
+\section{Future Recommendations}
+
+\TextArea{4.6cm}{\FutureRecommendations}
+
+% =========================
+% 18. Conclusion
+% =========================
+\section{Conclusion}
+
+\TextArea{4.2cm}{\ConclusionText}
+
+% =========================
+% 19. Signatures
+% =========================
+\section{Signatures}
+
+\noindent
+\SignatureBlock{Faculty Coordinator}{\PH{FACULTY_COORDINATOR}}
+\hfill
+\SignatureBlock{Club Head}{\PH{CLUB_HEAD}}
+\hfill
+\SignatureBlock{Department Head}{\PH{DEPARTMENT_HEAD}}
+
+\newpage
+
+% =========================
+% Photo Section
+% =========================
+\section*{\color{JainBlue}Photo Gallery}
+\addcontentsline{toc}{section}{Photo Gallery}
+
+\begin{center}
+\PhotoPlaceholder{Photo 1}{\PH{PHOTO1}}
+\hfill
+\PhotoPlaceholder{Photo 2}{\PH{PHOTO2}}
+\hfill
+\PhotoPlaceholder{Photo 3}{\PH{PHOTO3}}
+\end{center}
+
+\vspace{0.6cm}
+
+\SectionBox{
+\textbf{Captions}\\
+\InfoRow{Photo 1 Caption}{\PH{PHOTO1_CAPTION}}
+\InfoRow{Photo 2 Caption}{\PH{PHOTO2_CAPTION}}
+\InfoRow{Photo 3 Caption}{\PH{PHOTO3_CAPTION}}
+}
+
+\newpage
+
+% =========================
+% Last Page - Attachments
+% =========================
+\section*{\color{JainBlue}Attachments}
+\addcontentsline{toc}{section}{Attachments}
+
+\SectionBox{
+\InfoRow{Google Drive Link}{\DriveLinkText}
+\InfoRow{Additional Documents}{\PH{ADDITIONAL_DOCUMENTS}}
+\InfoRow{Contact Information}{\ContactInformation}
+}
+
+\vspace{0.4cm}
+
+\begin{minipage}[t]{0.34\textwidth}
+\begin{tcolorbox}[colback=white,colframe=JainBlue,boxrule=0.8pt,arc=1mm,height=4.8cm,valign=center]
+\centering
+\textbf{\PH{QR_CODE}}\\[6pt]
+QR Code Placeholder
+\end{tcolorbox}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.62\textwidth}
+\TextArea{4.8cm}{\PH{ATTACHMENT_NOTES}}
+\end{minipage}
+
+\end{document}

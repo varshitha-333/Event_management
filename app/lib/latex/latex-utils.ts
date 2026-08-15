@@ -142,6 +142,9 @@ export function fillPlaceholders(template: string, tokens: TokenMap): string {
   // Step 2: Validate that all required placeholders are provided
   validatePlaceholders(requiredPlaceholders, tokens);
   
+  // Tokens that contain LaTeX commands and should NOT be escaped
+  const unescapedTokens = new Set(['QR_CODE', 'JAIN_UNIVERSITY_LOGO']);
+  
   // Step 3: Replace \newcommand{\CommandName}{\PH{TOKEN}} with actual values
   // This handles the template's command definitions
   for (const [key, value] of Object.entries(tokens)) {
@@ -149,7 +152,8 @@ export function fillPlaceholders(template: string, tokens: TokenMap): string {
       continue; // Skip empty values - validation should have caught this
     }
     
-    const escaped = escapeLatex(value);
+    // Don't escape tokens that contain LaTeX commands
+    const escaped = unescapedTokens.has(key) ? value : escapeLatex(value);
     
     // Replace command definitions with escaped underscores: \newcommand{\CommandName}{\PH{TOKEN\_NAME}}
     const escapedKey = key.replace(/_/g, '\\_');
@@ -169,7 +173,8 @@ export function fillPlaceholders(template: string, tokens: TokenMap): string {
       continue;
     }
     
-    const escaped = escapeLatex(value);
+    // Don't escape tokens that contain LaTeX commands
+    const escaped = unescapedTokens.has(key) ? value : escapeLatex(value);
     
     // Replace both \PH{KEY} and \PH{KEY\_NAME} formats
     const placeholder1 = `\\PH{${key}}`;

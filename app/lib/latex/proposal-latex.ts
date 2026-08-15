@@ -1,5 +1,6 @@
 import { ProposalInput, ProposalOutput } from '../ai/proposal-generator';
 import { TokenMap, fillPlaceholders, joinList, formatINR, formatDate, academicYearFor, extractPlaceholders, validatePlaceholders } from './latex-utils';
+import path from 'path';
 
 /**
  * Data not present in ProposalInput but needed by the template (signatures,
@@ -13,6 +14,7 @@ export interface ProposalMeta {
   clubHead?: string;
   departmentHead?: string;
   qrCode?: string;
+  logoPath?: string;
 }
 
 const YES_NO = (v: boolean | undefined) => (v ? 'Required' : 'Not Required');
@@ -77,11 +79,11 @@ export function buildProposalLatex(
     CLUB_HEAD: meta.clubHead || ai.clubHead || 'Dr. Club Head',
     DEPARTMENT_HEAD: meta.departmentHead || ai.departmentHead || 'Dr. Department Head',
 
-    // QR Code - Use meta value or AI-generated fallback or realistic fake value
-    QR_CODE: meta.qrCode || ai.qrCode || 'QR Code Placeholder',
+    // QR Code - Use filename only (not full path) if provided
+    QR_CODE: meta.qrCode ? `\\includegraphics[width=3.5cm]{${path.basename(meta.qrCode)}}` : (ai.qrCode || 'QR Code Placeholder'),
 
-    // Logo fallback (used if jain-logo.png is not found)
-    JAIN_UNIVERSITY_LOGO: 'Jain University Logo',
+    // Logo path - Use filename only (not full path) if provided
+    JAIN_UNIVERSITY_LOGO: meta.logoPath ? path.basename(meta.logoPath) : 'Jain University Logo',
 
     // Logistics
     LOGISTICS_PROJECTOR: YES_NO(input.logistics?.projector),

@@ -1,0 +1,530 @@
+\documentclass[12pt,a4paper]{article}
+
+% =========================
+% Packages
+% =========================
+\usepackage[a4paper,top=1.15in,bottom=1.10in,left=1.00in,right=1.00in,headheight=56pt,headsep=18pt,footskip=24pt]{geometry}
+\usepackage{fontspec}
+% We deliberately do NOT use \setmainfont{Some Font Name}. A bare font name
+% is resolved through the operating system's font-config layer, which is
+% unreliable across machines (it silently falls back to an empty "nullfont"
+% on some systems, and errors outright on others where fontconfig itself is
+% broken/misconfigured, as on Windows). Instead we point fontspec directly
+% at the TeX Gyre Termes .otf files, a free, metric-compatible clone of
+% Times New Roman that ships with every standard TeX distribution
+% (including Tectonic/MiKTeX/TeX Live) and is looked up the same reliable
+% way on every machine, with no dependency on what's installed at the OS level.
+\setmainfont{texgyretermes-regular.otf}[
+    BoldFont = texgyretermes-bold.otf,
+    ItalicFont = texgyretermes-italic.otf,
+    BoldItalicFont = texgyretermes-bolditalic.otf,
+]
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{array,booktabs,longtable,tabularx}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usepackage{eso-pic}
+\usepackage{caption}
+
+% =========================
+% Colors
+% =========================
+\definecolor{JainBlue}{HTML}{0B2D67}
+\definecolor{JainGold}{HTML}{D4A62A}
+\definecolor{JainText}{HTML}{1A1A1A}
+\definecolor{JainGray}{HTML}{666666}
+\definecolor{JainLine}{HTML}{D9D9D9}
+\definecolor{JainFill}{HTML}{F7F9FC}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=JainBlue,
+    urlcolor=JainBlue,
+    citecolor=JainBlue,
+    pdfauthor={JAIN Deemed-to-be University Template},
+    pdftitle={Event Proposal Template}
+}
+\urlstyle{same}
+
+% =========================
+% Spacing
+% =========================
+\setstretch{1.15}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+
+% =========================
+% Page Border
+% =========================
+\AddToShipoutPictureBG{%
+\begin{tikzpicture}[remember picture,overlay]
+\draw[line width=1.0pt, color=JainBlue]
+([xshift=0.55in,yshift=-0.55in]current page.north west)
+rectangle
+([xshift=-0.55in,yshift=0.55in]current page.south east);
+\draw[line width=0.5pt, color=JainGold]
+([xshift=0.68in,yshift=-0.68in]current page.north west)
+rectangle
+([xshift=-0.68in,yshift=0.68in]current page.south east);
+\end{tikzpicture}
+}
+
+% =========================
+% Placeholder System
+% =========================
+\newcommand{\PH}[1]{{\ttfamily\small\{\{#1\}\}}}
+
+% Semantic placeholders
+\newcommand{\ClubName}{\PH{CLUB\_NAME}}
+\newcommand{\DepartmentName}{\PH{DEPARTMENT}}
+\newcommand{\AcademicYear}{\PH{ACADEMIC\_YEAR}}
+\newcommand{\PreparedBy}{\PH{PREPARED\_BY}}
+\newcommand{\PreparedDate}{\PH{DATE}}
+
+\newcommand{\EventName}{\PH{EVENT\_NAME}}
+\newcommand{\EventType}{\PH{EVENT\_TYPE}}
+\newcommand{\Theme}{\PH{THEME}}
+\newcommand{\ProposedDate}{\PH{PROPOSED\_DATE}}
+\newcommand{\EventTime}{\PH{TIME}}
+\newcommand{\Venue}{\PH{VENUE}}
+\newcommand{\ModeType}{\PH{MODE}}
+
+\newcommand{\FacultyCoordinator}{\PH{FACULTY\_COORDINATOR}}
+\newcommand{\StudentCoordinators}{\PH{STUDENT\_COORDINATORS}}
+\newcommand{\Organizer}{\PH{ORGANIZER}}
+\newcommand{\Description}{\PH{DESCRIPTION}}
+\newcommand{\TargetAudience}{\PH{TARGET\_AUDIENCE}}
+\newcommand{\ExpectedParticipants}{\PH{NO\_OF\_PARTICIPANTS}}
+
+\newcommand{\ResourcePerson}{\PH{RESOURCE\_PERSON}}
+\newcommand{\ResourceDesignation}{\PH{RESOURCE\_PERSON\_DESIGNATION}}
+\newcommand{\ResourceOrganization}{\PH{RESOURCE\_PERSON\_ORGANIZATION}}
+\newcommand{\ResourceBio}{\PH{RESOURCE\_PERSON\_SHORT\_BIO}}
+
+\newcommand{\PublicityPlan}{\PH{PUBLICITY\_PLAN}}
+\newcommand{\ExpectedOutcome}{\PH{EXPECTED\_OUTCOME}}
+\newcommand{\RiskMitigation}{\PH{RISKS\_AND\_MITIGATION}}
+\newcommand{\RegistrationText}{\PH{REGISTRATION\_LINK}}
+\newcommand{\RegistrationURL}{https://placeholder.invalid/registration}
+\newcommand{\BrochureText}{\PH{BROCHURE\_LINK}}
+\newcommand{\BrochureURL}{https://placeholder.invalid/brochure}
+
+% =========================
+% Logo helpers
+% =========================
+\newcommand{\LogoFile}{jain-logo.png}
+
+\newcommand{\HeaderLogo}{%
+\IfFileExists{\LogoFile}
+    {\includegraphics[height=1.10cm]{\LogoFile}}
+    {\fbox{\parbox[c][1.10cm][c]{5.5cm}{\centering \PH{JAIN\_UNIVERSITY\_LOGO}}}}%
+}
+
+\newcommand{\CoverLogo}{%
+\IfFileExists{\LogoFile}
+    {\includegraphics[height=2.3cm]{\LogoFile}}
+    {\fbox{\parbox[c][2.2cm][c]{0.78\textwidth}{\centering \PH{JAIN\_UNIVERSITY\_LOGO}}}}%
+}
+
+% =========================
+% Header / Footer
+% =========================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\HeaderLogo}
+\fancyhead[R]{%
+\begin{tabular}{r}
+\textbf{\color{JainBlue}EVENT PROPOSAL}\\
+\textcolor{JainGray}{\small \DepartmentName}\\
+\textcolor{JainGray}{\small Academic Year: \AcademicYear}
+\end{tabular}
+}
+\fancyfoot[L]{\textcolor{JainGray}{\footnotesize JAIN (Deemed-to-be University) \textbullet\ Faculty of Engineering and Technology}}
+\fancyfoot[C]{}
+\fancyfoot[R]{\textcolor{JainGray}{\small Page \thepage\ of \pageref{LastPage}}}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{JainGold}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{JainGold}\leaders\hrule height \footrulewidth\hfill}}
+
+% =========================
+% Section Styling
+% =========================
+\titleformat{\section}
+  {\Large\bfseries\color{JainBlue}}
+  {\thesection.}{0.6em}{}
+  [\vspace{-0.35em}\color{JainGold}\titlerule]
+
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{JainBlue}}
+  {\thesubsection}{0.5em}{}
+
+\titlespacing*{\section}{0pt}{1.1em}{0.8em}
+\titlespacing*{\subsection}{0pt}{0.8em}{0.4em}
+
+\setlist[itemize]{leftmargin=1.6em,itemsep=0.2em,topsep=0.3em,label=\textcolor{JainGold}{\small$\bullet$}}
+
+% =========================
+% Reusable Layout Commands
+% =========================
+\newcommand{\SectionBox}[1]{%
+\begin{tcolorbox}[colback=JainFill,colframe=JainBlue,boxrule=0.8pt,arc=1mm,left=6pt,right=6pt,top=5pt,bottom=5pt]
+#1
+\end{tcolorbox}
+}
+
+\newcommand{\TextArea}[2]{%
+\begin{tcolorbox}[colback=white,colframe=JainBlue!70,boxrule=0.6pt,arc=1mm,left=6pt,right=6pt,top=6pt,bottom=6pt,height=#1]
+#2
+\end{tcolorbox}
+}
+
+\newcommand{\InfoRow}[2]{%
+\begin{tabularx}{\textwidth}{>{\bfseries\raggedright\arraybackslash}p{0.30\textwidth}X}
+#1 & #2
+\end{tabularx}\par
+}
+
+\newcommand{\SignatureBlock}[2]{%
+\begin{minipage}[t]{0.31\textwidth}
+\vspace{0.2cm}
+\centering
+\rule{0.9\linewidth}{0.6pt}\\[4pt]
+\textbf{#1}\\
+#2
+\end{minipage}
+}
+
+\newcommand{\LinkBox}[2]{%
+\begin{tcolorbox}[colback=white,colframe=JainGold,boxrule=0.7pt,arc=1mm,left=6pt,right=6pt,top=4pt,bottom=4pt]
+\textbf{#1: }{\color{JainBlue}\underline{\href{#2}{#1}}}
+\end{tcolorbox}
+}
+
+\newcommand{\PlaceholderLink}[2]{%
+\begin{tcolorbox}[colback=white,colframe=JainGold,boxrule=0.7pt,arc=1mm,left=6pt,right=6pt,top=5pt,bottom=5pt]
+\textbf{#1: }\textcolor{JainBlue}{\underline{#2}}
+\end{tcolorbox}
+}
+
+% =========================
+% Document
+% =========================
+\begin{document}
+
+% =========================
+% Cover Page
+% =========================
+\thispagestyle{empty}
+
+\vspace*{0.5cm}
+\begin{center}
+    \CoverLogo
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+    {\Large\bfseries\color{JainBlue} JAIN (Deemed-to-be University)}\\[4pt]
+    {\large\color{JainText} Faculty of Engineering and Technology}\\[8pt]
+    {\large\bfseries\color{JainText} \ClubName}\\[4pt]
+    {\normalsize\color{JainGray} \DepartmentName}
+\end{center}
+
+\vspace{0.9cm}
+
+\begin{center}
+\begin{tcolorbox}[width=0.82\textwidth,colback=JainFill,colframe=JainBlue,boxrule=1pt,arc=1mm]
+    \centering
+    {\Huge\bfseries\color{JainBlue} EVENT PROPOSAL}\\[8pt]
+    {\large Academic Year: \AcademicYear}
+\end{tcolorbox}
+\end{center}
+
+\vspace{0.9cm}
+
+\SectionBox{
+\InfoRow{Prepared By}{\PreparedBy}
+\InfoRow{Date}{\PreparedDate}
+\InfoRow{Club / Unit}{\ClubName}
+\InfoRow{Department}{\DepartmentName}
+}
+
+\vspace{0.6cm}
+
+\SectionBox{
+\textbf{\color{JainBlue}Approval Section}\\[4pt]
+This proposal is submitted for academic and administrative review and approval. All operational details, logistics, scheduling, publicity, and resource planning will be finalized upon formal approval by the competent authorities.
+}
+
+\vfill
+
+\noindent
+\SignatureBlock{Faculty Coordinator}{\PH{FACULTY\_COORDINATOR}}
+\hfill
+\SignatureBlock{Club Head}{\PH{CLUB\_HEAD}}
+\hfill
+\SignatureBlock{Department Head}{\PH{DEPARTMENT\_HEAD}}
+
+\newpage
+
+% =========================
+% Forwarding Letter (dedicated page)
+% =========================
+
+\vspace*{0.2cm}
+\noindent \PreparedDate \hfill
+
+\vspace{0.3cm}
+
+\noindent
+To,\\[3pt]
+The Head of the Department, \DepartmentName\\
+The Chairperson, Technical Council\\
+And All Concerned Reviewing Authorities
+
+\vspace{0.3cm}
+
+\noindent \textbf{Subject: } Request for review and approval to conduct \EventName{} organized by \ClubName.
+
+\vspace{0.3cm}
+
+\noindent Respected Sir/Madam,
+
+\vspace{0.25cm}
+
+\noindent
+With due respect, on behalf of \ClubName, \DepartmentName, we would like to submit the enclosed event proposal for your kind review and approval. The key details are summarized below and elaborated further in the attached document.
+
+\vspace{0.3cm}
+
+\SectionBox{
+\InfoRow{Event Name}{\EventName}
+\InfoRow{Proposed Date}{\ProposedDate}
+\InfoRow{Venue}{\Venue}
+\InfoRow{Expected Participants}{\ExpectedParticipants}
+}
+
+\vspace{0.3cm}
+
+\noindent
+We believe this event will add meaningful value to the students and the wider academic community, and will be conducted in accordance with the university's guidelines. We kindly request your approval to proceed with the planning, publicity, and execution of this event, and would be glad to provide any further information required.
+
+\vspace{0.4cm}
+
+\noindent Thanking you,\\
+\noindent Yours sincerely,
+
+\vspace{1.4cm}
+
+\noindent
+\SignatureBlock{Student Coordinator}{\PH{STUDENT\_COORDINATORS}}
+\hfill
+\SignatureBlock{Club Head}{\PH{CLUB\_HEAD}}
+\hfill
+\SignatureBlock{Faculty Coordinator}{\PH{FACULTY\_COORDINATOR}}
+
+\vspace{0.4cm}
+\noindent \textit{\small Encl: Event Proposal Document}
+
+\newpage
+
+% =========================
+% 1. Event Details
+% =========================
+\section{Event Details}
+
+\SectionBox{
+\InfoRow{Event Name}{\EventName}
+\InfoRow{Event Type}{\EventType}
+\InfoRow{Theme}{\Theme}
+\InfoRow{Proposed Date}{\ProposedDate}
+\InfoRow{Time}{\EventTime}
+\InfoRow{Venue}{\Venue}
+\InfoRow{Mode}{\ModeType}
+}
+
+% =========================
+% 2. Organizing Team
+% =========================
+\section{Organizing Team}
+
+\SectionBox{
+\InfoRow{Faculty Coordinator}{\FacultyCoordinator}
+\InfoRow{Student Coordinator(s)}{\StudentCoordinators}
+\InfoRow{Club Name}{\ClubName}
+\InfoRow{Department}{\DepartmentName}
+}
+
+% =========================
+% 3. About the Event
+% =========================
+\section{About the Event}
+
+\TextArea{5.8cm}{\Description}
+
+% =========================
+% 4. Objectives
+% =========================
+\section{Objectives}
+
+\SectionBox{
+\begin{itemize}
+    \item \PH{OBJECTIVE\_1}
+    \item \PH{OBJECTIVE\_2}
+    \item \PH{OBJECTIVE\_3}
+    \item \PH{OBJECTIVE\_4}
+\end{itemize}
+}
+
+% =========================
+% 5. Target Audience
+% =========================
+\section{Target Audience}
+
+\SectionBox{
+\TargetAudience
+}
+
+% =========================
+% 6. Expected Number of Participants
+% =========================
+\section{Expected Number of Participants}
+
+\SectionBox{
+\ExpectedParticipants
+}
+
+% =========================
+% 7. Resource Person Details
+% =========================
+\section{Resource Person Details}
+
+\SectionBox{
+\InfoRow{Name}{\ResourcePerson}
+\InfoRow{Designation}{\ResourceDesignation}
+\InfoRow{Organization}{\ResourceOrganization}
+\InfoRow{Short Bio}{\ResourceBio}
+}
+
+% =========================
+% 8. Event Schedule
+% =========================
+\section{Event Schedule}
+
+\rowcolors{2}{JainFill}{white}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.18\textwidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.25\textwidth}}
+\rowcolor{JainBlue}
+\color{white}\textbf{Time} & \color{white}\textbf{Activity} & \color{white}\textbf{Speaker / Lead} \\
+\midrule
+\PH{SCHEDULE\_TIME\_1} & \PH{SCHEDULE\_ACTIVITY\_1} & \PH{SCHEDULE\_SPEAKER\_1} \\
+\PH{SCHEDULE\_TIME\_2} & \PH{SCHEDULE\_ACTIVITY\_2} & \PH{SCHEDULE\_SPEAKER\_2} \\
+\PH{SCHEDULE\_TIME\_3} & \PH{SCHEDULE\_ACTIVITY\_3} & \PH{SCHEDULE\_SPEAKER\_3} \\
+\PH{SCHEDULE\_TIME\_4} & \PH{SCHEDULE\_ACTIVITY\_4} & \PH{SCHEDULE\_SPEAKER\_4} \\
+\PH{SCHEDULE\_TIME\_5} & \PH{SCHEDULE\_ACTIVITY\_5} & \PH{SCHEDULE\_SPEAKER\_5} \\
+\end{tabularx}
+
+% =========================
+% 9. Budget Estimation
+% =========================
+\section{Budget Estimation}
+
+\rowcolors{2}{JainFill}{white}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.08\textwidth} X >{\raggedright\arraybackslash}p{0.22\textwidth}}
+\rowcolor{JainBlue}
+\color{white}\textbf{S.No.} & \color{white}\textbf{Particulars} & \color{white}\textbf{Estimated Amount} \\
+\midrule
+1 & \PH{BUDGET\_ITEM\_1} & \PH{BUDGET\_AMOUNT\_1} \\
+2 & \PH{BUDGET\_ITEM\_2} & \PH{BUDGET\_AMOUNT\_2} \\
+3 & \PH{BUDGET\_ITEM\_3} & \PH{BUDGET\_AMOUNT\_3} \\
+4 & \PH{BUDGET\_ITEM\_4} & \PH{BUDGET\_AMOUNT\_4} \\
+5 & \PH{BUDGET\_ITEM\_5} & \PH{BUDGET\_AMOUNT\_5} \\
+\rowcolor{JainFill}
+\multicolumn{2}{>{\raggedleft\arraybackslash}p{0.70\textwidth}}{\textbf{Total Estimated Budget}} & \textbf{\PH{TOTAL\_BUDGET}} \\
+\end{tabularx}
+
+% =========================
+% 10. Logistics Required
+% =========================
+\section{Logistics Required}
+
+\rowcolors{2}{JainFill}{white}
+\begin{tabularx}{\textwidth}{>{\bfseries\raggedright\arraybackslash}p{0.32\textwidth} X}
+\rowcolor{JainBlue}
+\color{white}\textbf{Item} & \color{white}\textbf{Requirement / Remarks} \\
+\midrule
+Projector & \PH{LOGISTICS\_PROJECTOR} \\
+Mic & \PH{LOGISTICS\_MIC} \\
+Internet & \PH{LOGISTICS\_INTERNET} \\
+Certificates & \PH{LOGISTICS\_CERTIFICATES} \\
+Refreshments & \PH{LOGISTICS\_REFRESHMENTS} \\
+Photography & \PH{LOGISTICS\_PHOTOGRAPHY} \\
+Volunteers & \PH{LOGISTICS\_VOLUNTEERS} \\
+\end{tabularx}
+
+% =========================
+% 11. Publicity Plan
+% =========================
+\section{Publicity Plan}
+
+\TextArea{4.4cm}{\PublicityPlan}
+
+% =========================
+% 12. Expected Outcomes
+% =========================
+\section{Expected Outcomes}
+
+\SectionBox{
+\begin{itemize}
+    \item \PH{EXPECTED\_OUTCOME\_1}
+    \item \PH{EXPECTED\_OUTCOME\_2}
+    \item \PH{EXPECTED\_OUTCOME\_3}
+    \item \PH{EXPECTED\_OUTCOME\_4}
+\end{itemize}
+}
+
+% =========================
+% 13. Risks \& Mitigation
+% =========================
+\section{Risks \& Mitigation}
+
+\TextArea{4.8cm}{\RiskMitigation}
+
+% =========================
+% 14. Approval Signatures
+% =========================
+\section{Approval Signatures}
+
+\noindent
+\SignatureBlock{Faculty Coordinator}{\PH{FACULTY\_COORDINATOR}}
+\hfill
+\SignatureBlock{Club Head}{\PH{CLUB\_HEAD}}
+\hfill
+\SignatureBlock{Department Head}{\PH{DEPARTMENT\_HEAD}}
+
+% =========================
+% 15. QR Code / Registration Link Placeholder
+% =========================
+\section{QR Code / Registration Link}
+
+\begin{minipage}[t]{0.36\textwidth}
+\begin{tcolorbox}[colback=white,colframe=JainBlue,boxrule=0.8pt,arc=1mm,height=4.6cm,valign=center]
+\centering
+\PH{QR\_CODE}
+\end{tcolorbox}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.60\textwidth}
+\PlaceholderLink{Registration Link}{\RegistrationText}
+\vspace{0.2cm}
+\PlaceholderLink{Brochure Link}{\BrochureText}
+\end{minipage}
+
+\end{document}

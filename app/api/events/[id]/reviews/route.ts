@@ -29,7 +29,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
     const body = await request.json();
-    const { rating, suggestions, freeText, isAnonymous } = body;
+    const { rating, suggestions, freeText, isAnonymous, name, department } = body;
 
     if (!rating || rating < 1 || rating > 5) {
       return NextResponse.json({ error: 'Rating must be between 1 and 5' }, { status: 400 });
@@ -43,6 +43,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       data: {
         eventId,
         userId: authUser.userId,
+        name: name || authUser.userId || 'Anonymous',
+        department: department || null,
         rating,
         suggestions: suggestions || '',
         freeText: freeText || '',

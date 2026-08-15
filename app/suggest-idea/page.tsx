@@ -233,7 +233,11 @@ export default function SuggestIdeaPage() {
                       cursor: 'pointer',
                       transition: 'all 0.2s'
                     }}
-                    onClick={() => router.push(`/register-event?theme=${encodeURIComponent(formData.theme)}&idea=${encodeURIComponent(suggestion.title)}`)}
+                    onClick={() => {
+                      // Pass full suggestion data to create event page
+                      const suggestionData = encodeURIComponent(JSON.stringify(suggestion));
+                      router.push(`/register-event?suggestion=${suggestionData}`);
+                    }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                       <i className="fas fa-calendar-check" style={{ color: 'var(--gold)' }}></i>

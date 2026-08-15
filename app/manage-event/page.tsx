@@ -97,6 +97,8 @@ export default function ManageEvent() {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [pendingPhotos, setPendingPhotos] = useState<Array<{ id: string; file: File; url: string; caption: string; albumTag: string }>>([]);
+  const [isUploadingPhotos, setIsUploadingPhotos] = useState(false);
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
   const [starRating, setStarRating] = useState(0);
   const [reviewerName, setReviewerName] = useState('');
   const [reviewerDept, setReviewerDept] = useState('');
@@ -105,6 +107,9 @@ export default function ManageEvent() {
   const [feedbackSummary, setFeedbackSummary] = useState<string>('');
   const [albumTag, setAlbumTag] = useState('General');
   const [photoCaption, setPhotoCaption] = useState('');
+  const [isGeneratingProposal, setIsGeneratingProposal] = useState(false);
+  const [generationProgress, setGenerationProgress] = useState(0);
+  const [generationStep, setGenerationStep] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastError, setToastError] = useState(false);
@@ -113,9 +118,42 @@ export default function ManageEvent() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const idCounterRef = useRef(0);
   const [showReportModal, setShowReportModal] = useState(false);
-  const [reportType, setReportType] = useState<'pre' | 'post'>('post');
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const [reportGenerated, setReportGenerated] = useState(false);
+  const [selectedPhotoIds, setSelectedPhotoIds] = useState<string[]>([]);
+  const [originalEventData, setOriginalEventData] = useState<Record<string, any>>({});
+
+  // Function to check if event data has been modified
+  const isEventModified = (eventId: string): boolean => {
+    const currentEvent = events.find(e => e.id === eventId);
+    const original = originalEventData[eventId];
+    
+    if (!currentEvent || !original) return false;
+    
+    // Compare key fields
+    const fieldsToCompare = [
+      'title', 'description', 'type', 'theme', 'startDate', 'endDate',
+      'venue', 'mode', 'maxCapacity', 'currentCapacity', 'budget', 'actualCost',
+      'status', 'approvalStatus', 'tags', 'facultyCoordinator', 'facultyIncharge',
+      'studentCoordinators', 'contactInfo'
+    ];
+    
+    for (const field of fieldsToCompare) {
+      const currentValue = currentEvent[field as keyof Event];
+      const originalValue = original[field];
+      
+      // Handle array comparison
+      if (Array.isArray(currentValue) && Array.isArray(originalValue)) {
+        if (JSON.stringify(currentValue) !== JSON.stringify(originalValue)) {
+          return true;
+        }
+      } else if (currentValue !== originalValue) {
+        return true;
+      }
+    }
+    
+    return false;
+  };
   const [reportData, setReportData] = useState({
     eventName: '',
     date: '',
@@ -205,10 +243,37 @@ export default function ManageEvent() {
             studentCoordinators: event.studentCoordinators,
             contactInfo: event.contactInfo,
             sponsorshipDetails: event.sponsorshipDetails,
-            proposalStatus: event.proposal?.status || 'DRAFT',
-            reportStatus: event.report?.status || 'DRAFT'
+            proposalStatus: event.proposalStatus || 'DRAFT',
+            reportStatus: event.reportStatus || 'DRAFT'
           }));
           setEvents(transformedEvents);
+
+          // Store original event data for modification detection
+          const originalData: Record<string, any> = {};
+          data.forEach((event: any) => {
+            originalData[event.id] = {
+              title: event.title,
+              description: event.description,
+              type: event.type,
+              theme: event.theme,
+              startDate: event.startDate,
+              endDate: event.endDate,
+              venue: event.venue,
+              mode: event.mode,
+              maxCapacity: event.maxCapacity,
+              currentCapacity: event.currentCapacity,
+              budget: event.budget,
+              actualCost: event.actualCost,
+              status: event.status,
+              approvalStatus: event.approvalStatus,
+              tags: event.tags,
+              facultyCoordinator: event.facultyCoordinator,
+              facultyIncharge: event.facultyIncharge,
+              studentCoordinators: event.studentCoordinators,
+              contactInfo: event.contactInfo
+            };
+          });
+          setOriginalEventData(originalData);
           
           const initialEventData: Record<string, { photos: Photo[]; reviews: Review[] }> = {};
           transformedEvents.forEach((ev: Event) => {
@@ -227,11 +292,77 @@ export default function ManageEvent() {
     };
 
     fetchEvents();
+  }, [router]);
 
+  useEffect(() => {
     const now = new Date();
     const mm = String(now.getMonth() + 1).padStart(2, '0');
     setReviewDate(`${now.getFullYear()}-${mm}`);
   }, []);
+
+  // Refresh events when page gains focus (e.g., returning from Edit Event)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        const fetchEvents = async () => {
+          try {
+            const response = await fetch('/api/events');
+            if (response.ok) {
+              const data = await response.json();
+              const transformedEvents = data.map((event: any) => ({
+                id: event.id,
+                name: event.title || event.name,
+                department: event.club?.department || event.department,
+                date: event.startDate || event.date,
+                location: event.venue || event.location,
+                description: event.description,
+                type: event.type,
+                category: event.category,
+                theme: event.theme,
+                school: event.school,
+                venue: event.venue,
+                mode: event.mode,
+                maxCapacity: event.maxCapacity,
+                currentCapacity: event.currentCapacity,
+                status: event.status,
+                approvalStatus: event.approvalStatus,
+                poster: event.poster,
+                qrCode: event.qrCode,
+                facultyCoordinator: event.facultyCoordinator,
+                facultyIncharge: event.facultyIncharge,
+                studentCoordinators: event.studentCoordinators,
+                contactInfo: event.contactInfo,
+                sponsorshipDetails: event.sponsorshipDetails,
+                proposalStatus: event.proposal?.status || 'DRAFT',
+                reportStatus: event.report?.status || 'DRAFT'
+              }));
+              setEvents(transformedEvents);
+              
+              // Preserve existing event data for selected event
+              if (selectedEventId) {
+                const existingData = eventData[selectedEventId];
+                const initialEventData: Record<string, { photos: Photo[]; reviews: Review[] }> = {};
+                transformedEvents.forEach((ev: Event) => {
+                  initialEventData[ev.id] = {
+                    photos: ev.id === selectedEventId && existingData ? existingData.photos : [],
+                    reviews: ev.id === selectedEventId && existingData ? existingData.reviews : []
+                  };
+                });
+                setEventData(prev => ({ ...prev, ...initialEventData }));
+              }
+            }
+          } catch (error) {
+            console.error('Failed to refresh events:', error);
+          }
+        };
+
+        fetchEvents();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [selectedEventId, eventData]);
 
   if (isAuthLoading) {
     return (
@@ -391,7 +522,9 @@ export default function ManageEvent() {
   };
 
   const uploadPhotos = async () => {
-    if (!selectedEventId || !pendingPhotos.length) return;
+    if (!selectedEventId || !pendingPhotos.length || isUploadingPhotos) return;
+
+    setIsUploadingPhotos(true);
 
     try {
       const uploadPromises = pendingPhotos.map(async (photo) => {
@@ -422,15 +555,18 @@ export default function ManageEvent() {
 
       const uploadedPhotos = await Promise.all(uploadPromises);
 
-      // Update event data with uploaded photos
+      // Update event data with uploaded photos, avoiding duplicates
       setEventData(prev => {
         const updated = { ...prev };
-        const newPhotos = uploadedPhotos.map(p => ({
-          id: p.id,
-          url: p.url,
-          caption: p.caption,
-          albumTag: p.albumTag
-        }));
+        const existingPhotoIds = new Set(updated[selectedEventId].photos.map(p => p.id));
+        const newPhotos = uploadedPhotos
+          .filter(p => !existingPhotoIds.has(p.id))
+          .map(p => ({
+            id: p.id,
+            url: p.url,
+            caption: p.caption,
+            albumTag: p.albumTag
+          }));
         updated[selectedEventId].photos = [...updated[selectedEventId].photos, ...newPhotos];
         return updated;
       });
@@ -441,6 +577,8 @@ export default function ManageEvent() {
     } catch (error) {
       console.error('Photo upload error:', error);
       showToastMsg('Failed to upload photos', true);
+    } finally {
+      setIsUploadingPhotos(false);
     }
   };
 
@@ -468,37 +606,66 @@ export default function ManageEvent() {
     }
   };
 
-  const addReview = () => {
+  const addReview = async () => {
     if (!selectedEventId) return;
     if (!reviewerName) { showToastMsg('Please enter the reviewer name.', true); return; }
     if (!reviewerDept) { showToastMsg('Please enter department / year.', true); return; }
     if (!starRating) { showToastMsg('Please select a star rating.', true); return; }
     if (!reviewText) { showToastMsg('Please enter the review text.', true); return; }
-    if (!reviewDate) { showToastMsg('Please select a review date.', true); return; }
+    if (isSubmittingReview) return;
 
-    const [yr, mo] = reviewDate.split('-');
-    const dateLabel = new Date(parseInt(yr), parseInt(mo) - 1).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
+    setIsSubmittingReview(true);
 
-    setEventData(prev => {
-      const updated = { ...prev };
-      updated[selectedEventId].reviews.unshift({
-        id: generateId(),
-        name: reviewerName,
-        dept: reviewerDept,
-        rating: starRating,
-        text: reviewText,
-        date: dateLabel,
-        initials: getInitials(reviewerName),
-        color: getRandomColor()
+    try {
+      const response = await fetch(`/api/events/${selectedEventId}/reviews`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          rating: starRating,
+          suggestions: reviewText,
+          freeText: reviewText,
+          isAnonymous: false,
+          name: reviewerName,
+          department: reviewerDept
+        })
       });
-      return updated;
-    });
 
-    setReviewerName('');
-    setReviewerDept('');
-    setReviewText('');
-    setStarRating(0);
-    showToastMsg('Review added successfully!');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to submit review');
+      }
+
+      // Refetch reviews from database to get the authoritative list
+      const reviewsResponse = await fetch(`/api/events/${selectedEventId}/reviews`);
+      if (reviewsResponse.ok) {
+        const reviews = await reviewsResponse.json();
+        setEventData(prev => {
+          const updated = { ...prev };
+          updated[selectedEventId].reviews = reviews.map((r: any) => ({
+            id: r.id,
+            name: r.name || r.userId || 'Anonymous',
+            dept: r.department || 'N/A',
+            rating: r.rating,
+            text: r.text || r.freeText || r.suggestions || '',
+            date: r.date || new Date(r.createdAt).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }),
+            color: getDepartmentColor(r.department),
+            initials: getInitials(r.name || r.userId || 'Anonymous')
+          }));
+          return updated;
+        });
+      }
+
+      setReviewerName('');
+      setReviewerDept('');
+      setReviewText('');
+      setStarRating(0);
+      showToastMsg('Review added successfully!');
+    } catch (error) {
+      console.error('Review submission error:', error);
+      showToastMsg(error instanceof Error ? error.message : 'Failed to submit review', true);
+    } finally {
+      setIsSubmittingReview(false);
+    }
   };
 
   const clearReviewForm = () => {
@@ -559,203 +726,83 @@ export default function ManageEvent() {
 
   const handleGenerateReport = async () => {
     if (!selectedEvent) return;
-
     setIsGeneratingReport(true);
+    setGenerationProgress(0);
+    setGenerationStep('Initializing...');
 
     try {
-      if (reportType === 'pre') {
-        // For pre-event reports, generate a proposal
-        const response = await fetch('/api/proposal/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            eventId: selectedEvent.id,
-            formData: {
-              eventName: selectedEvent.name,
-              eventType: 'Workshop',
-              eventTheme: selectedEvent.name,
-              proposedDate: selectedEvent.date,
-              eventTime: '09:00 AM',
-              venue: selectedEvent.location,
-              mode: 'Offline',
-              facultyCoordinator: reportData.facultyCoordinator || 'Faculty Coordinator',
-              studentCoordinators: reportData.studentCoordinators ? reportData.studentCoordinators.split(',').map(s => s.trim()) : ['Student Coordinator'],
-              clubName: 'Event Club',
-              department: selectedEvent.department,
-              resourcePerson: reportData.resourcePerson ? {
-                name: reportData.resourcePerson,
-                designation: 'Guest Speaker',
-                organization: 'External Organization',
-                shortBio: 'Expert in the field'
-              } : undefined,
-              expectedParticipants: parseInt(reportData.actualParticipants) || 50,
-              budgetItems: reportData.budgetUtilized ? [
-                {
-                  item: 'Venue & Infrastructure',
-                  amount: Math.floor((parseInt(reportData.budgetUtilized.replace(/[₹,]/g, '')) || 10000) * 0.3)
-                },
-                {
-                  item: 'Refreshments & Catering',
-                  amount: Math.floor((parseInt(reportData.budgetUtilized.replace(/[₹,]/g, '')) || 10000) * 0.25)
-                },
-                {
-                  item: 'Materials & Supplies',
-                  amount: Math.floor((parseInt(reportData.budgetUtilized.replace(/[₹,]/g, '')) || 10000) * 0.2)
-                },
-                {
-                  item: 'Speaker Honorarium',
-                  amount: Math.floor((parseInt(reportData.budgetUtilized.replace(/[₹,]/g, '')) || 10000) * 0.15)
-                },
-                {
-                  item: 'Contingency & Miscellaneous',
-                  amount: Math.floor((parseInt(reportData.budgetUtilized.replace(/[₹,]/g, '')) || 10000) * 0.1)
-                }
-              ] : [
-                { item: 'Venue & Infrastructure', amount: 3000 },
-                { item: 'Refreshments & Catering', amount: 2500 },
-                { item: 'Materials & Supplies', amount: 2000 },
-                { item: 'Speaker Honorarium', amount: 1500 },
-                { item: 'Contingency & Miscellaneous', amount: 1000 }
-              ],
-              logistics: {
-                projector: true,
-                mic: true,
-                internet: true,
-                certificates: true,
-                refreshments: true,
-                photography: true,
-                volunteers: true
-              },
-              registrationLink: reportData.links || '',
-              brochureLink: ''
-            }
-          })
+      // Simulate progress updates
+      const progressInterval = setInterval(() => {
+        setGenerationProgress(prev => {
+          if (prev >= 90) return prev;
+          return prev + 10;
         });
 
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.details || 'Failed to generate proposal');
-        }
-        const result = await response.json();
-        setReportGenerated(true);
-        showToastMsg('Proposal generated successfully! 🎉');
-      } else {
-        // Post-event report
-        const response = await fetch('/api/report/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            eventId: selectedEvent.id,
-            formData: {
-              eventName: selectedEvent.name,
-              date: selectedEvent.date,
-              time: '09:00 AM',
-              venue: selectedEvent.location,
-              eventType: 'Workshop',
-              organizer: 'Event Club',
-              facultyCoordinator: reportData.facultyCoordinator || 'Faculty Coordinator',
-              studentCoordinators: reportData.studentCoordinators ? reportData.studentCoordinators.split(',').map(s => s.trim()) : ['Student Coordinator'],
-              resourcePerson: reportData.resourcePerson ? {
-                name: reportData.resourcePerson,
-                designation: 'Guest Speaker',
-                organization: 'External Organization'
-              } : undefined,
-              actualParticipants: parseInt(reportData.actualParticipants) || 50,
-              participantStats: {
-                registered: parseInt(reportData.actualParticipants) || 50,
-                attended: parseInt(reportData.actualParticipants) || 50,
-                male: Math.floor((parseInt(reportData.actualParticipants) || 50) * 0.5),
-                female: Math.floor((parseInt(reportData.actualParticipants) || 50) * 0.5),
-                others: 0,
-                certificatesIssued: parseInt(reportData.actualParticipants) || 50
-              },
-              budgetUtilized: reportData.budgetUtilized ? [
-                {
-                  item: 'Venue & Infrastructure',
-                  amount: Math.floor((parseInt(reportData.budgetUtilized.replace(/[₹,]/g, '')) || 10000) * 0.3)
-                },
-                {
-                  item: 'Refreshments & Catering',
-                  amount: Math.floor((parseInt(reportData.budgetUtilized.replace(/[₹,]/g, '')) || 10000) * 0.25)
-                },
-                {
-                  item: 'Materials & Supplies',
-                  amount: Math.floor((parseInt(reportData.budgetUtilized.replace(/[₹,]/g, '')) || 10000) * 0.2)
-                },
-                {
-                  item: 'Speaker Honorarium',
-                  amount: Math.floor((parseInt(reportData.budgetUtilized.replace(/[₹,]/g, '')) || 10000) * 0.15)
-                },
-                {
-                  item: 'Contingency & Miscellaneous',
-                  amount: Math.floor((parseInt(reportData.budgetUtilized.replace(/[₹,]/g, '')) || 10000) * 0.1)
-                }
-              ] : [
-                { item: 'Venue & Infrastructure', amount: 3000 },
-                { item: 'Refreshments & Catering', amount: 2500 },
-                { item: 'Materials & Supplies', amount: 2000 },
-                { item: 'Speaker Honorarium', amount: 1500 },
-                { item: 'Contingency & Miscellaneous', amount: 1000 }
-              ],
-              links: {
-                driveLink: reportData.links || '',
-                registrationLink: reportData.links || '',
-                attendanceLink: reportData.links || '',
-                feedbackLink: reportData.links || '',
-                recordingLink: '',
-                presentationLink: ''
-              },
-              socialMediaLinks: reportData.socialMediaLinks ? reportData.socialMediaLinks.split(',').map(s => s.trim()) : [],
-              preparedBy: reportData.facultyCoordinator || 'Faculty Coordinator',
-              preparedDate: new Date().toISOString(),
-              academicYear: '2025-2026',
-              clubName: 'Event Club',
-              department: selectedEvent.department,
-              clubHead: 'Dr. Sharma',
-              departmentHead: 'Dr. Patel',
-              contactInformation: 'Email: event.club@jainuniversity.ac.in | Phone: +91-1234567890',
-              additionalDocuments: 'Event photos, attendance sheets, feedback forms',
-              attachmentNotes: 'All documents attached as per university guidelines',
-              qrCode: 'QR Code for Event Report'
-            }
-          })
-        });
+        if (generationProgress < 30) setGenerationStep('Fetching event data and photos...');
+        else if (generationProgress < 60) setGenerationStep('Generating AI content...');
+        else if (generationProgress < 90) setGenerationStep('Compiling PDF...');
+      }, 500);
 
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.details || 'Failed to generate report');
-        }
-        const result = await response.json();
-        setReportGenerated(true);
-        showToastMsg('Post-event report generated successfully! 🎉');
+      const response = await fetch('/api/report/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventId: selectedEvent.id,
+          formData: {
+            ...reportData,
+            photos: selectedPhotoIds.map(id => {
+              const photo = currentEventData?.photos.find(p => p.id === id);
+              return photo ? { url: photo.url, caption: photo.caption, albumTag: photo.albumTag } : null;
+            }).filter(Boolean)
+          }
+        })
+      });
+
+      clearInterval(progressInterval);
+      setGenerationProgress(100);
+      setGenerationStep('Complete!');
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.details || 'Failed to generate report');
       }
+      const result = await response.json();
+      setReportGenerated(true);
+      showToastMsg('Post-event report generated successfully! 🎉');
     } catch (error) {
       console.error('Generation error:', error);
       showToastMsg(error instanceof Error ? error.message : 'Failed to generate report', true);
     } finally {
       setIsGeneratingReport(false);
+      setGenerationProgress(0);
+      setGenerationStep('');
     }
   };
 
-  const handleOpenReportModal = (type: 'pre' | 'post') => {
+  const handleOpenReportModal = () => {
     if (!selectedEvent) return;
-    setReportType(type);
+    console.log('[REPORT-MODAL] Opening report modal for event:', selectedEvent.id);
+    console.log('[REPORT-MODAL] Event QR code:', selectedEvent.qrCode);
+    
     setReportData(prev => ({
       ...prev,
       eventName: selectedEvent.name,
       date: selectedEvent.date,
-      time: '',
+      time: '09:00',
       venue: selectedEvent.location,
-      eventType: '',
+      eventType: selectedEvent.type || '',
       organizer: '',
-      facultyCoordinator: '',
-      studentCoordinators: '',
-      resourcePerson: '',
+      facultyCoordinator: selectedEvent.facultyCoordinator || '',
+      studentCoordinators: Array.isArray(selectedEvent.studentCoordinators) 
+        ? selectedEvent.studentCoordinators.join(', ') 
+        : '',
+      resourcePerson: (selectedEvent.contactInfo as any)?.resourcePerson?.name || '',
       actualParticipants: '',
       budgetUtilized: '',
       links: '',
       socialMediaLinks: '',
-      photos: ''
+      photos: '',
+      qrCode: selectedEvent.qrCode || ''
     }));
     setReportGenerated(false);
     setShowReportModal(true);
@@ -879,11 +926,12 @@ export default function ManageEvent() {
                       <span className={`status-badge ${selectedEvent.proposalStatus?.toLowerCase() || 'draft'}`}>
                         {selectedEvent.proposalStatus || 'DRAFT'}
                       </span>
-                      {selectedEvent.proposalStatus === 'GENERATED' && (
+                      {(selectedEvent.proposalStatus === 'GENERATED' || selectedEvent.proposalStatus === 'APPROVED') && !isEventModified(selectedEvent.id) ? (
                         <button
                           className="btn btn-gold-outline btn-sm"
                           style={{ padding: '4px 12px', fontSize: '12px' }}
                           onClick={async () => {
+                            console.log(`[MANAGE-EVENT] Downloading proposal for event ${selectedEvent.id}`);
                             const link = document.createElement('a');
                             link.href = `/api/proposal/${selectedEvent.id}/download`;
                             link.download = `proposal_${selectedEvent.name.replace(/\s+/g, '_')}.pdf`;
@@ -892,47 +940,376 @@ export default function ManageEvent() {
                             document.body.removeChild(link);
                           }}
                         >
-                          <i className="fas fa-download"></i> Download
+                          <i className="fas fa-download"></i> Download Proposal
+                        </button>
+                      ) : (selectedEvent.proposalStatus === 'GENERATED' || selectedEvent.proposalStatus === 'APPROVED') && isEventModified(selectedEvent.id) ? (
+                        <button
+                          className="btn btn-warning btn-sm"
+                          style={{ padding: '4px 12px', fontSize: '12px' }}
+                          onClick={async () => {
+                            console.log(`[MANAGE-EVENT] Regenerating proposal for modified event ${selectedEvent.id}`);
+                            setIsGeneratingProposal(true);
+                            setGenerationProgress(0);
+                            setGenerationStep('Initializing...');
+                            
+                            try {
+                              const progressInterval = setInterval(() => {
+                                setGenerationProgress(prev => {
+                                  if (prev >= 90) return prev;
+                                  return prev + 10;
+                                });
+                                
+                                if (generationProgress < 30) setGenerationStep('Fetching event data...');
+                                else if (generationProgress < 60) setGenerationStep('Generating AI content...');
+                                else if (generationProgress < 90) setGenerationStep('Compiling PDF...');
+                              }, 500);
+
+                              const response = await fetch('/api/proposal/generate', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                  eventId: selectedEvent.id,
+                                formData: {
+                                  eventName: selectedEvent.name,
+                                  eventType: selectedEvent.type || 'workshop',
+                                  eventTheme: selectedEvent.theme || 'General',
+                                  proposedDate: selectedEvent.date,
+                                  eventTime: '09:00',
+                                  venue: selectedEvent.location,
+                                  mode: selectedEvent.mode || 'offline',
+                                  facultyCoordinator: 'Faculty Coordinator',
+                                  studentCoordinators: [],
+                                  clubName: 'Event Club',
+                                  department: selectedEvent.department,
+                                  expectedParticipants: 50,
+                                  budgetItems: [],
+                                  logistics: {}
+                                }
+                              })
+                              });
+                              
+                              clearInterval(progressInterval);
+                              setGenerationProgress(100);
+                              setGenerationStep('Complete!');
+                              
+                              if (!response.ok) {
+                                const error = await response.json();
+                                throw new Error(error.details || 'Failed to regenerate proposal');
+                              }
+                              
+                              // Update original data after successful regeneration
+                              const eventsResponse = await fetch('/api/events');
+                              if (eventsResponse.ok) {
+                                const data = await eventsResponse.json();
+                                const transformedEvents = data.map((event: any) => ({
+                                  id: event.id,
+                                  name: event.title || event.name,
+                                  department: event.club?.department || event.department,
+                                  date: event.startDate || event.date,
+                                  location: event.venue || event.location,
+                                  description: event.description,
+                                  type: event.type,
+                                  category: event.category,
+                                  theme: event.theme,
+                                  school: event.school,
+                                  venue: event.venue,
+                                  mode: event.mode,
+                                  maxCapacity: event.maxCapacity,
+                                  currentCapacity: event.currentCapacity,
+                                  status: event.status,
+                                  approvalStatus: event.approvalStatus,
+                                  poster: event.poster,
+                                  qrCode: event.qrCode,
+                                  facultyCoordinator: event.facultyCoordinator,
+                                  facultyIncharge: event.facultyIncharge,
+                                  studentCoordinators: event.studentCoordinators,
+                                  contactInfo: event.contactInfo,
+                                  sponsorshipDetails: event.sponsorshipDetails,
+                                  proposalStatus: event.proposalStatus || 'DRAFT',
+                                  reportStatus: event.reportStatus || 'DRAFT'
+                                }));
+                                setEvents(transformedEvents);
+                                
+                                // Update original data
+                                const originalData: Record<string, any> = {};
+                                data.forEach((event: any) => {
+                                  originalData[event.id] = {
+                                    title: event.title,
+                                    description: event.description,
+                                    type: event.type,
+                                    theme: event.theme,
+                                    startDate: event.startDate,
+                                    endDate: event.endDate,
+                                    venue: event.venue,
+                                    mode: event.mode,
+                                    maxCapacity: event.maxCapacity,
+                                    currentCapacity: event.currentCapacity,
+                                    budget: event.budget,
+                                    actualCost: event.actualCost,
+                                    status: event.status,
+                                    approvalStatus: event.approvalStatus,
+                                    tags: event.tags,
+                                    facultyCoordinator: event.facultyCoordinator,
+                                    facultyIncharge: event.facultyIncharge,
+                                    studentCoordinators: event.studentCoordinators,
+                                    contactInfo: event.contactInfo
+                                  };
+                                });
+                                setOriginalEventData(originalData);
+                              }
+                              
+                              showToastMsg('Proposal regenerated successfully! 🎉');
+                            } catch (error) {
+                              console.error('Proposal regeneration error:', error);
+                              showToastMsg(error instanceof Error ? error.message : 'Failed to regenerate proposal', true);
+                            } finally {
+                              setIsGeneratingProposal(false);
+                              setGenerationProgress(0);
+                              setGenerationStep('');
+                            }
+                          }}
+                          disabled={isGeneratingProposal}
+                        >
+                          {isGeneratingProposal ? (
+                            <>
+                              <i className="fas fa-spinner fa-spin"></i> Regenerating...
+                            </>
+                          ) : (
+                            <>
+                              <i className="fas fa-sync-alt"></i> Regenerate Proposal
+                            </>
+                          )}
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-ghost btn-sm"
+                          style={{ padding: '4px 12px', fontSize: '12px' }}
+                          onClick={async () => {
+                            console.log(`[MANAGE-EVENT] Generating proposal for event ${selectedEvent.id}`);
+                            setIsGeneratingProposal(true);
+                            setGenerationProgress(0);
+                            setGenerationStep('Initializing...');
+                            
+                            try {
+                              // Simulate progress updates
+                              const progressInterval = setInterval(() => {
+                                setGenerationProgress(prev => {
+                                  if (prev >= 90) return prev;
+                                  return prev + 10;
+                                });
+                                
+                                if (generationProgress < 30) setGenerationStep('Fetching event data...');
+                                else if (generationProgress < 60) setGenerationStep('Generating AI content...');
+                                else if (generationProgress < 90) setGenerationStep('Compiling PDF...');
+                              }, 500);
+
+                              const response = await fetch('/api/proposal/generate', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                  eventId: selectedEvent.id,
+                                  formData: {
+                                    eventName: selectedEvent.name,
+                                    eventType: selectedEvent.type || 'workshop',
+                                    eventTheme: selectedEvent.theme || 'General',
+                                    proposedDate: selectedEvent.date,
+                                    eventTime: '09:00',
+                                    venue: selectedEvent.location,
+                                    mode: selectedEvent.mode || 'offline',
+                                    facultyCoordinator: 'Faculty Coordinator',
+                                    studentCoordinators: [],
+                                    clubName: 'Event Club',
+                                    department: selectedEvent.department,
+                                    expectedParticipants: 50,
+                                    budgetItems: [],
+                                    logistics: {}
+                                  }
+                                })
+                              });
+                              
+                              clearInterval(progressInterval);
+                              setGenerationProgress(100);
+                              setGenerationStep('Complete!');
+                              
+                              if (!response.ok) {
+                                const error = await response.json();
+                                throw new Error(error.details || 'Failed to generate proposal');
+                              }
+                              
+                              // Refresh events to update status
+                              const eventsResponse = await fetch('/api/events');
+                              if (eventsResponse.ok) {
+                                const data = await eventsResponse.json();
+                                const transformedEvents = data.map((event: any) => ({
+                                  id: event.id,
+                                  name: event.title || event.name,
+                                  department: event.club?.department || event.department,
+                                  date: event.startDate || event.date,
+                                  location: event.venue,
+                                  description: event.description,
+                                  type: event.type,
+                                  category: event.category,
+                                  theme: event.theme,
+                                  school: event.school,
+                                  venue: event.venue,
+                                  mode: event.mode,
+                                  maxCapacity: event.maxCapacity,
+                                  currentCapacity: event.currentCapacity,
+                                  status: event.status,
+                                  approvalStatus: event.approvalStatus,
+                                  poster: event.poster,
+                                  qrCode: event.qrCode,
+                                  facultyCoordinator: event.facultyCoordinator,
+                                  facultyIncharge: event.facultyIncharge,
+                                  studentCoordinators: event.studentCoordinators,
+                                  contactInfo: event.contactInfo,
+                                  sponsorshipDetails: event.sponsorshipDetails,
+                                  proposalStatus: event.proposalStatus || 'DRAFT',
+                                  reportStatus: event.reportStatus || 'DRAFT'
+                                }));
+                                setEvents(transformedEvents);
+                                // Update the current event data cache
+                                const updatedEvent = transformedEvents.find((e: any) => e.id === selectedEvent.id);
+                                if (updatedEvent) {
+                                  setEventData(prev => ({
+                                    ...prev,
+                                    [selectedEvent.id]: {
+                                      photos: eventData[selectedEvent.id]?.photos || [],
+                                      reviews: eventData[selectedEvent.id]?.reviews || []
+                                    }
+                                  }));
+                                }
+                              }
+                              
+                              showToastMsg('Proposal generated successfully! 🎉');
+                            } catch (error) {
+                              console.error('Proposal generation error:', error);
+                              showToastMsg(error instanceof Error ? error.message : 'Failed to generate proposal', true);
+                            } finally {
+                              setIsGeneratingProposal(false);
+                              setGenerationProgress(0);
+                              setGenerationStep('');
+                            }
+                          }}
+                          disabled={isGeneratingProposal}
+                        >
+                          {isGeneratingProposal ? (
+                            <>
+                              <i className="fas fa-spinner fa-spin"></i> Generating...
+                            </>
+                          ) : (
+                            <>
+                              <i className="fas fa-magic"></i> Generate Proposal
+                            </>
+                          )}
                         </button>
                       )}
                     </div>
-                    {selectedEvent.proposalStatus === 'DRAFT' && (
-                      <button className="btn btn-ghost btn-sm" style={{ padding: '4px 12px', fontSize: '12px' }} onClick={() => handleOpenReportModal('pre')}>
-                        <i className="fas fa-magic"></i> Generate Proposal
-                      </button>
-                    )}
                   </div>
 
-                  {/* Report Status */}
+                  {/* Progress Modal */}
+                  {(isGeneratingProposal || isGeneratingReport) && (
+                    <div style={{
+                      position: 'fixed',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: 'rgba(0,0,0,0.5)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      zIndex: 1000
+                    }}>
+                      <div style={{
+                        background: 'white',
+                        padding: '30px',
+                        borderRadius: '12px',
+                        textAlign: 'center',
+                        minWidth: '300px'
+                      }}>
+                        <div style={{
+                          width: '100%',
+                          height: '8px',
+                          background: '#e5e7eb',
+                          borderRadius: '4px',
+                          marginBottom: '16px',
+                          overflow: 'hidden'
+                        }}>
+                          <div style={{
+                            width: `${generationProgress}%`,
+                            height: '100%',
+                            background: 'var(--gold)',
+                            transition: 'width 0.3s ease'
+                          }} />
+                        </div>
+                        <div style={{ fontSize: '14px', color: '#374151', marginBottom: '8px' }}>
+                          {generationStep}
+                        </div>
+                        <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                          {generationProgress}%
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Post Event Proposal Status */}
                   <div style={{ flex: 1, minWidth: '200px' }}>
-                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-pale)', marginBottom: '8px' }}>POST EVENT REPORT</div>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-pale)', marginBottom: '8px' }}>POST EVENT PROPOSAL</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                       <span className={`status-badge ${selectedEvent.reportStatus?.toLowerCase() || 'draft'}`}>
                         {selectedEvent.reportStatus || 'DRAFT'}
                       </span>
-                      {selectedEvent.reportStatus === 'SUBMITTED' && (
+                      {(selectedEvent.reportStatus === 'SUBMITTED' || selectedEvent.reportStatus === 'APPROVED') && !isEventModified(selectedEvent.id) ? (
                         <button
                           className="btn btn-gold-outline btn-sm"
                           style={{ padding: '4px 12px', fontSize: '12px' }}
                           onClick={async () => {
                             const link = document.createElement('a');
                             link.href = `/api/report/${selectedEvent.id}/download`;
-                            link.download = `report_${selectedEvent.name.replace(/\s+/g, '_')}.pdf`;
+                            link.download = `post_event_report_${selectedEvent.name.replace(/\s+/g, '_')}.pdf`;
                             document.body.appendChild(link);
                             link.click();
                             document.body.removeChild(link);
                           }}
                         >
-                          <i className="fas fa-download"></i> Download
+                          <i className="fas fa-download"></i> Download Post Event Report
                         </button>
-                      )}
+                      ) : (selectedEvent.reportStatus === 'SUBMITTED' || selectedEvent.reportStatus === 'APPROVED') && isEventModified(selectedEvent.id) ? (
+                        <button
+                          className="btn btn-warning btn-sm"
+                          style={{ padding: '4px 12px', fontSize: '12px' }}
+                          onClick={() => handleOpenReportModal()}
+                        >
+                          <i className="fas fa-sync-alt"></i> Regenerate Post Event Report
+                        </button>
+                      ) : null}
                     </div>
                     {selectedEvent.reportStatus === 'DRAFT' && (
-                      <button className="btn btn-ghost btn-sm" style={{ padding: '4px 12px', fontSize: '12px' }} onClick={() => handleOpenReportModal('post')}>
-                        <i className="fas fa-magic"></i> Generate Report
+                      <button
+                        className="btn btn-ghost btn-sm"
+                        style={{ padding: '4px 12px', fontSize: '12px' }}
+                        onClick={() => handleOpenReportModal()}
+                      >
+                        <i className="fas fa-magic"></i> Generate Post Event Report
                       </button>
                     )}
                   </div>
+
+                  {/* Edit Event */}
+                  <div style={{ flex: 1, minWidth: '200px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-pale)', marginBottom: '8px' }}>EVENT MANAGEMENT</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                      <button
+                        className="btn btn-gold-outline btn-sm"
+                        style={{ padding: '4px 12px', fontSize: '12px' }}
+                        onClick={() => router.push(`/edit-event/${selectedEvent.id}`)}
+                      >
+                        <i className="fas fa-edit"></i> Edit Event
+                      </button>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -1191,13 +1568,13 @@ export default function ManageEvent() {
         </div>
       )}
 
-      {/* REPORT GENERATION MODAL */}
+      {/* REPORT GENERATION MODAL - POST EVENT ONLY */}
       {showReportModal && (
         <div className="modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
           <div className="modal-card" style={{ background: 'var(--white)', borderRadius: '16px', maxWidth: '600px', width: '90%', maxHeight: '90vh', overflow: 'auto', padding: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h2 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-dark)', margin: 0 }}>
-                {reportType === 'pre' ? 'Generate Pre-Event Report' : 'Generate Post-Event Report'}
+                Generate Post-Event Report
               </h2>
               <button onClick={() => setShowReportModal(false)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: 'var(--text-soft)' }}>
                 <i className="fas fa-times"></i>
@@ -1247,47 +1624,81 @@ export default function ManageEvent() {
                     Close
                   </button>
                   <button
-                    onClick={() => selectedEvent && window.open(`/api/${reportType === 'pre' ? 'proposal' : 'report'}/${selectedEvent.id}/download`, '_blank')}
+                    onClick={() => selectedEvent && window.open(`/api/report/${selectedEvent.id}/download`, '_blank')}
                     style={{ padding: '10px 20px', border: 'none', borderRadius: '8px', background: 'var(--gold)', color: 'var(--navy)', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}
                   >
-                    <i className="fas fa-download"></i> Download {reportType === 'pre' ? 'Proposal' : 'Report'}
+                    <i className="fas fa-download"></i> Download Report
                   </button>
                 </div>
               </>
             ) : (
               <>
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-mid)', marginBottom: '6px' }}>Faculty Coordinator</label>
-                  <input
-                    type="text"
-                    style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--border)', borderRadius: '8px', fontSize: '14px' }}
-                    value={reportData.facultyCoordinator}
-                    onChange={(e) => setReportData({ ...reportData, facultyCoordinator: e.target.value })}
-                    placeholder="Dr. Name"
-                  />
-                </div>
-
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-mid)', marginBottom: '6px' }}>Student Coordinators (comma-separated)</label>
-                  <input
-                    type="text"
-                    style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--border)', borderRadius: '8px', fontSize: '14px' }}
-                    value={reportData.studentCoordinators}
-                    onChange={(e) => setReportData({ ...reportData, studentCoordinators: e.target.value })}
-                    placeholder="John Doe, Jane Smith"
-                  />
-                </div>
-
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-mid)', marginBottom: '6px' }}>Resource Person</label>
-                  <input
-                    type="text"
-                    style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--border)', borderRadius: '8px', fontSize: '14px' }}
-                    value={reportData.resourcePerson}
-                    onChange={(e) => setReportData({ ...reportData, resourcePerson: e.target.value })}
-                    placeholder="Guest speaker name"
-                  />
-                </div>
+                {/* Photo Selection for Post-Event Reports */}
+                {currentEventData?.photos && currentEventData.photos.length > 0 && (
+                  <div style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-mid)', marginBottom: '8px' }}>
+                      Select Photos for Report ({selectedPhotoIds.length} selected)
+                    </label>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', maxHeight: '200px', overflow: 'auto', padding: '8px', background: 'var(--surface)', borderRadius: '8px' }}>
+                      {currentEventData.photos.map((photo) => (
+                        <div
+                          key={photo.id}
+                          onClick={() => {
+                            setSelectedPhotoIds(prev => 
+                              prev.includes(photo.id) 
+                                ? prev.filter(id => id !== photo.id)
+                                : [...prev, photo.id]
+                            );
+                          }}
+                          style={{
+                            position: 'relative',
+                            cursor: 'pointer',
+                            borderRadius: '6px',
+                            overflow: 'hidden',
+                            border: selectedPhotoIds.includes(photo.id) ? '3px solid var(--gold)' : '2px solid var(--border)',
+                            aspectRatio: '16/9'
+                          }}
+                        >
+                          <img
+                            src={photo.url}
+                            alt={photo.caption}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          />
+                          {selectedPhotoIds.includes(photo.id) && (
+                            <div style={{
+                              position: 'absolute',
+                              top: '4px',
+                              right: '4px',
+                              background: 'var(--gold)',
+                              borderRadius: '50%',
+                              width: '20px',
+                              height: '20px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}>
+                              <i className="fas fa-check" style={{ fontSize: '12px', color: 'var(--navy)' }}></i>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                      <button
+                        onClick={() => setSelectedPhotoIds(currentEventData.photos.map(p => p.id))}
+                        style={{ padding: '6px 12px', fontSize: '12px', border: '1px solid var(--border)', borderRadius: '6px', background: 'var(--white)', cursor: 'pointer' }}
+                      >
+                        Select All
+                      </button>
+                      <button
+                        onClick={() => setSelectedPhotoIds([])}
+                        style={{ padding: '6px 12px', fontSize: '12px', border: '1px solid var(--border)', borderRadius: '6px', background: 'var(--white)', cursor: 'pointer' }}
+                      >
+                        Clear Selection
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 <div style={{ marginBottom: '16px' }}>
                   <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-mid)', marginBottom: '6px' }}>Actual Participants</label>

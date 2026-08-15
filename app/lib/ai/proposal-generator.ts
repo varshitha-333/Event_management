@@ -257,7 +257,8 @@ export async function generateProposalContent(input: ProposalInput, templatePath
     console.log(`[AI-PROPOSAL] Prompt construction: ${Date.now() - promptConstructionStart}ms`);
 
     const apiCallStart = Date.now();
-    const response = await client.chat.completions.create({
+    // Use streaming for faster response
+    const stream = await client.chat.completions.create({
       model,
       messages: [
         {
@@ -271,27 +272,27 @@ export async function generateProposalContent(input: ProposalInput, templatePath
       ],
       temperature: 0.7,
       max_tokens: 4096,
-      response_format: { type: 'json_object' }
+      response_format: { type: 'json_object' },
+      stream: true
     });
-    console.log(`[AI-PROPOSAL] AI API call: ${Date.now() - apiCallStart}ms`);
 
-    console.log('AI response:', JSON.stringify(response, null, 2));
-
-    if (!response.choices || response.choices.length === 0) {
-      throw new Error('No choices returned from AI API');
+    let fullContent = '';
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content || '';
+      fullContent += content;
     }
+    console.log(`[AI-PROPOSAL] AI API call (streaming): ${Date.now() - apiCallStart}ms`);
 
-    const content = response.choices[0].message?.content;
-    if (!content) {
+    if (!fullContent) {
       throw new Error('No content generated');
     }
 
     const jsonParsingStart = Date.now();
     let parsed: ProposalOutput;
     try {
-      parsed = JSON.parse(extractJsonPayload(content)) as ProposalOutput;
+      parsed = JSON.parse(extractJsonPayload(fullContent)) as ProposalOutput;
     } catch (parseError) {
-      console.error('Raw AI content that failed to parse:', content);
+      console.error('Raw AI content that failed to parse:', fullContent);
       throw new Error('AI returned malformed JSON');
     }
     console.log(`[AI-PROPOSAL] JSON parsing: ${Date.now() - jsonParsingStart}ms`);

@@ -1,29 +1,53 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-// Initialize OpenRouter API
-const openRouter = new OpenAI({
-  baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: process.env.OPENROUTER_API_KEY || '',
-  defaultHeaders: {
-    'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-    'X-Title': 'Jain University Event Management',
-  }
-});
+// Singleton pattern for AI clients to reuse HTTP connections
+let openRouterClient: OpenAI | null = null;
+let nvidiaClient: OpenAI | null = null;
 
-// Initialize NVIDIA API
-const nvidia = new OpenAI({
-  baseURL: 'https://integrate.api.nvidia.com/v1',
-  apiKey: process.env.NVIDIA_API_KEY || '',
-});
+// Initialize OpenRouter API (singleton)
+function getOpenRouterClient(): OpenAI {
+  if (!openRouterClient) {
+    openRouterClient = new OpenAI({
+      baseURL: 'https://openrouter.ai/api/v1',
+      apiKey: process.env.OPENROUTER_API_KEY || '',
+      defaultHeaders: {
+        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+        'X-Title': 'Jain University Event Management',
+      }
+    });
+  }
+  return openRouterClient;
+}
+
+// Initialize NVIDIA API (singleton)
+function getNvidiaClient(): OpenAI {
+  if (!nvidiaClient) {
+    nvidiaClient = new OpenAI({
+      baseURL: 'https://integrate.api.nvidia.com/v1',
+      apiKey: process.env.NVIDIA_API_KEY || '',
+    });
+  }
+  return nvidiaClient;
+}
 
 // Function to select AI provider
 function getAIProvider() {
   // Prefer NVIDIA API if available, fallback to OpenRouter
   if (process.env.NVIDIA_API_KEY) {
-    return { client: nvidia, model: 'meta/llama-3.1-70b-instruct' };
+    // Use faster 8B model for 3-minute target while maintaining quality
+    return { client: getNvidiaClient(), model: 'meta/llama-3.1-8b-instruct' };
   }
-  return { client: openRouter, model: 'deepseek/deepseek-chat' };
+  // Use faster model on OpenRouter for 3-minute target
+  return { client: getOpenRouterClient(), model: 'meta-llama/llama-3.1-8b-instruct:free' };
+}
+
+// Simple in-memory cache for identical requests
+const suggestionCache = new Map<string, { suggestions: any; timestamp: number }>();
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+
+function getCacheKey(theme: string, department: string, guests?: string, audience?: string, tone?: string): string {
+  return `${theme}|${department}|${guests || ''}|${audience || ''}|${tone || 'professional'}`;
 }
 
 interface EventSuggestion {
@@ -61,9 +85,14 @@ interface EventSuggestion {
 }
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
+  console.log('[EVENT-SUGGESTION-PERF] START');
+  
   try {
+    const parseStart = Date.now();
     const body = await request.json();
     const { theme, department, guests, audience, tone } = body;
+    console.log(`[EVENT-SUGGESTION-PERF] Request parsing: ${Date.now() - parseStart}ms`);
 
     if (!theme || !department) {
       return NextResponse.json(
@@ -72,12 +101,34 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const suggestions = await generateAIEventIdeas(theme, department, guests, audience, tone);
+    // Check cache first
+    const cacheStart = Date.now();
+    const cacheKey = getCacheKey(theme, department, guests, audience, tone);
+    const cached = suggestionCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      console.log(`[EVENT-SUGGESTION-PERF] Cache hit: ${Date.now() - cacheStart}ms`);
+      console.log(`[EVENT-SUGGESTION-PERF] Total (cached): ${Date.now() - startTime}ms`);
+      return NextResponse.json({ suggestions: cached.suggestions });
+    }
+    console.log(`[EVENT-SUGGESTION-PERF] Cache miss: ${Date.now() - cacheStart}ms`);
 
-    return NextResponse.json({ suggestions });
+    const aiStart = Date.now();
+    const suggestions = await generateAIEventIdeas(theme, department, guests, audience, tone);
+    console.log(`[EVENT-SUGGESTION-PERF] AI generation: ${Date.now() - aiStart}ms`);
+
+    // Cache the result
+    suggestionCache.set(cacheKey, { suggestions, timestamp: Date.now() });
+
+    const responseStart = Date.now();
+    const response = NextResponse.json({ suggestions });
+    console.log(`[EVENT-SUGGESTION-PERF] Response serialization: ${Date.now() - responseStart}ms`);
+    console.log(`[EVENT-SUGGESTION-PERF] Total: ${Date.now() - startTime}ms`);
+    
+    return response;
 
   } catch (error) {
-    console.error('AI suggestion error:', error);
+    console.error('[EVENT-SUGGESTION-PERF] Error:', error);
+    console.log(`[EVENT-SUGGESTION-PERF] Total (with error): ${Date.now() - startTime}ms`);
     return NextResponse.json(
       { error: 'Failed to generate suggestions' },
       { status: 500 }
@@ -92,8 +143,15 @@ async function generateAIEventIdeas(
   audience?: string,
   tone?: string
 ): Promise<EventSuggestion[]> {
-  const { client, model } = getAIProvider();
+  const functionStart = Date.now();
+  console.log('[EVENT-SUGGESTION-PERF] generateAIEventIdeas START');
   
+  const providerStart = Date.now();
+  const { client, model } = getAIProvider();
+  console.log(`[EVENT-SUGGESTION-PERF] Provider selection: ${Date.now() - providerStart}ms`);
+  console.log(`[EVENT-SUGGESTION-PERF] Using provider: ${model}`);
+  
+  const promptStart = Date.now();
   const prompt = `
 You are an expert event planner for Jain University (Deemed-to-be University).
 
@@ -118,7 +176,7 @@ For each event suggestion, provide the following information in a concise, well-
    - Innovation: 2-3 skills
 6. **Suitable Audience**: Which students should participate (1 sentence)
 7. **Difficulty Level**: Beginner / Intermediate / Advanced
-8. **Estimated Budget**: Approximate budget range
+8. **Estimated Budget**: MUST be between ₹30,000 to ₹50,000 only - do not exceed this range
 9. **Duration**: Expected duration (e.g., "2 days", "1 week")
 10. **Team Size**: Recommended organizing team size
 11. **Resources Required**: List of 3-5 key resources
@@ -148,6 +206,7 @@ CRITICAL REQUIREMENTS:
 - If giving examples, identify them as representative examples
 - Generate realistic values for ALL fields even if not explicitly provided in input
 - Make logistics, venue, and marketing suggestions practical for a university setting
+- BUDGET MUST BE BETWEEN ₹30,000 TO ₹50,000 ONLY - NEVER EXCEED THIS RANGE
 
 Respond ONLY with valid JSON in this exact structure:
 {
@@ -187,7 +246,9 @@ Respond ONLY with valid JSON in this exact structure:
   ]
 }
 `;
+  console.log(`[EVENT-SUGGESTION-PERF] Prompt construction: ${Date.now() - promptStart}ms`);
 
+  const apiCallStart = Date.now();
   const response = await client.chat.completions.create({
     model,
     messages: [
@@ -201,9 +262,10 @@ Respond ONLY with valid JSON in this exact structure:
       }
     ],
     temperature: 0.8,
-    max_tokens: 4096,
+    max_tokens: 2048, // Increased back for 3 suggestions
     response_format: { type: 'json_object' }
   });
+  console.log(`[EVENT-SUGGESTION-PERF] AI API call: ${Date.now() - apiCallStart}ms`);
 
   if (!response.choices || response.choices.length === 0) {
     throw new Error('No choices returned from AI API');
@@ -214,6 +276,7 @@ Respond ONLY with valid JSON in this exact structure:
     throw new Error('No content generated');
   }
 
+  const parseStart = Date.now();
   let parsed: { suggestions: EventSuggestion[] };
   try {
     const jsonPayload = extractJsonPayload(content);
@@ -222,11 +285,13 @@ Respond ONLY with valid JSON in this exact structure:
     console.error('Raw AI content that failed to parse:', content);
     throw new Error('AI returned malformed JSON');
   }
+  console.log(`[EVENT-SUGGESTION-PERF] JSON parsing: ${Date.now() - parseStart}ms`);
 
   if (!Array.isArray(parsed.suggestions) || parsed.suggestions.length === 0) {
     throw new Error('Invalid response structure');
   }
 
+  console.log(`[EVENT-SUGGESTION-PERF] generateAIEventIdeas Total: ${Date.now() - functionStart}ms`);
   return parsed.suggestions;
 }
 

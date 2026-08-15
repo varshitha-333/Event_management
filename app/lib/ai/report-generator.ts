@@ -173,7 +173,8 @@ export async function generateReportContent(
       .replace('{{INPUT_DATA}}', inputData)
       .replace('{{PROPOSAL_DATA}}', proposalDataStr);
 
-    const response = await client.chat.completions.create({
+    // Use streaming for faster response
+    const stream = await client.chat.completions.create({
       model,
       messages: [
         {
@@ -187,23 +188,26 @@ export async function generateReportContent(
       ],
       temperature: 0.7,
       max_tokens: 4096,
-      response_format: { type: 'json_object' }
+      response_format: { type: 'json_object' },
+      stream: true
     });
 
-    if (!response.choices || response.choices.length === 0) {
-      throw new Error('No choices returned from AI API');
+    let fullContent = '';
+    
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content || '';
+      fullContent += content;
     }
 
-    const content = response.choices[0].message?.content;
-    if (!content) {
+    if (!fullContent) {
       throw new Error('No content generated');
     }
 
     let parsed: ReportOutput;
     try {
-      parsed = JSON.parse(extractJsonPayload(content)) as ReportOutput;
+      parsed = JSON.parse(extractJsonPayload(fullContent)) as ReportOutput;
     } catch (parseError) {
-      console.error('Raw AI content that failed to parse:', content);
+      console.error('Raw AI content that failed to parse:', fullContent);
       throw new Error('AI returned malformed JSON');
     }
 

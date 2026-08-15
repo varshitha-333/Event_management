@@ -99,7 +99,48 @@ export default function RegisterEvent() {
       }
     };
 
+    // Check for suggestion data in URL and pre-fill form
+    const checkForSuggestion = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const suggestionParam = urlParams.get('suggestion');
+      
+      if (suggestionParam) {
+        try {
+          const suggestion = JSON.parse(decodeURIComponent(suggestionParam));
+          console.log('Pre-filling form with suggestion:', suggestion);
+          
+          // Map suggestion fields to form fields
+          setFormData(prev => ({
+            ...prev,
+            eventTitle: suggestion.title || prev.eventTitle,
+            eventDesc: suggestion.description ? `${suggestion.description}\n\nPurpose: ${suggestion.purpose}\n\nBenefits: ${suggestion.benefits}\n\nExpected Outcome: ${suggestion.expectedOutcome}` : prev.eventDesc,
+            eventType: suggestion.eventType || prev.eventType,
+            eventTheme: suggestion.category || prev.eventTheme,
+            eventVenue: suggestion.venueRequirements || prev.eventVenue,
+            budgetItems: suggestion.estimatedBudget || prev.budgetItems,
+            // Map logisticsNeeded to logistics checkboxes
+            logistics: {
+              ...prev.logistics,
+              projector: suggestion.logisticsNeeded?.some((l: string) => l.toLowerCase().includes('projector')) || prev.logistics.projector,
+              mic: suggestion.logisticsNeeded?.some((l: string) => l.toLowerCase().includes('mic')) || prev.logistics.mic,
+              internet: suggestion.logisticsNeeded?.some((l: string) => l.toLowerCase().includes('internet')) || prev.logistics.internet,
+              certificates: suggestion.logisticsNeeded?.some((l: string) => l.toLowerCase().includes('certificate')) || prev.logistics.certificates,
+              refreshments: suggestion.logisticsNeeded?.some((l: string) => l.toLowerCase().includes('refreshment')) || prev.logistics.refreshments,
+              photography: suggestion.logisticsNeeded?.some((l: string) => l.toLowerCase().includes('photo')) || prev.logistics.photography,
+              volunteers: suggestion.logisticsNeeded?.some((l: string) => l.toLowerCase().includes('volunteer')) || prev.logistics.volunteers
+            }
+          }));
+          
+          // Clear URL params to avoid re-filling on refresh
+          window.history.replaceState({}, '', '/register-event');
+        } catch (error) {
+          console.error('Failed to parse suggestion data:', error);
+        }
+      }
+    };
+
     checkUserRole();
+    checkForSuggestion();
   }, [router]);
 
   if (isLoading) {
@@ -198,10 +239,11 @@ export default function RegisterEvent() {
     // Upload to server and get URL
     try {
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('type', 'qr');
+      formData.append('qr', file);
+      // Note: We don't have eventId yet, so it will save to filesystem temporarily
+      // After event creation, we need to update the event with the QR code
       
-      const response = await fetch('/api/upload', {
+      const response = await fetch('/api/upload/qr', {
         method: 'POST',
         body: formData
       });
@@ -210,6 +252,8 @@ export default function RegisterEvent() {
         const data = await response.json();
         setQrCodeUrl(data.url);
         console.log('[UPLOAD] QR code uploaded:', data.url);
+        console.log('[UPLOAD] Storage type:', data.storage);
+        console.log('[UPLOAD] Response data:', data);
       } else {
         showToastMsg('Failed to upload QR code', true);
       }
@@ -245,6 +289,35 @@ export default function RegisterEvent() {
         return false;
       }
     }
+
+    // Validate event date - reject dates before today
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const eventDate = new Date(formData.eventDate);
+    eventDate.setHours(0, 0, 0, 0);
+    
+    if (eventDate < today) {
+      showToastMsg('Event date cannot be in the past. Please select today or a future date.', true);
+      return false;
+    }
+
+    // Validate registration deadline
+    if (formData.regDeadline) {
+      const regDeadline = new Date(formData.regDeadline);
+      regDeadline.setHours(0, 0, 0, 0);
+      
+      if (regDeadline < today) {
+        showToastMsg('Registration deadline cannot be in the past.', true);
+        return false;
+      }
+      
+      if (regDeadline > eventDate) {
+        showToastMsg('Registration deadline cannot be after event date.', true);
+        return false;
+      }
+    }
+
     return true;
   };
 
@@ -299,7 +372,15 @@ export default function RegisterEvent() {
           maxCapacity: formData.maxCapacity,
           clubId: formData.organizerName || undefined,
           poster: posterUrl || null,
-          qrCode: qrCodeUrl || null
+          qrCode: qrCodeUrl || null,
+          studentCoordinators: formData.studentCoordinators.split(',').map(s => s.trim()).filter(s => s),
+          resourcePerson: formData.resourcePersonName ? {
+            name: formData.resourcePersonName,
+            designation: formData.resourcePersonDesignation,
+            organization: formData.resourcePersonOrganization,
+            shortBio: formData.resourcePersonBio
+          } : undefined,
+          facultyCoordinator: formData.coordName
         })
       });
 
@@ -310,6 +391,29 @@ export default function RegisterEvent() {
 
       const eventJson = await eventResponse.json();
       setCreatedEventId(eventJson.id);
+      
+      // If QR code was uploaded, update the event to store it in database
+      if (qrCodeFile) {
+        console.log('[QR-UPDATE] Updating event with QR code in database');
+        try {
+          const qrFormData = new FormData();
+          qrFormData.append('qr', qrCodeFile);
+          qrFormData.append('eventId', eventJson.id);
+          
+          const qrResponse = await fetch('/api/upload/qr', {
+            method: 'POST',
+            body: qrFormData
+          });
+          
+          if (qrResponse.ok) {
+            console.log('[QR-UPDATE] QR code stored in database for event:', eventJson.id);
+          } else {
+            console.error('[QR-UPDATE] Failed to store QR in database');
+          }
+        } catch (qrError) {
+          console.error('[QR-UPDATE] Error storing QR in database:', qrError);
+        }
+      }
       
       showToastMsg(`"${formData.eventTitle}" created successfully! 🎉`);
       

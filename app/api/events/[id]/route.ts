@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
 import { getAuthUser } from '@/lib/auth';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/prisma';
 
 export async function GET(
   request: NextRequest,
@@ -37,39 +35,103 @@ export async function GET(
       );
     }
 
-    // Transform event to match frontend format
-    const transformedEvent = {
-      id: event.id,
-      name: event.title,
-      department: event.club.department,
-      date: event.startDate.toISOString().split('T')[0],
-      time: event.startDate.toTimeString().slice(0, 5),
-      location: event.venue,
-      description: event.description,
-      capacity: event.maxCapacity,
-      organizer: event.creator.name,
-      color: getDepartmentColor(event.club.department),
-      poster: event.poster || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop&q=80',
-      type: event.type.toLowerCase(),
-      mode: event.mode.toLowerCase(),
-      status: event.status.toLowerCase(),
-      theme: event.theme,
-      endDate: event.endDate.toISOString().split('T')[0],
-      reviews: event.reviews.map(review => ({
-        id: review.id,
-        rating: review.rating,
-        text: review.freeText || '',
-        name: review.isAnonymous ? 'Anonymous' : 'User',
-        department: review.department || 'Unknown',
-        date: review.createdAt.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-      }))
-    };
-
-    return NextResponse.json(transformedEvent);
+    // Return full event data without transformation for edit page
+    return NextResponse.json(event);
   } catch (error) {
     console.error('Event fetch error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const authUser = getAuthUser(request);
+    if (!authUser) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Only staff roles can edit events
+    const staffRoles = ['FACULTY', 'COORDINATOR', 'ADMIN', 'HOD', 'DEAN'];
+    if (!staffRoles.includes(authUser.role)) {
+      return NextResponse.json(
+        { error: 'Only staff members can edit events' },
+        { status: 403 }
+      );
+    }
+
+    const { id } = await params;
+    const body = await request.json();
+
+    // Check if event exists
+    const event = await prisma.event.findUnique({
+      where: { id }
+    });
+
+    if (!event) {
+      return NextResponse.json(
+        { error: 'Event not found' },
+        { status: 404 }
+      );
+    }
+
+    // Build update data with only provided fields (partial update)
+    const updateData: any = {};
+
+    if (body.title !== undefined) updateData.title = body.title;
+    if (body.description !== undefined) updateData.description = body.description;
+    if (body.type !== undefined) updateData.type = body.type.toUpperCase();
+    if (body.theme !== undefined) updateData.theme = body.theme;
+    if (body.startDate !== undefined) {
+      const startDate = new Date(body.startDate);
+      startDate.setHours(0, 0, 0, 0);
+      updateData.startDate = startDate;
+    }
+    if (body.endDate !== undefined) {
+      const endDate = new Date(body.endDate);
+      endDate.setHours(0, 0, 0, 0);
+      updateData.endDate = endDate;
+    }
+    if (body.venue !== undefined) updateData.venue = body.venue;
+    if (body.mode !== undefined) updateData.mode = body.mode.toUpperCase();
+    if (body.maxCapacity !== undefined) updateData.maxCapacity = body.maxCapacity;
+    if (body.poster !== undefined) updateData.poster = body.poster;
+    if (body.qrCode !== undefined) updateData.qrCode = body.qrCode;
+    if (body.studentCoordinators !== undefined) updateData.studentCoordinators = body.studentCoordinators;
+    if (body.facultyCoordinator !== undefined) updateData.facultyCoordinator = body.facultyCoordinator;
+    if (body.contactInfo !== undefined) updateData.contactInfo = body.contactInfo;
+
+    // Update event
+    const updatedEvent = await prisma.event.update({
+      where: { id },
+      data: updateData,
+      include: {
+        club: true,
+        creator: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        }
+      }
+    });
+
+    console.log(`[EVENT] Event updated: ${id}`);
+
+    return NextResponse.json(updatedEvent);
+  } catch (error) {
+    console.error('Event update error:', error);
+    return NextResponse.json(
+      { error: 'Failed to update event', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

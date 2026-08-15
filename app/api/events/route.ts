@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient, EventType, EventMode } from '@prisma/client';
 import { getAuthUser } from '@/lib/auth';
 import prisma, { withRetry } from '@/lib/prisma';
-
-const prismaClient = new PrismaClient();
+import { EventType, EventMode } from '@prisma/client';
 
 // Background function to generate proposal without blocking the response
 async function generateProposalInBackground(eventId: string) {
@@ -75,7 +73,9 @@ export async function GET(request: NextRequest) {
             name: true,
             email: true
           }
-        }
+        },
+        proposal: true,
+        report: true
       },
       orderBy: {
         startDate: 'asc'
@@ -99,7 +99,9 @@ export async function GET(request: NextRequest) {
       poster: event.poster || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop&q=80',
       type: event.type.toLowerCase(),
       mode: event.mode.toLowerCase(),
-      status: event.status.toLowerCase()
+      status: event.status.toLowerCase(),
+      proposalStatus: event.proposal?.status || 'DRAFT',
+      reportStatus: event.report?.status || 'DRAFT'
     }));
 
     // Remove duplicates by ID
@@ -139,6 +141,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if user is staff (not student)
+    const staffRoles = ['FACULTY', 'COORDINATOR', 'ADMIN', 'HOD', 'DEAN'];
+    if (!staffRoles.includes(authUser.role)) {
+      return NextResponse.json(
+        { error: 'Only staff members can create events' },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const {
       title,
@@ -153,7 +164,10 @@ export async function POST(request: NextRequest) {
       clubId,
       poster,
       qrCode,
-      generateProposal
+      generateProposal,
+      studentCoordinators,
+      resourcePerson,
+      facultyCoordinator
     } = body;
 
     if (!title || !description || !startDate || !venue) {
@@ -179,11 +193,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate dates
+    // Validate dates - reject dates before today
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to midnight for comparison
+    
     const startDateObj = new Date(startDate);
     if (isNaN(startDateObj.getTime())) {
       return NextResponse.json(
         { error: 'Invalid start date format' },
+        { status: 400 }
+      );
+    }
+    
+    // Set startDate to midnight for comparison
+    startDateObj.setHours(0, 0, 0, 0);
+    
+    // Reject dates before today
+    if (startDateObj < today) {
+      return NextResponse.json(
+        { error: 'Event date cannot be in the past. Please select today or a future date.' },
         { status: 400 }
       );
     }
@@ -243,11 +271,15 @@ export async function POST(request: NextRequest) {
         clubId: resolvedClubId,
         createdBy: authUser.userId,
         poster: poster || null,
-        qrCode: qrCode || null
+        qrCode: qrCode || null,
+        studentCoordinators: Array.isArray(studentCoordinators) ? studentCoordinators : [],
+        facultyCoordinator: facultyCoordinator || null,
+        contactInfo: resourcePerson ? resourcePerson : undefined
       }
     });
 
     console.log(`[EVENT] Event created: ${event.id}`);
+    console.log(`[EVENT] QR code URL stored: ${qrCode}`);
 
     // Trigger proposal generation in background if requested
     if (body.generateProposal === true) {
