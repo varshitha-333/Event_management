@@ -328,6 +328,16 @@ See `ARCHITECTURAL_FIXES_SUMMARY.md` for detailed information about recent fixes
 - ✅ Database connection resilience with retry logic
 - ✅ Comprehensive logging throughout system
 - ✅ Gitignore cleanup and organization
+- ✅ **QR Code Rendering Fix**: Fixed QR code display in Post Event Report PDFs
+  - Resolved template validation issues with QR placeholder
+  - Fixed QR marker name mismatch between report generation and download
+  - Restored QR replacement logic in LaTeX compilation
+  - QR code now properly displays in PDF instead of showing as placeholder
+- ✅ **Photo Gallery Image Size Optimization**: 
+  - Increased photo gallery image sizes for better visibility
+  - Adjusted dimensions to fit within page boundaries (no overflow)
+  - 1 column: 14cm, 2 columns: 6.5cm, 3 columns: 4.2cm
+  - QR code size: 3.5cm (standard size)
 
 ## 🤝 Contributing
 
